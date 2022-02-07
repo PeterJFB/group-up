@@ -1,7 +1,13 @@
-version: '3.7'
+version: '3.9'
 services:
   backend:
-    container_name: backend
-    build: .
-    command: python3 manage.py runserver
-
+    build: backend/.
+    command: python manage.py runserver 0.0.0.0:8000
+    ports:
+      - "8000:8000"
+    links:
+      - frontend
+  frontend:
+    build: frontend/.
+    ports:
+      - "3000:3000"
