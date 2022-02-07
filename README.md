@@ -1,16 +1,47 @@
 # GroupUp
-### TDT4140 Prosjektarbeid Gruppe 22
 
-## Setup Guide Frontend
+## TDT4140 Prosjektarbeid Gruppe 22
 
-Pull latest changes with ```git pull```<br>
+## Setup Guide
 
-Create a virtual environment wiht ```python3 -m venv env``` and enable it with ```source env/bin/activate``` on mac or windows: INSERT HERE <br>
+Pull latest changes with ```git pull```
 
-Run ```pip install -r requirements.txt```
+### UNIX/MacOS
 
-Navigate to the ```frontend``` folder with ```cd frontend``` in your terminal window.
+#### Backend
 
-Install npm packages with ```npm i``` in the frontend folder.
+```shell
+python3 -m venv env
+source env/bin/activate
+pip install -r requirements.txt
+cd backend
+python manage.py runserver
+```
 
-Start the dev server for react with ```npm start```
+#### Frontend
+
+```shell
+cd frontend
+npm install
+npm start
+```
+
+### Windows
+
+#### Backend
+
+```shell
+python3 -m venv env
+env/Scripts/activate
+pip install -r requirements.txt
+cd backend
+python manage.py runserver
+```
+
+#### Frontend
+
+```shell
+cd frontend
+npm install
+npm start
+```
