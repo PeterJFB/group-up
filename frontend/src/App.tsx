@@ -1,12 +1,11 @@
 import React from 'react';
 import logo from './logo.svg';
 import './App.css';
-import {Box} from "@chakra-ui/react";
+import {Box} from '@chakra-ui/react';
 
 function App() {
   return (
     <Box className="App">
-
       <header className="App-header">
         <img src={logo} className="App-logo" alt="logo" />
         <p>
