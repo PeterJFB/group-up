@@ -16,6 +16,17 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path, include
 
+# The `urlpatterns` variable is a list of all the URLs that can be requested from the server.
+#
+# The `path` function is a function that takes two arguments:
+#
+# 1. The URL that you want to add to the list of URLs that can be requested from the server.
+#
+# 2. The view function that you want to run when the URL is requested.
+#
+# The first path function call is the admin page of the site.
+# The second path function call is the api/ url, which is where all of the api calls will be routed.
+# The third path function call is the auth/ url, which is where all of the authentication calls will
 urlpatterns = [
     path("admin/", admin.site.urls),
     path("api/", include("core.urls")),
