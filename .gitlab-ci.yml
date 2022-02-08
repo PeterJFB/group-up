@@ -33,5 +33,6 @@ django-tests:
     - pytest --html=report.html
   artifacts:
     when: always
-    reports:
-      junit: report.xml
+    paths:
+      - report.html
+    expire_in: 1 week
