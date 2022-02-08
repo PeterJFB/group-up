@@ -29,4 +29,8 @@ django-tests:
     - python -m pip install --upgrade pip
     - pip install -r backend/requirements.txt
   script:
-    - python backend/manage.py test
+    - python backend/manage.py test > report.xml
+  artifacts:
+    when: always
+    reports:
+      junit: report.xml
