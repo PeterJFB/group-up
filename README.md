@@ -13,8 +13,8 @@ Pull latest changes with ```git pull```
 ```shell
 python3 -m venv env
 source env/bin/activate
-pip install -r requirements.txt
 cd backend
+pip install -r requirements.txt
 python manage.py runserver
 ```
 
@@ -33,8 +33,8 @@ npm start
 ```shell
 python3 -m venv env
 env/Scripts/activate
-pip install -r requirements.txt
 cd backend
+pip install -r requirements.txt
 python manage.py runserver
 ```
 
