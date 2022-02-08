@@ -5,22 +5,24 @@ from django.contrib.auth.models import BaseUserManager
 
 
 class UserProfileManager(BaseUserManager):
-    def create_user(self, email, name, password):
-        """Create a new user profile"""
+    # Create a new user profile
+    def create_user(self, email, username, password):
+
         if not email:
             raise ValueError("User must have an email address")
 
         email = self.normalize_email(email)
-        user = self.model(email=email, name=name)
+        user = self.model(email=email, username=username)
 
         user.set_password(password)
         user.save(using=self._db)
 
         return user
 
-    def create_superuser(self, email, name, password):
-        """Create a new superuser profile"""
-        user = self.create_user(email, name, password)
+    # Create a new superuser profile
+    def create_superuser(self, email, username, password):
+
+        user = self.create_user(email, username, password)
         user.is_superuser = True
         user.is_staff = True
 
@@ -29,21 +31,25 @@ class UserProfileManager(BaseUserManager):
         return user
 
 
+# Database model for users in the system
 class User(AbstractBaseUser, PermissionsMixin):
-    """Database model for users in the system"""
 
+    # Fields for the user model
     email = models.EmailField(max_length=255, unique=True)
-    name = models.CharField(max_length=255, default="")
+    username = models.CharField(max_length=255, default="")
+    first_name = models.CharField(max_length=255, default="")
+    last_name = models.CharField(max_length=255, default="")
     is_staff = models.BooleanField(default=False, verbose_name="staff status")
+    birthdate = models.DateField(null=True, blank=True)
 
     # avatar = models.ImageField(upload_to='avatars/', default='avatars/default.png')
-    # birthdate = models.DateField(null=True, blank=True)
     # interestGroups = models.ManyToManyField(InterestGroup, blank=True)
 
+    # Usermanager for creating users
     objects = UserProfileManager()
 
     USERNAME_FIELD = "email"
-    REQUIRED_FIELDS = ["name"]
+    REQUIRED_FIELDS = ["username", "first_name", "last_name"]
 
     def __str__(self):
         return self.email
