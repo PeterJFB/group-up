@@ -1,6 +1,7 @@
 
 stages:
   - build
+  - lint
   - test
 
 build-frontend:
@@ -14,9 +15,11 @@ build-backend:
     - echo "Build backend here"
 
 linting-tests:
-  stage: build
+  stage: lint
   script:
-    - echo "Lint script here"
+    - cd frontend/
+    - npm i eslint
+    - node_modules/eslint/bin/eslint.js .
 
 django-tests:
   stage: test
