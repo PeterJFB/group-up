@@ -1,13 +1,28 @@
-image: python:3.10
 
 stages:
+  - build
   - test
 
-before_script:
-  - python -m pip install --upgrade pip
-  - pip install -r backend/requirements.txt
-
-test:
-  stage: test
+build-frontend:
+  stage: build
   script:
-  - python backend/manage.py test
+    - echo "Build frontend here"
+
+build-backend:
+  stage: build
+  script:
+    - echo "Build backend here"
+
+linting-tests:
+  stage: build
+  script:
+    - echo "Lint script here"
+
+django-tests:
+  stage: test
+  image: python:3.10
+  before_script:
+    - python -m pip install --upgrade pip
+    - pip install -r backend/requirements.txt
+  script:
+    - python backend/manage.py test
