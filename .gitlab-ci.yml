@@ -16,7 +16,7 @@ build-backend:
 
 linting-tests:
   stage: lint
-  image: npm:latest
+  image: node:latest
   script:
     - cd frontend/
     - npm i eslint
