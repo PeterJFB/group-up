@@ -1,6 +1,3 @@
-from django.shortcuts import render
-
-
 from django.contrib.auth.models import User
 from .serializers import UserSerializer
 from rest_framework.generics import CreateAPIView
@@ -8,6 +5,7 @@ from rest_framework.permissions import AllowAny
 from rest_framework.authtoken.models import Token
 
 
+# Create a view that takes a POST request with a username, email and password, and creates a user with that info
 class RegisterView(CreateAPIView):
     queryset = User.objects.all()
     permission_classes = (AllowAny,)
