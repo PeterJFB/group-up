@@ -1,6 +1,12 @@
+image: python:3.10
+
+stages:
+  - test
+
+before_script:
+  - pip install backend/requirements.txt
+
 test:
+  stage: test
   script:
-  - apt-get update -qy
-  - apt-get install -y python-dev python-pip
-  - pip install -r backend/requirements.txt
   - python backend/manage.py test
