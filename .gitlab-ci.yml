@@ -1,22 +1,26 @@
 
 stages:
-  - build
+  # - build
   - lint
   - test
 
-build-frontend:
-  stage: build
-  script:
-    - echo "Build frontend here"
+# build-frontend:
+#   stage: build
+#   image: alpine:latest
+#   script:
+#     - echo "Build frontend here"
 
-build-backend:
-  stage: build
-  script:
-    - echo "Build backend here"
+# build-backend:
+#   stage: build
+#   script:
+#     - echo "Build backend here"
 
 linting-tests:
   stage: lint
   image: node:latest
+  cache:
+    paths:
+      - node_modules/
   script:
     - cd frontend/
     - npm i eslint
