@@ -35,4 +35,4 @@ django-tests:
   artifacts:
     when: always
     reports:
-      junit: report.xml
+      junit: backend/report.xml
