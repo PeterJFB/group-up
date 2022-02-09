@@ -17,10 +17,10 @@ stages:
 
 linting-tests:
   stage: lint
-  image: node:latest
+  image: node:16-alpine
   cache:
     paths:
-      - node_modules/
+      - frontend/node_modules/
   script:
     - cd frontend/
     - npm i eslint
