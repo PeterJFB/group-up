@@ -34,7 +34,7 @@ backend_linting_tests:
     - pip install black
   script:
     - cd backend
-    - black . --check --verbose --diff --color --extend-exclude="migrations|manage.py"
+    - black . --check --verbose --color --extend-exclude="migrations|manage.py"
 
 django-tests:
   stage: test
