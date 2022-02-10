@@ -19,7 +19,7 @@ build-frontend:
 linting-tests:
   stage: lint
   needs:
-    - job: build-frontend/
+    - job: build-frontend
   image: node:16-alpine
   script:
     - cd frontend/
