@@ -1,4 +1,4 @@
-from django.contrib.auth.models import User
+from core.models import User
 from .serializers import UserSerializer
 from rest_framework.generics import CreateAPIView
 from rest_framework.permissions import AllowAny

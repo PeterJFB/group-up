@@ -8,9 +8,9 @@ class TestSetUp(APITestCase):
         self.login_url = reverse("login")
 
         self.user_data = {
-            'username': 'testmann',
-            'email': 'test@gmail.com',
-            'password': 'pass',
+            "username": "testmann",
+            "email": "test@gmail.com",
+            "password": "pass",
         }
         return super().setUp()
 
