@@ -1,29 +1,29 @@
 
 stages:
-  # - build
+  - build
   - lint
   - test
 
-# build-frontend:
-#   stage: build
-#   image: alpine:latest
-#   script:
-#     - echo "Build frontend here"
-
-# build-backend:
-#   stage: build
-#   script:
-#     - echo "Build backend here"
+build-frontend:
+  stage: build
+  image: node:16-alpine
+  artifacts:
+    paths:
+      - $CI_PROJECT_DIR/frontend/node_modules/
+  script:
+    - cd frontend/
+    - npm ci
+    - npm run build
+    
 
 linting-tests:
   stage: lint
+  needs:
+    - job: build-frontend/
   image: node:16-alpine
-  cache:
-    paths:
-      - frontend/node_modules/
   script:
     - cd frontend/
-    - npm i eslint
+    # - npm i eslint
     - node_modules/eslint/bin/eslint.js .
 
 django-tests:
