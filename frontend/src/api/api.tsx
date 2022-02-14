@@ -1,11 +1,17 @@
-const url = 'localhost:8080'; // TODO: move to environment variable
+const {REACT_APP_URL} = process.env;
+
+/**
+ * This file consists of a set helper functions, which the frontend will use to communicate
+ * with our backend, i.e. participating as a controller to the model.
+ */
 
 type TokenBody = {
   token: string;
 };
 
 /**
- * The default wrapper for any request after authentication
+ * The default wrapper for any request after authentication. The function allows our frontend to make requests while this
+ * function handles authentication (provided that the user is already signed in).
  *
  * @param endpoint api endpoint
  * @param method e.g. POST, PUT, GET etc.
@@ -18,11 +24,13 @@ export async function fetchWithToken<ResponseBody>(
 ) {
   const token = localStorage.getItem('token');
 
+  // Do not perform the request is the token is missing
   if (!token) {
     return {missingToken: true};
   }
 
-  const response = await fetch(url + endpoint, {
+  // Perform request to backend with token
+  const response = await fetch(REACT_APP_URL + endpoint, {
     method: method,
     headers: {
       Accept: 'application/json',
@@ -32,8 +40,8 @@ export async function fetchWithToken<ResponseBody>(
     body,
   });
 
+  // Return response
   const responseBody: ResponseBody = await response.json();
-
   return {
     headers: response.headers,
     status: response.status,
@@ -43,13 +51,14 @@ export async function fetchWithToken<ResponseBody>(
 }
 
 /**
- * Wrapper for any authentication request. When successful, it saves a token, allowing the use of `fetchWithToken` for later requests
+ * Wrapper for any authentication request. When successful, it saves a token, allowing the use of `fetchWithToken` for later requests.
  *
  * @param username username for authentication, i.e. the users email
  * @param password the password for the user attempting to authenticate.
  */
 export async function signInAndSaveToken(username: string, password: string) {
-  const response = await fetch(url + '/login', {
+  // Perform request to "/login" with credentials
+  const response = await fetch(REACT_APP_URL + '/login', {
     method: 'GET',
     headers: {
       Accept: 'application/json',
@@ -62,13 +71,17 @@ export async function signInAndSaveToken(username: string, password: string) {
   });
   const responseBody: TokenBody = await response.json();
 
+  // Retrieve and store token
   const token = responseBody.token;
-
   localStorage.setItem('token', token);
 
+  // TODO: return status from an invalid authentication
+
+  // Ensure the token was successfully saved
   const validateToken = localStorage.getItem('token');
   if (token !== validateToken) {
     return {
+      status: response.status,
       savedToken: false,
     };
   }
