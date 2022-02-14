@@ -5,6 +5,9 @@ const {REACT_APP_URL} = process.env;
  * with our backend, i.e. participating as a controller to the model.
  */
 
+// Including all for completion sake. https://developer.mozilla.org/en-US/docs/Web/HTTP/Methods
+type HttpRequestMethod = "POST" | "HEAD" | "POST" | "PUT" | "DELETE" | "CONNECT" | "OPTIONS" | "TRACE" | "OPTIONS";
+
 type TokenBody = {
   token: string;
 };
@@ -19,7 +22,7 @@ type TokenBody = {
  */
 export async function fetchWithToken<ResponseBody>(
   endpoint: string,
-  method: string,
+  method: HttpRequestMethod,
   body: Record<string, unknown> | string
 ) {
   const token = localStorage.getItem('token');
