@@ -79,17 +79,11 @@ export async function signInAndSaveToken(username: string, password: string) {
 
   // Ensure the token was successfully saved
   const validateToken = localStorage.getItem('token');
-  if (token !== validateToken) {
-    return {
-      status: response.status,
-      savedToken: false,
-    };
-  }
 
   return {
     headers: response.headers,
     status: response.status,
     token: token,
-    savedToken: true,
+    error: token !== validateToken,
   };
 }
