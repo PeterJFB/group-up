@@ -20,7 +20,7 @@ type TokenBody = {
 export async function fetchWithToken<ResponseBody>(
   endpoint: string,
   method: string,
-  body: any
+  body: Record<string, unknown> | string
 ) {
   const token = localStorage.getItem('token');
 
@@ -37,7 +37,7 @@ export async function fetchWithToken<ResponseBody>(
       'Content-Type': 'application/json',
       Authorization: `Token ${token}`,
     },
-    body,
+    body: JSON.stringify(body),
   });
 
   // Return response
@@ -64,10 +64,10 @@ export async function signInAndSaveToken(username: string, password: string) {
       Accept: 'application/json',
       'Content-Type': 'application/json',
     },
-    body: {
+    body: JSON.stringify({
       username,
       password,
-    } as any,
+    }),
   });
   const responseBody: TokenBody = await response.json();
 
