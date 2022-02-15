@@ -6,10 +6,37 @@ const {REACT_APP_URL} = process.env;
  */
 
 // Including all for completion sake. https://developer.mozilla.org/en-US/docs/Web/HTTP/Methods
-type HttpRequestMethod = "POST" | "HEAD" | "POST" | "PUT" | "DELETE" | "CONNECT" | "OPTIONS" | "TRACE" | "OPTIONS";
+type HttpRequestMethod =
+  | 'POST'
+  | 'HEAD'
+  | 'POST'
+  | 'PUT'
+  | 'DELETE'
+  | 'CONNECT'
+  | 'OPTIONS'
+  | 'TRACE'
+  | 'OPTIONS';
 
 type TokenBody = {
   token: string;
+};
+
+type fetchWithTokenResponse<responseBody> =
+  | {missingToken: true}
+  | {
+      missingToken: false;
+      headers: Headers;
+      status: number;
+      body: responseBody;
+    };
+
+type UserObject = {
+  username: string;
+  first_name: string;
+  last_name: string;
+  email: string;
+  birthdate: Date;
+  password: string;
 };
 
 /**
@@ -24,7 +51,7 @@ export async function fetchWithToken<ResponseBody>(
   endpoint: string,
   method: HttpRequestMethod,
   body: Record<string, unknown> | string
-) {
+): Promise<fetchWithTokenResponse<ResponseBody>> {
   const token = localStorage.getItem('token');
 
   // Do not perform the request is the token is missing
@@ -46,10 +73,40 @@ export async function fetchWithToken<ResponseBody>(
   // Return response
   const responseBody: ResponseBody = await response.json();
   return {
+    missingToken: !token,
     headers: response.headers,
     status: response.status,
     body: responseBody,
-    missingToken: false,
+  };
+}
+
+/**
+ * Wrapper for any registration request. When successful, it saves a token, allowing the use of `fetchWithToken` for later requests.
+ *
+ * @param user object of the user to be registered
+ */
+export async function registerAndSaveToken(user: UserObject) {
+  // Perform request to "/login" with credentials
+  const response = await fetch(REACT_APP_URL + '/auth/register', {
+    method: 'GET',
+    headers: {
+      Accept: 'application/json',
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify(user),
+  });
+  const responseBody: TokenBody = await response.json();
+
+  // TODO: return status from an invalid registration
+
+  // Retrieve and store token
+  const token = responseBody.token;
+  localStorage.setItem('token', token);
+
+  return {
+    headers: response.headers,
+    status: response.status,
+    token: token,
   };
 }
 
@@ -61,7 +118,7 @@ export async function fetchWithToken<ResponseBody>(
  */
 export async function signInAndSaveToken(username: string, password: string) {
   // Perform request to "/login" with credentials
-  const response = await fetch(REACT_APP_URL + '/login', {
+  const response = await fetch(REACT_APP_URL + '/auth/login', {
     method: 'GET',
     headers: {
       Accept: 'application/json',
@@ -74,19 +131,15 @@ export async function signInAndSaveToken(username: string, password: string) {
   });
   const responseBody: TokenBody = await response.json();
 
+  // TODO: return status from an invalid authentication
+
   // Retrieve and store token
   const token = responseBody.token;
   localStorage.setItem('token', token);
-
-  // TODO: return status from an invalid authentication
-
-  // Ensure the token was successfully saved
-  const validateToken = localStorage.getItem('token');
 
   return {
     headers: response.headers,
     status: response.status,
     token: token,
-    error: token !== validateToken,
   };
 }
