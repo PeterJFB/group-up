@@ -1,12 +1,16 @@
 from core.models import User
-from .serializers import UserSerializer
 from rest_framework.generics import CreateAPIView
 from rest_framework.permissions import AllowAny
 from rest_framework.authtoken.models import Token
+from .serializers import UserSerializer
 
 
-# Create a view that takes a POST request with a username, email and password, and creates a user with that info
 class RegisterView(CreateAPIView):
+    """
+    Create a view that takes a POST request
+    with a username, email and password, and creates a user with that info
+    """
+
     queryset = User.objects.all()
     permission_classes = (AllowAny,)
     serializer_class = UserSerializer
