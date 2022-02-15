@@ -6,6 +6,7 @@ class TestSetUp(APITestCase):
     def setUp(self) -> None:
         self.register_url = reverse("register")
         self.login_url = reverse("login")
+        self.hello_url = reverse("hello")
 
         self.user_data = {
             "username": "testmann",
