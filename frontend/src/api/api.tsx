@@ -13,7 +13,6 @@ type HttpRequestMethod =
   | 'PUT'
   | 'DELETE'
   | 'CONNECT'
-  | 'OPTIONS'
   | 'TRACE'
   | 'OPTIONS';
 
@@ -22,7 +21,10 @@ type TokenBody = {
 };
 
 type fetchWithTokenResponse<responseBody> =
+  // The response-fields will be empty if the browser has no token in storage
+  // Fields if token is missing
   | {missingToken: true}
+  // Fields if token is not missing
   | {
       missingToken: false;
       headers: Headers;
@@ -30,6 +32,7 @@ type fetchWithTokenResponse<responseBody> =
       body: responseBody;
     };
 
+// The User with fields corresponding to our database
 type UserObject = {
   username: string;
   first_name: string;
