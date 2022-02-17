@@ -4,10 +4,12 @@ services:
     build: backend/.
     command: python manage.py runserver 0.0.0.0:8000
     ports:
-      - "8000:8000"
+      - '8000:8000'
     links:
       - frontend
   frontend:
+    environment:
+      - REACT_APP_URL=http://localhost:8000
     build: frontend/.
     ports:
-      - "3000:3000"
+      - '3000:3000'
