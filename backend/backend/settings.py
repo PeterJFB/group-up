@@ -40,6 +40,7 @@ INSTALLED_APPS = [
     "rest_framework",
     "rest_framework.authtoken",
     "core",
+    "authorization",
 ]
 
 REST_FRAMEWORK = {
@@ -129,8 +130,5 @@ STATIC_URL = "static/"
 # https://docs.djangoproject.com/en/4.0/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
-<<<<<<< HEAD
 
 AUTH_USER_MODEL = "core.User"
-=======
->>>>>>> 614f867... configure django to authenticate/register users
