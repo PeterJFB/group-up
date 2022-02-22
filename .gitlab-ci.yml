@@ -1,4 +1,3 @@
-
 stages:
   - build
   - test
@@ -11,18 +10,14 @@ build-frontend:
     - cd frontend/
     - npm ci
     - npm run build
-  artifacts:
-    paths:
-      - $CI_PROJECT_DIR/frontend/node_modules/
     
 frontend-linting-tests:
   stage: lint
   retry: 2
-  needs:
-    - job: build-frontend
   image: node:16-alpine
   script:
     - cd frontend/
+    - npm ci
     - node_modules/eslint/bin/eslint.js .
 
 backend_linting_tests:
@@ -50,4 +45,15 @@ django-tests:
     reports:
       junit: backend/report.xml
     
-    
+react-tests:
+  stage: test
+  image: node:16-alpine
+  retry: 2
+  script:
+    - cd frontend/
+    - npm ci
+    - CI=true npm run test -- --testResultsProcessor=\"jest-junit\"
+  artifacts:
+    when: always
+    reports:
+      junit: frontend/junit.xml
