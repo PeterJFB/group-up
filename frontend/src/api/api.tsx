@@ -32,16 +32,7 @@ type fetchWithTokenResponse<responseBody> =
       body: responseBody;
     };
 
-// The User with fields corresponding to our database
-type UserObject = {
-  username: string;
-  first_name: string;
-  last_name: string;
-  email: string;
-  birthdate: Date;
-  password: string;
-};
-
+import {UserObject} from './types';
 /**
  * The default wrapper for any request after authentication. The function allows our frontend to make requests while this
  * function handles authentication (provided that the user is already signed in).
@@ -91,7 +82,7 @@ export async function fetchWithToken<ResponseBody>(
 export async function registerAndSaveToken(user: UserObject) {
   // Perform request to "/login" with credentials
   const response = await fetch(REACT_APP_URL + '/auth/register', {
-    method: 'GET',
+    method: 'POST',
     headers: {
       Accept: 'application/json',
       'Content-Type': 'application/json',
@@ -106,11 +97,12 @@ export async function registerAndSaveToken(user: UserObject) {
   const token = responseBody.token;
   localStorage.setItem('token', token);
 
-  return {
-    headers: response.headers,
-    status: response.status,
-    token: token,
-  };
+  return response.status;
+  // return {
+  //   headers: response.headers,
+  //   status: response.status,
+  //   token: token,
+  // };
 }
 
 /**
@@ -122,7 +114,7 @@ export async function registerAndSaveToken(user: UserObject) {
 export async function signInAndSaveToken(username: string, password: string) {
   // Perform request to "/login" with credentials
   const response = await fetch(REACT_APP_URL + '/auth/login', {
-    method: 'GET',
+    method: 'POST',
     headers: {
       Accept: 'application/json',
       'Content-Type': 'application/json',
