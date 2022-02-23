@@ -15,6 +15,8 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path, include
+from rest_framework import routers
+from groupApp import views as groupAppViews
 
 # The `urlpatterns` variable is a list of all the URLs that can be requested from the server.
 #
@@ -27,8 +29,13 @@ from django.urls import path, include
 # The first path function call is the admin page of the site.
 # The second path function call is the api/ url, which is where all of the api calls will be routed.
 # The third path function call is the auth/ url, which is where all of the authentication calls will
+router = routers.DefaultRouter()
+router.register(r"groups", groupAppViews.InterestGroupViewSet)
+router.register(r"interests", groupAppViews.InterestViewSet)
+router.register(r"groupMatches", groupAppViews.GroupMatchViewSet)
+
 urlpatterns = [
     path("admin/", admin.site.urls),
-    path("api/", include("core.urls")),
+    path("api/", include(router.urls)),
     path("auth/", include("authorization.urls")),
 ]

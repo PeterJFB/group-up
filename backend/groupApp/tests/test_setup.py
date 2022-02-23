@@ -1,5 +1,7 @@
 from rest_framework.test import APITestCase
 from django.urls import reverse
+from core.models import User
+from rest_framework.authtoken.models import Token
 
 
 class TestSetUp(APITestCase):
@@ -12,6 +14,20 @@ class TestSetUp(APITestCase):
             "email": "test@gmail.com",
             "password": "pass",
         }
+        user = User.objects.create_user(
+            self.user_data["username"],
+            self.user_data["email"],
+            self.user_data["password"],
+        )
+
+        self.client.post(
+            self.login_url,
+            self.user_data,
+            format="json",
+        )  # log in
+
+        self.tokenString = "Token " + Token.objects.get(user=user).key
+
         return super().setUp()
 
     def tearDown(self) -> None:
