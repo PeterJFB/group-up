@@ -73,22 +73,3 @@ class TestViews(TestSetUp):
             res.status_code,
             400,
         )
-
-    def test_can_access_when_authenticated(self):
-
-        user = User.objects.create_user(
-            self.user_data["username"],
-            self.user_data["email"],
-            self.user_data["password"],
-        )
-        self.client.post(self.login_url, self.user_data, format="json")  # log in
-        tokenString = "Token " + Token.objects.get(user=user).key
-
-        res = self.client.get(
-            self.hello_url, HTTP_AUTHORIZATION=tokenString, format="json"
-        )
-        self.assertEqual(res.status_code, 200)
-
-    def test_cannot_acces_without_authentication(self):
-        res = self.client.get(self.hello_url, format="json")
-        self.assertEqual(res.status_code, 401)
