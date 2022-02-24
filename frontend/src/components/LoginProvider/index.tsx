@@ -5,7 +5,7 @@ export const LoginProvider: React.FC = ({children}) => {
   const [loggedIn, setLoggedIn] = useState(false);
 
   return (
-    <Box>
+    <>
       {!loggedIn ? (
         <VStack>
           <Box>Du er ikke logget inn</Box>
@@ -20,6 +20,6 @@ export const LoginProvider: React.FC = ({children}) => {
       ) : (
         <>{children}</>
       )}
-    </Box>
+    </>
   );
 };
