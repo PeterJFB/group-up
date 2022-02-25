@@ -13,6 +13,9 @@ class InterestGroupSerializer(serializers.ModelSerializer):
             "interests",
             "matches",
             "sentLikes",
+            "meetingDate",
+            "location",
+            "quote",
         ]
 
     def create(self, validated_data):
@@ -24,6 +27,10 @@ class InterestGroupSerializer(serializers.ModelSerializer):
         instance.name = validated_data.get("name", instance.name)
         instance.description = validated_data.get("description", instance.description)
         instance.groupAdmin = validated_data.get("groupAdmin", instance.groupAdmin)
+
+        instance.meetingDate = validated_data.get("meetingDate", instance.meetingDate)
+        instance.location = validated_data.get("location", instance.location)
+        instance.quote = validated_data.get("quote", instance.quote)
 
         if "members" in validated_data:
             instance.members.set(validated_data.get("members"))
