@@ -14,6 +14,9 @@ class InterestGroup(models.Model):
     sentLikes = models.ManyToManyField(
         "InterestGroup", blank=True, related_name="SentLikes"
     )
+    meetingDate = models.DateTimeField(null=True, blank=True)
+    location = models.CharField(max_length=1000, default="")
+    quote = models.CharField(max_length=150, default="")
 
     REQUIRED_FIELDS = ["name", "description", "groupAdmin"]
 
