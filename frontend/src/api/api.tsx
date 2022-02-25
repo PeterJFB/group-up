@@ -108,10 +108,10 @@ export async function registerAndSaveToken(user: UserObject) {
 /**
  * Wrapper for any authentication request. When successful, it saves a token, allowing the use of `fetchWithToken` for later requests.
  *
- * @param username username for authentication, i.e. the users email
+ * @param email email for authentication.
  * @param password the password for the user attempting to authenticate.
  */
-export async function signInAndSaveToken(username: string, password: string) {
+export async function signInAndSaveToken(email: string, password: string) {
   // Perform request to "/login" with credentials
   const response = await fetch(REACT_APP_URL + '/auth/login', {
     method: 'POST',
@@ -120,7 +120,7 @@ export async function signInAndSaveToken(username: string, password: string) {
       'Content-Type': 'application/json',
     },
     body: JSON.stringify({
-      username,
+      username: email,
       password,
     }),
   });
@@ -132,9 +132,5 @@ export async function signInAndSaveToken(username: string, password: string) {
   const token = responseBody.token;
   localStorage.setItem('token', token);
 
-  return {
-    headers: response.headers,
-    status: response.status,
-    token: token,
-  };
+  return response.status;
 }
