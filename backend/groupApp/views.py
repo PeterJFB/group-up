@@ -45,6 +45,17 @@ class InterestGroupViewSet(viewsets.ModelViewSet):
         group.save()
         return Response(InterestGroupSerializer(group).data, status=200)
 
+    @action(
+        methods=["get"],
+        detail=True,
+        url_path="getAges",
+        url_name="getAges",
+    )
+    def getAges(self, request, pk=None):
+        group = InterestGroup.objects.get(id=pk)
+        ages = group.members.all().values_list("birthdate", flat=True)
+        return Response(ages, status=200)
+
 
 class InterestViewSet(viewsets.ModelViewSet):
     queryset = Interest.objects.all()
