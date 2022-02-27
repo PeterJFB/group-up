@@ -1,6 +1,6 @@
 from django.urls import path
 from rest_framework.authtoken import views as auth_views
-from .views import RegisterView
+from .views import RegisterView, LoginView, ValidateTokenView
 
 # The `urlpatterns` variable is a list of all the URLs that can be requested from the server.
 #
@@ -13,6 +13,7 @@ from .views import RegisterView
 # The `auth_views` module is a module that Django provides that contains a number of pre-built view
 # functions.
 urlpatterns = [
-    path("login/", auth_views.obtain_auth_token, name="login"),
+    path("login/", LoginView.as_view(), name="login"),
+    path("validateToken/", ValidateTokenView.as_view(), name="validateToken"),
     path("register/", RegisterView.as_view(), name="register"),
 ]
