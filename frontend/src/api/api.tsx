@@ -32,7 +32,7 @@ type fetchWithTokenResponse<responseBody> =
       body: responseBody;
     };
 
-import {UserObject} from './types';
+import {UserObject} from '../types/api';
 /**
  * The default wrapper for any request after authentication. The function allows our frontend to make requests while this
  * function handles authentication (provided that the user is already signed in).
@@ -44,14 +44,15 @@ import {UserObject} from './types';
 export async function fetchWithToken<ResponseBody>(
   endpoint: string,
   method: HttpRequestMethod,
-  body: Record<string, unknown> | string
+  body?: Record<string, unknown> | string
 ): Promise<fetchWithTokenResponse<ResponseBody>> {
   const token = localStorage.getItem('token');
 
   // Do not perform the request is the token is missing
+  /*
   if (!token) {
     return {missingToken: true};
-  }
+  }*/
 
   // Perform request to backend with token
   const response = await fetch(REACT_APP_URL + endpoint, {
