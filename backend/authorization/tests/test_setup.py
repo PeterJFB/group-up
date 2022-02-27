@@ -11,8 +11,13 @@ class TestSetUp(APITestCase):
             "username": "testmann",
             "email": "test@gmail.com",
             "password": "pass",
+            "first_name": "test",
+            "last_name": "mann",
         }
         return super().setUp()
 
     def tearDown(self) -> None:
         return super().tearDown()
+
+    def register_user(self):
+        self.client.post(self.register_url, self.user_data, format="json")

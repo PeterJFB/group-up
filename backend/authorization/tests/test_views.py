@@ -24,12 +24,12 @@ class TestViews(TestSetUp):
         )
 
     def test_user_can_login_with_correct_data(self):
-        user = User.objects.create_user(
-            self.user_data["username"],
-            self.user_data["email"],
-            self.user_data["password"],
-        )
-        res = self.client.post(self.login_url, self.user_data, format="json")
+        self.register_user()
+        user_data = {
+            "username": self.user_data["email"],
+            "password": self.user_data["password"],
+        }
+        res = self.client.post(self.login_url, user_data, format="json")
 
         self.assertEqual(
             res.status_code,
@@ -39,15 +39,12 @@ class TestViews(TestSetUp):
             "token", res.data, msg="Token is not returned after successful register"
         )
 
+        user = User.objects.get(email=self.user_data["email"])
         token = Token.objects.get(user=user)
         self.assertEqual(res.data["token"], token.key)
 
-    def test_user_cannot_login_with_incorrect_data(self):
-        User.objects.create_user(
-            self.user_data["username"],
-            self.user_data["email"],
-            self.user_data["password"],
-        )
+    def test_user_cannot_login_without_credentials(self):
+        self.register_user()
         res = self.client.post(self.login_url)
 
         self.assertEqual(
@@ -56,15 +53,10 @@ class TestViews(TestSetUp):
         )
 
     def test_user_cannot_login_with_wrong_data(self):
-        user = User.objects.create_user(
-            self.user_data["username"],
-            self.user_data["email"],
-            self.user_data["password"],
-        )
+        self.register_user()
         res = self.client.post(
             self.login_url,
             {
-                "username": "testmann",
                 "email": "test@gmail.com",
                 "password": "wrongpass",
             },
