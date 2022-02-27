@@ -8,9 +8,12 @@ class InterestGroupSerializer(serializers.ModelSerializer):
         fields = [
             "name",
             "description",
+            "location",
+            "wantToDoNext",
             "members",
             "groupAdmin",
             "interests",
+            "date",
             "matches",
             "sentLikes",
             "meetingDate",
@@ -19,6 +22,8 @@ class InterestGroupSerializer(serializers.ModelSerializer):
         ]
 
     def create(self, validated_data):
+        request = self.context.get("request")
+        validated_data["groupAdmin"] = request.user
         interestGroup = InterestGroup.objects.create(**validated_data)
         interestGroup.save()
         return interestGroup
@@ -27,6 +32,11 @@ class InterestGroupSerializer(serializers.ModelSerializer):
         instance.name = validated_data.get("name", instance.name)
         instance.description = validated_data.get("description", instance.description)
         instance.groupAdmin = validated_data.get("groupAdmin", instance.groupAdmin)
+        instance.date = validated_data.get("date", instance.date)
+        instance.location = validated_data.get("location", instance.location)
+        instance.wantToDoNext = validated_data.get(
+            "wantToDoNext", instance.wantToDoNext
+        )
 
         instance.meetingDate = validated_data.get("meetingDate", instance.meetingDate)
         instance.location = validated_data.get("location", instance.location)

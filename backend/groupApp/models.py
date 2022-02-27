@@ -6,10 +6,13 @@ class InterestGroup(models.Model):
     name = models.CharField(max_length=255, default="")
     description = models.TextField(max_length=500, default="")
     members = models.ManyToManyField(User, blank=True)
+    location = models.CharField(max_length=255, default="")
+    wantToDoNext = models.TextField(max_length=500, default="")
     groupAdmin = models.ForeignKey(
         User, on_delete=models.DO_NOTHING, default=None, related_name="admin"
     )
     interests = models.ManyToManyField("Interest", blank=True)
+    date = models.DateField("Date", blank=True, null=True)
     matches = models.ManyToManyField("GroupMatch", blank=True)
     sentLikes = models.ManyToManyField(
         "InterestGroup", blank=True, related_name="SentLikes"

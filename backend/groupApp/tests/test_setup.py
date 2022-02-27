@@ -27,6 +27,7 @@ class TestSetUp(APITestCase):
         )  # log in
 
         self.tokenString = "Token " + Token.objects.get(user=user).key
+        self.userID = user.id
 
         return super().setUp()
 

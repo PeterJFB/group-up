@@ -34,7 +34,7 @@ class InterestGroupTestCaseApi(TestSetUp):
 
         url = reverse("interestgroup-list")
 
-        data = {"name": "Test", "description": "Test", "groupAdmin": admin.id}
+        data = {"name": "Test", "description": "Test"}
 
         response = self.client.post(
             url, data, HTTP_AUTHORIZATION=self.tokenString, format="json"
@@ -42,7 +42,7 @@ class InterestGroupTestCaseApi(TestSetUp):
         self.assertEqual(response.status_code, 201)
         self.assertEqual(response.data["name"], "Test")
         self.assertEqual(response.data["description"], "Test")
-        self.assertEqual(response.data["groupAdmin"], admin.id)
+        self.assertEqual(response.data["groupAdmin"], self.userID)
 
     def testInterestGroupAddMember(self):
         admin = User.objects.create_user(
