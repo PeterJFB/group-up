@@ -18,8 +18,8 @@ const RegisterForm: React.FC<RegisterFormProps> = ({
 }: RegisterFormProps) => {
   /**
    * Register user form with fields First name, last name, username, email, password, and confirm password
-   * Should send a register post request to the backend, and if succesful should login user and redirect to
-   * home sreen
+   * Should send a register post request to the backend, and if successful should login user and redirect to
+   * home screen
    */
   const {
     handleSubmit,

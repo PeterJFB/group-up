@@ -7,3 +7,15 @@ export type UserObject = {
   birthdate: Date;
   password: string;
 };
+
+export type GroupObject = {
+  groupid: number;
+  groupname: string;
+  groupdesc: string;
+  groupmembers: string[];
+  interests: string[];
+  location: string;
+  date: string;
+  quote: string;
+  //...
+};

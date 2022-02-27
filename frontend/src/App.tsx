@@ -4,6 +4,7 @@ import {BrowserRouter, Navigate, Route, Routes} from 'react-router-dom';
 import {LoginProvider} from './components/LoginProvider';
 import {Navigation} from './components/Navigation';
 import {Header} from './components/Header';
+import {Groups} from './components/Groups';
 
 const Temp: React.FC = ({children}) => {
   return (
@@ -49,7 +50,7 @@ function App() {
           <Box overflowX={'scroll'} flex={1}>
             <Routes>
               {/* <Route path="/" element={<Temp>Home</Temp>} /> */}
-              <Route path="/groups" element={<Temp>groups</Temp>} />
+              <Route path="/groups" element={<Groups />} />
               <Route path="/find" element={<Temp>find</Temp>} />
               <Route path="/gmatches" element={<Temp>gmatches</Temp>} />
               <Route path="/profile" element={<Temp>profile</Temp>} />

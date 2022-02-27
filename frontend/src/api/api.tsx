@@ -7,7 +7,7 @@ const {REACT_APP_URL} = process.env;
 
 // Including all for completion sake. https://developer.mozilla.org/en-US/docs/Web/HTTP/Methods
 type HttpRequestMethod =
-  | 'POST'
+  | 'GET'
   | 'HEAD'
   | 'POST'
   | 'PUT'
