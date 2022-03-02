@@ -5,8 +5,8 @@ export type Interest = {
 
 export type UserObject = {
   username: string;
-  firstName: string;
-  lastName: string;
+  first_name: string;
+  last_name: string;
   email: string;
   birthdate: Date;
   password: string;
@@ -14,11 +14,11 @@ export type UserObject = {
 
 export type GroupType = {
   name: string;
+  quote: string;
   description: string;
   members: UserObject[];
   groupAdmin: UserObject;
   interests: Interest[];
   location: string;
-  quote: string;
   meetingDate: string;
 };

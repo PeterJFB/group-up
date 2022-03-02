@@ -7,6 +7,7 @@ import {
   FormControl,
   Input,
   Button,
+  Textarea,
 } from '@chakra-ui/react';
 import {CreateGroupObject} from './types';
 type CreateGroupFormProps = {
@@ -18,8 +19,8 @@ const CreateGroupForm: React.FC<CreateGroupFormProps> = ({
 }: CreateGroupFormProps) => {
   /**
    * Register user form with fields First name, last name, username, email, password, and confirm password
-   * Should send a register post request to the backend, and if succesful should login user and redirect to
-   * home sreen
+   * Should send a register post request to the backend, and if successful should login user and redirect to
+   * home screen
    */
   const {
     handleSubmit,
@@ -39,35 +40,35 @@ const CreateGroupForm: React.FC<CreateGroupFormProps> = ({
       <Flex px={10} py={2}>
         <form onSubmit={handleSubmit(onSubmit)}>
           <Box py={2}>
-            <FormControl isInvalid={!!errors.groupname} isRequired>
+            <FormControl isInvalid={!!errors.name} isRequired>
               <FormLabel>Group Name</FormLabel>
               <Input
-                id="groupname"
-                placeholder="Rocinante"
-                {...register('groupname', {
+                id="name"
+                placeholder="Weekend Fishing Group"
+                {...register('name', {
                   required: 'This is required',
                   pattern: {
-                    value: /^[A-Za-zÆæØøÅå\\-]*$/i,
+                    value: /^[A-Za-zÆæØøÅå \\-]*$/i,
                     message: 'Invalid name',
                   },
                 })}
               />
               <FormErrorMessage>
-                {errors.groupname && (
-                  <span data-testid="groupname-error" role="alert">
-                    {errors.groupname.message}
+                {errors.name && (
+                  <span data-testid="name-error" role="alert">
+                    {errors.name.message}
                   </span>
                 )}
               </FormErrorMessage>
             </FormControl>
           </Box>
           <Box py={2}>
-            <FormControl isInvalid={!!errors.groupdesc} isRequired>
-              <FormLabel>Group description</FormLabel>
+            <FormControl isInvalid={!!errors.quote} isRequired>
+              <FormLabel>One-Liner</FormLabel>
               <Input
-                id="groupdesc"
-                placeholder="Saving the universe, one day at a time."
-                {...register('groupdesc', {
+                id="quote"
+                placeholder="We want to go fishing"
+                {...register('quote', {
                   required: 'This is required',
                   pattern: {
                     value: /^[A-Za-zÆæØøÅå \\-]*$/i,
@@ -76,9 +77,32 @@ const CreateGroupForm: React.FC<CreateGroupFormProps> = ({
                 })}
               />
               <FormErrorMessage>
-                {errors.groupdesc && (
-                  <span data-testid="groupdesc-error" role="alert">
-                    {errors.groupdesc.message}
+                {errors.quote && (
+                  <span data-testid="quote-error" role="alert">
+                    {errors.quote.message}
+                  </span>
+                )}
+              </FormErrorMessage>
+            </FormControl>
+          </Box>
+          <Box py={2}>
+            <FormControl isInvalid={!!errors.description} isRequired>
+              <FormLabel>Group description</FormLabel>
+              <Textarea
+                id="description"
+                placeholder="We like to fish, there's nothing like the smell of fresh bait and gasoline on the lake."
+                {...register('description', {
+                  required: 'This is required',
+                  pattern: {
+                    value: /^[A-Za-zÆæØøÅå \\\-.,']*$/i,
+                    message: 'Invalid description',
+                  },
+                })}
+              />
+              <FormErrorMessage>
+                {errors.description && (
+                  <span data-testid="description-error" role="alert">
+                    {errors.description.message}
                   </span>
                 )}
               </FormErrorMessage>
@@ -89,7 +113,7 @@ const CreateGroupForm: React.FC<CreateGroupFormProps> = ({
               <FormLabel>Location</FormLabel>
               <Input
                 id="location"
-                placeholder="The moon"
+                placeholder="Nidelva"
                 {...register('location', {
                   required: 'This is required',
                   pattern: {
@@ -112,7 +136,7 @@ const CreateGroupForm: React.FC<CreateGroupFormProps> = ({
               <FormLabel>interests</FormLabel>
               <Input
                 id="interests"
-                placeholder="cars, bikes, climbing"
+                placeholder="Fishing, Boating, Chilling"
                 {...register('interests', {
                   required: 'This is required',
                   pattern: {
@@ -148,29 +172,6 @@ const CreateGroupForm: React.FC<CreateGroupFormProps> = ({
                     {errors.date.message ||
                       (errors.date.type === 'validate' &&
                         'The date must be in the future')}
-                  </span>
-                )}
-              </FormErrorMessage>
-            </FormControl>
-          </Box>
-          <Box py={2}>
-            <FormControl isInvalid={!!errors.quote} isRequired>
-              <FormLabel>Meeting Quote</FormLabel>
-              <Input
-                id="quote"
-                placeholder="We want to go fishing"
-                {...register('quote', {
-                  required: 'This is required',
-                  pattern: {
-                    value: /^[A-Za-zÆæØøÅå \\-]*$/i,
-                    message: 'Invalid description',
-                  },
-                })}
-              />
-              <FormErrorMessage>
-                {errors.quote && (
-                  <span data-testid="quote-error" role="alert">
-                    {errors.quote.message}
                   </span>
                 )}
               </FormErrorMessage>

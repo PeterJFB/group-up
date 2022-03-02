@@ -5,6 +5,7 @@ import {LoginProvider} from './components/LoginProvider';
 import {Navigation} from './components/Navigation';
 import {Header} from './components/Header';
 import {Groups} from './components/Groups';
+import GroupProfile from './components/GroupProfile';
 
 const Temp: React.FC = ({children}) => {
   return (
@@ -51,6 +52,7 @@ function App() {
             <Routes>
               {/* <Route path="/" element={<Temp>Home</Temp>} /> */}
               <Route path="/groups" element={<Groups />} />
+              <Route path="/groups/:id" element={<GroupProfile />} />
               <Route path="/find" element={<Temp>find</Temp>} />
               <Route path="/gmatches" element={<Temp>gmatches</Temp>} />
               <Route path="/profile" element={<Temp>profile</Temp>} />
