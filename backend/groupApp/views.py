@@ -56,6 +56,18 @@ class InterestGroupViewSet(viewsets.ModelViewSet):
         ages = group.members.all().values_list("birthdate", flat=True)
         return Response(ages, status=200)
 
+    @action(
+        methods=["get"],
+        detail=False,
+        url_path="getMyGroups",
+        url_name="getMyGroups",
+    )
+    def getMyGroups(self, request):
+        groups = InterestGroup.objects.filter(members__in=[request.user])
+
+        serialized = InterestGroupSerializer(groups, many=True).data
+        return Response(serialized, status=200)
+
 
 class InterestViewSet(viewsets.ModelViewSet):
     queryset = Interest.objects.all()

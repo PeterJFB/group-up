@@ -2,16 +2,27 @@ import React from 'react';
 import {screen, render, fireEvent} from '@testing-library/react';
 import '@testing-library/jest-dom';
 import LoginForm from '../LoginForm';
+import {MemoryRouter} from 'react-router-dom';
 const mockLogin = async (email: string, password: string) =>
   email == 'email@email.com' && password == 'password' ? 200 : 404;
 
-describe('RegisterForm', () => {
+const mockNavigate = jest.fn((path: string) => {
+  return;
+});
+describe('LoginForm', () => {
   beforeEach(() => {
-    render(<LoginForm signInAndGetStatus={mockLogin} />);
+    render(
+      <MemoryRouter>
+        <LoginForm navigate={mockNavigate} signInAndGetStatus={mockLogin} />
+      </MemoryRouter>
+    );
   });
 
+  //TODO: test routing to register
+  //TODO: test navigation to home screen
+
   it('should display required error for all fields when they are empty', async () => {
-    fireEvent.submit(screen.getByRole('button'));
+    fireEvent.submit(screen.getByText('Log in'));
 
     expect(await screen.findAllByRole('alert')).toHaveLength(2);
     // expect(mockLogin).not.toBeCalled();
@@ -24,7 +35,7 @@ describe('RegisterForm', () => {
       },
     });
 
-    fireEvent.submit(screen.getByRole('button'));
+    fireEvent.submit(screen.getByText('Log in'));
 
     expect(await screen.findByTestId('email-error')).toBeDefined();
     // expect(mockLogin).not.toBeCalled();
@@ -46,7 +57,7 @@ describe('RegisterForm', () => {
       },
     });
 
-    fireEvent.submit(screen.getByRole('button'));
+    fireEvent.submit(screen.getByText('Log in'));
 
     expect(await screen.findByTestId('wrongPassword-error')).toBeDefined();
     // expect(mockLogin).toBeCalled();
@@ -65,7 +76,7 @@ describe('RegisterForm', () => {
       },
     });
 
-    fireEvent.submit(screen.getByRole('button'));
+    fireEvent.submit(screen.getByText('Log in'));
 
     expect(
       (screen.getByRole('textbox', {name: /email/i}) as HTMLInputElement).value

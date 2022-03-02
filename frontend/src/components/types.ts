@@ -1,13 +1,13 @@
 import {UserObject} from '../types/api';
-export type RegisterUserObject = UserObject & {confirmPassword: string};
+export type RegisterUserObject = UserObject & {confirmPassword?: string};
 export type CreateGroupObject = {
-  groupid: number;
-  groupname: string;
-  groupdesc: string;
-  groupmembers: string[];
+  id: number;
+  name: string;
+  quote: string;
+  description: string;
+  members: string[];
   interests: string;
   location: string;
   date: string;
-  quote: string;
   //...
 };

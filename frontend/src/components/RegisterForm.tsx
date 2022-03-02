@@ -7,14 +7,19 @@ import {
   FormControl,
   Input,
   Button,
+  Box,
+  Flex,
+  Container
 } from '@chakra-ui/react';
 import {RegisterUserObject} from './types';
 type RegisterFormProps = {
-  onSubmit: (values: RegisterUserObject) => Promise<number>;
+  registerAndGetStatus: (values: RegisterUserObject) => Promise<number>;
+  navigate: (path: string) => void;
 };
 
 const RegisterForm: React.FC<RegisterFormProps> = ({
-  onSubmit,
+  registerAndGetStatus,
+  navigate,
 }: RegisterFormProps) => {
   /**
    * Register user form with fields First name, last name, username, email, password, and confirm password
@@ -37,36 +42,23 @@ const RegisterForm: React.FC<RegisterFormProps> = ({
     return getValues('password') == getValues('confirmPassword');
   };
 
-  return (
-    <form onSubmit={handleSubmit(onSubmit)}>
-      <FormControl isInvalid={!!errors.firstName}>
-        <FormLabel htmlFor="firstName">First Name</FormLabel>
-        <Input
-          id="firstName"
-          placeholder="John"
-          {...register('firstName', {
-            required: 'This is required',
-            pattern: {
-              value: /^[A-Za-zÆæØøÅå\\-]*$/i,
-              message: 'Invalid name',
-            },
-          })}
-        />
-        <FormErrorMessage>
-          {errors.firstName && (
-            <span data-testid="firstName-error" role="alert">
-              {errors.firstName.message}
-            </span>
-          )}
-        </FormErrorMessage>
-      </FormControl>
+  const onSubmit = async (values: RegisterUserObject) => {
+    const status = await registerAndGetStatus(values);
+    if (status == 201) navigate('/');
+  };
 
-      <FormControl isInvalid={!!errors.lastName}>
-        <FormLabel htmlFor="lastName">Last Name</FormLabel>
+  return (
+    <Container maxW="container.lg.xl" p={0}>
+      <Flex px={10} py={2}>
+        <Box py={'5'}>
+    <form onSubmit={handleSubmit(onSubmit)}>
+    <Box  py={'2'}>
+      <FormControl isInvalid={!!errors.first_name}>
+        <FormLabel htmlFor="first_name">First Name</FormLabel>
         <Input
-          id="lastName"
-          placeholder="Green"
-          {...register('lastName', {
+          id="first_name"
+          placeholder="John"
+          {...register('first_name', {
             required: 'This is required',
             pattern: {
               value: /^[A-Za-zÆæØøÅå\\-]*$/i,
@@ -75,18 +67,43 @@ const RegisterForm: React.FC<RegisterFormProps> = ({
           })}
         />
         <FormErrorMessage>
-          {errors.lastName && (
-            <span data-testid="lastName-error" role="alert">
-              {errors.lastName.message}
+          {errors.first_name && (
+            <span data-testid="first_name-error" role="alert">
+              {errors.first_name.message}
             </span>
           )}
         </FormErrorMessage>
       </FormControl>
+      </Box>
+      <Box  py={'2'}>
+      <FormControl isInvalid={!!errors.last_name}>
+        <FormLabel htmlFor="last_name">Last Name</FormLabel>
+        <Input
+          id="last_name"
+          placeholder="Green"
+          {...register('last_name', {
+            required: 'This is required',
+            pattern: {
+              value: /^[A-Za-zÆæØøÅå\\-]*$/i,
+              message: 'Invalid name',
+            },
+          })}
+        />
+        <FormErrorMessage>
+          {errors.last_name && (
+            <span data-testid="last_name-error" role="alert">
+              {errors.last_name.message}
+            </span>
+          )}
+        </FormErrorMessage>
+      </FormControl>
+      </Box>
+      <Box  py={'2'}>
       <FormControl isInvalid={!!errors.email}>
         <FormLabel htmlFor="email">Email</FormLabel>
         <Input
           id="email"
-          placeholder="email"
+          placeholder="johngreen@gmail.com"
           {...register('email', {
             required: 'This is required',
             pattern: {
@@ -103,12 +120,13 @@ const RegisterForm: React.FC<RegisterFormProps> = ({
           )}
         </FormErrorMessage>
       </FormControl>
-
+      </Box>
+      <Box  py={'2'}>
       <FormControl isInvalid={!!errors.username}>
         <FormLabel htmlFor="username">Username</FormLabel>
         <Input
           id="username"
-          placeholder="username"
+          placeholder="johnnyboy"
           {...register('username', {
             required: 'This is required',
             minLength: {value: 3, message: 'Minimum length should be 3'},
@@ -126,7 +144,8 @@ const RegisterForm: React.FC<RegisterFormProps> = ({
           )}
         </FormErrorMessage>
       </FormControl>
-
+      </Box>
+      <Box  py={'2'}>
       {/* <!-- Age - TODO: change to birth date--> */}
       <FormControl isInvalid={!!errors.birthdate}>
         <FormLabel htmlFor="birthdate">Birthdate</FormLabel>
@@ -151,7 +170,8 @@ const RegisterForm: React.FC<RegisterFormProps> = ({
             ))}
         </FormErrorMessage>
       </FormControl>
-
+      </Box>
+      <Box  py={'2'}>
       <FormControl isInvalid={!!errors.password}>
         <FormLabel htmlFor="password">Password</FormLabel>
         <Input
@@ -175,13 +195,15 @@ const RegisterForm: React.FC<RegisterFormProps> = ({
           )}
         </FormErrorMessage>
       </FormControl>
+      </Box>
+      <Box  py={'2'}>
       <FormControl isInvalid={!!errors.confirmPassword}>
         <FormLabel htmlFor="confirmPassword">Confirm Password</FormLabel>
         <Input
           type="password"
           id="confirmPassword"
           data-testid="confirmPassword"
-          placeholder="confirmPassword"
+          placeholder="password"
           {...register('confirmPassword', {
             validate: passwordMatches,
           })}
@@ -195,10 +217,16 @@ const RegisterForm: React.FC<RegisterFormProps> = ({
             )}
         </FormErrorMessage>
       </FormControl>
+      </Box>
+      <Box  py={'0'}>
       <Button mt={4} colorScheme="teal" isLoading={isSubmitting} type="submit">
         Submit
       </Button>
+      </Box>
     </form>
+    </Box>
+      </Flex>
+    </Container>
   );
 };
 export default RegisterForm;

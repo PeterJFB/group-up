@@ -2,12 +2,12 @@ from django.db import models
 from core.models import User
 
 
-class InterestGroup(models.Model):
+class InterestGroup(models.Model):  # TODO: Set more realistic lengths for fields
     name = models.CharField(max_length=255, default="")
     description = models.TextField(max_length=500, default="")
     members = models.ManyToManyField(User, blank=True)
     location = models.CharField(max_length=255, default="")
-    wantToDoNext = models.TextField(max_length=500, default="")
+    quote = models.TextField(max_length=500, default="")
     groupAdmin = models.ForeignKey(
         User, on_delete=models.DO_NOTHING, default=None, related_name="admin"
     )
@@ -17,9 +17,6 @@ class InterestGroup(models.Model):
     sentLikes = models.ManyToManyField(
         "InterestGroup", blank=True, related_name="SentLikes"
     )
-    meetingDate = models.DateTimeField(null=True, blank=True)
-    location = models.CharField(max_length=1000, default="")
-    quote = models.CharField(max_length=150, default="")
 
     REQUIRED_FIELDS = ["name", "description", "groupAdmin"]
 
@@ -29,7 +26,7 @@ class InterestGroup(models.Model):
 
 class Interest(models.Model):
     name = models.CharField(max_length=255, default="")
-    description = models.TextField(default="")
+    description = models.TextField(max_length=1000, default="")
 
     REQUIRED_FIELDS = ["name", "description"]
 

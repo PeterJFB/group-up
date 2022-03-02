@@ -1,21 +1,23 @@
+import {Interest} from '../types/api';
+
 // The User with fields corresponding to our database
 export type UserObject = {
   username: string;
-  firstName: string;
-  lastName: string;
+  first_name: string;
+  last_name: string;
   email: string;
   birthdate: Date;
   password: string;
 };
 
 export type GroupObject = {
-  groupid: number;
-  groupname: string;
-  groupdesc: string;
-  groupmembers: string[];
-  interests: string[];
+  id: number;
+  name: string;
+  quote: string;
+  description: string;
+  members: string[];
+  interests: Interest[];
   location: string;
   date: string;
-  quote: string;
   //...
 };

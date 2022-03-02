@@ -8,14 +8,12 @@ import {
   HStack,
   Image,
   Box,
-  Center,
+  Spacer,
 } from '@chakra-ui/react';
 import {fetchWithToken} from '../api/api';
 import {GroupType} from '../types/api';
-
-type GroupProfileProps = {
-  id: number;
-};
+import {useParams} from 'react-router-dom';
+import {InterestItem} from './Groups';
 
 async function fetchGroupInfo(id: number) {
   const response = await fetchWithToken<GroupType>(`/api/groups/${id}`, 'GET');
@@ -32,15 +30,20 @@ async function fetchGroupAges(id: number) {
   else return;
 }
 
-const GroupProfile: React.FC<GroupProfileProps> = ({id}: GroupProfileProps) => {
+const GroupProfile: React.FC = () => {
+  const {id} = useParams();
   const [groupDetails, setGroupDetails] = useState<GroupType>();
   const [ageDetails, setAgeDetails] = useState<string[]>();
 
   useEffect(() => {
-    fetchGroupInfo(id)
+    if (!id) {
+      console.log(id);
+      return;
+    }
+    fetchGroupInfo(parseInt(id))
       .then(resp => setGroupDetails(resp))
       .catch(err => console.log(err));
-    fetchGroupAges(id)
+    fetchGroupAges(parseInt(id))
       .then(resp => setAgeDetails(resp))
       .catch(err => console.log(err));
   }, []);
@@ -55,11 +58,11 @@ const GroupProfile: React.FC<GroupProfileProps> = ({id}: GroupProfileProps) => {
 
   function ageGap(ages: string[]) {
     const agesSorted = findAges(ages);
-    if (ages.length == 1 || ages[0] == ages[ages.length - 1]) {
-      return agesSorted[0] + ' år';
+    if (ages[0] == ages[ages.length - 1]) {
+      return agesSorted[0] + ' y.o.';
     } else {
       return (
-        agesSorted[0] + ' år - ' + agesSorted[agesSorted.length - 1] + ' år'
+        agesSorted[0] + ' y.o. - ' + agesSorted[agesSorted.length - 1] + ' y.o.'
       );
     }
   }
@@ -69,119 +72,104 @@ const GroupProfile: React.FC<GroupProfileProps> = ({id}: GroupProfileProps) => {
 
   return (
     <Container maxW="container.lg.xl" p={0}>
-      <Flex h="100vh" py={20}>
+      <Flex h="80vh" py={20} bg="groupWhite.200">
         <VStack
           w="full"
-          h="full"
-          p={10}
-          alignItems="flex-start"
-          bg="groupWhite.100"
+          // h="full"
+          // p={10}
         >
           <HStack w="full">
-            <Box flex={1} color="groupWhite.100" />
-
-            <VStack flex={1} spacing="10px" alignItems="flex-start">
-              <Box flex={1}>
+            <Spacer />
+            <VStack spacing="10px">
+              <Box>
                 <Image
                   borderRadius="full"
                   boxShadow="xl"
+                  w="150px"
                   src={process.env.PUBLIC_URL + '/images/groupImage2.png'}
                 />
-                {/**SPRINT 2: Personol profile picture */}
+                {/* TODO: SPRINT 2: Personol profile picture */}
               </Box>
-
-              <Heading size="lg" color="black">
+              <Heading w={'300px'} size="lg" color="black" textAlign={'center'}>
                 {groupDetails.name}
               </Heading>
             </VStack>
-            <Box flex={1} color="groupWhite.100" />
+            <Spacer />
+            
           </HStack>
-          <HStack w="full">
+
+          {/* MEMBER COUNT, AGE RANGE AND LOCATION */}
+          <Flex w="full" mb="15px">
+          {/* <HStack w="full"> */}
+            <Spacer />
             <Box
               border="1px"
               borderColor="groupGreen"
               rounded="md"
               boxShadow="sm"
-              mt="20px"
+              // mt="20px"
+              color="black"
+            >
+              <Flex h={'26px'}>
+                <Box marginLeft={'8px'} marginRight={'4px'}>
+                  <Text fontSize={'lg'} fontWeight={'bold'}>{groupDetails.members.length}</Text>
+                </Box>
+                <Box>
+                  <Image
+                    src={`${process.env.PUBLIC_URL}/images/ProfileIcon.svg`}
+                    w={'24px'}
+                    position={'relative'}
+                    right={'0px'}
+                    top={'2px'}
+                  />
+                </Box>
+              </Flex>
+            </Box>
+            <Spacer />
+            <Box >
+                <Text fontSize={'20px'} textAlign={'center'}>
+                  Ages: {ageGap(ageDetails)}
+                </Text>
+                {/*TODO: Replace text object above with multi-line text object containing ages, time and rating. */}
+            </Box>
+            <Spacer />
+            <Box 
+              // ml="23px" 
+              // pt="23px" 
+              flex={1} 
               color="black"
             >
               <HStack>
-                <Box />
-                <Text fontSize="20px">{groupDetails.members.length}</Text>
                 <Image
-                  w="19px"
-                  height="20px"
-                  src={process.env.PUBLIC_URL + '/images/membersIcon.png'}
-                />
-
-                <Box />
-              </HStack>
-            </Box>
-            <VStack flex={1} spacing="5px">
-              <Box flex={1} color="groupWhite.100" />
-              <Center fontSize="20px" color="black">
-                {' '}
-                {/**Får ikke til sentrering */}
-                Alder: {ageGap(ageDetails)}
-              </Center>
-
-              {/*TODO: 
-              <Text size="14px" color="black">
-               Tid: 
-              </Text>
-                time-variable from Group Object
-                SPRINT 2
-              */}
-
-              {/**
-              <Text pt="3px" color="black">
-                Review S2
-              </Text> 
-              TODO: SPRINT 2 */}
-            </VStack>
-            <Box ml="23px" pt="23px" flex={1} color="black">
-              <HStack>
-                <Image
-                  w="20px"
-                  height="20px"
-                  src={process.env.PUBLIC_URL + '/images/locationIcon.png'}
+                  w="24px"
+                  src={process.env.PUBLIC_URL + '/images/locationIcon.svg'}
                 />
                 <Text fontSize="20px">{groupDetails.location}</Text>
               </HStack>
             </Box>
-          </HStack>
-          <HStack w="full">
-            <Box flex={1} color="groupWhite.100" />
+            <Spacer />
+          {/* </HStack> */}
+          </Flex>
+          <Flex pt="5">
+          {groupDetails.interests.map((interest, index) => {
+            return <InterestItem key={index.toString()} interest={interest} />;
+            //TODO: Add max length to interest fields to avoid overflow
+            //TODO: In case of overflow, show as many as will fit, then [+N] as the last field to show they have N more interests
+          })}
+        </Flex>
 
-            <VStack spacing="1px">
-              <Box flex={1} color="groupWhite.100" />
-              <Box
-                border="1px"
-                borderColor="groupGreen"
-                boxShadow="sm"
-                rounded="md"
-                color="black"
-                flex={1}
-              >
-                {groupDetails.interests.map(interest => (
-                  <Box key={interest.name}>{interest.name}</Box>
-                ))}
-              </Box>
-            </VStack>
-
-            <Box flex={1} color="groupWhite.100" />
-          </HStack>
-
-          <VStack>
-            <Text fontSize="20px" pt="17px" color="black">
-              {groupDetails.quote}
-            </Text>
-
-            <Center pt="20px" fontSize="20px" color="black">
-              {' '}
-              {/**Får ikke til sentrering */}
-              {groupDetails.description}
-            </Center>
+          {/* QUOTE AND DESCRIPTION */}
+          <VStack py="20px"  maxW={'70vw'}>
+            <Box>
+              <Text fontStyle={'italic'} fontSize="20px" color="black" textAlign={'center'}>
+                {groupDetails.quote}
+              </Text>
+            </Box>
+            <Box pt="30px">
+              <Text fontSize="20px" color="black" textAlign={'center'}>
+                {groupDetails.description}
+              </Text>
+            </Box>
           </VStack>
         </VStack>
       </Flex>

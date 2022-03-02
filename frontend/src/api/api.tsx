@@ -32,7 +32,7 @@ type fetchWithTokenResponse<responseBody> =
       body: responseBody;
     };
 
-import {UserObject} from '../types/api';
+import {RegisterUserObject} from '../components/types';
 /**
  * The default wrapper for any request after authentication. The function allows our frontend to make requests while this
  * function handles authentication (provided that the user is already signed in).
@@ -62,11 +62,16 @@ export async function fetchWithToken<ResponseBody>(
       'Content-Type': 'application/json',
       Authorization: `Token ${token}`,
     },
-    body: JSON.stringify(body),
+    body: body ? JSON.stringify(body) : null,
   });
 
   // Return response
-  const responseBody: ResponseBody = await response.json();
+  let responseBody;
+  try {
+    responseBody = await response.json();
+  } catch {
+    responseBody = null;
+  }
   return {
     missingToken: !token,
     headers: response.headers,
@@ -80,9 +85,10 @@ export async function fetchWithToken<ResponseBody>(
  *
  * @param user object of the user to be registered
  */
-export async function registerAndSaveToken(user: UserObject) {
+export async function registerAndSaveToken(user: RegisterUserObject) {
+  delete user.confirmPassword;
   // Perform request to "/login" with credentials
-  const response = await fetch(REACT_APP_URL + '/auth/register', {
+  const response = await fetch(REACT_APP_URL + '/auth/register/', {
     method: 'POST',
     headers: {
       Accept: 'application/json',
@@ -114,7 +120,7 @@ export async function registerAndSaveToken(user: UserObject) {
  */
 export async function signInAndSaveToken(email: string, password: string) {
   // Perform request to "/login" with credentials
-  const response = await fetch(REACT_APP_URL + '/auth/login', {
+  const response = await fetch(REACT_APP_URL + '/auth/login/', {
     method: 'POST',
     headers: {
       Accept: 'application/json',
@@ -124,7 +130,7 @@ export async function signInAndSaveToken(email: string, password: string) {
       username: email,
       password,
     }),
-  });
+  }); //TODO ADD ERROR HANDLING
   const responseBody: TokenBody = await response.json();
 
   // TODO: return status from an invalid authentication

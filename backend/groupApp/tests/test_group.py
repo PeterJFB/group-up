@@ -28,21 +28,25 @@ class InterestGroupTestCase(TestCase):
 
 class InterestGroupTestCaseApi(TestSetUp):
     def testInterestGroupCreation(self):
-        admin = User.objects.create_user(
-            email="test123@test456.no", username="test123", password="test123"
-        )
-
         url = reverse("interestgroup-list")
 
-        data = {"name": "Test", "description": "Test"}
+        data = {
+            "name": "test",
+            "description": "heihei",
+            "location": "fredrikstad",
+            "date": "2023-10-05",
+            "quote": "fiske",
+            "interests": [{"name": "asd", "description": "asd"}],
+        }
 
         response = self.client.post(
             url, data, HTTP_AUTHORIZATION=self.tokenString, format="json"
         )
         self.assertEqual(response.status_code, 201)
-        self.assertEqual(response.data["name"], "Test")
-        self.assertEqual(response.data["description"], "Test")
-        self.assertEqual(response.data["groupAdmin"], self.userID)
+        self.assertEqual(response.data["name"], "test")
+        self.assertEqual(response.data["description"], "heihei")
+        group = InterestGroup.objects.get(name="test", description="heihei")
+        self.assertEqual(group.groupAdmin, self.user)
 
     def testInterestGroupAddMember(self):
         admin = User.objects.create_user(

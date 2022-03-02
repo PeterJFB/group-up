@@ -13,6 +13,7 @@ class TestSetUp(APITestCase):
             "password": "pass",
             "first_name": "test",
             "last_name": "mann",
+            "birthdate": "2010-10-10",
         }
         return super().setUp()
 

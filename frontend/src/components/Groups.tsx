@@ -1,4 +1,5 @@
-import React from 'react';
+import React, {useEffect, useState} from 'react';
+import {Link as RouteLink} from 'react-router-dom';
 import {
   Image,
   Modal,
@@ -19,19 +20,31 @@ import {AddIcon} from '@chakra-ui/icons';
 import CreateGroupForm from './CreateGroupForm';
 import {CreateGroupObject} from './types';
 import {fetchWithToken} from '../api/api';
+import {GroupObject} from '../api/types';
+import {Interest} from '../types/api';
 
 type GroupListItemProps = {
   id: number;
   name: string;
   members: string[];
-  interests: string[];
+  interests: Interest[];
 };
 
-type InterestType = {
-  interest: string;
+type InterestItemProps = {
+  interest: Interest;
 };
 
-const InterestItem: React.FC<InterestType> = ({interest}) => {
+const useToggle = (
+  initialValue = false
+): [value: boolean, toggle: () => void] => {
+  const [value, setValue] = React.useState(initialValue);
+  const toggle = () => {
+    setValue(v => !v);
+  };
+  return [value, toggle];
+};
+
+export const InterestItem: React.FC<InterestItemProps> = ({interest}) => {
   return (
     <Box
       marginLeft="10px"
@@ -43,7 +56,7 @@ const InterestItem: React.FC<InterestType> = ({interest}) => {
       borderRadius={'md'}
       boxShadow={'md'}
     >
-      {interest}
+      {interest.name}
     </Box>
   );
 };
@@ -56,7 +69,13 @@ const GroupListItem: React.FC<GroupListItemProps> = ({
   interests,
 }: GroupListItemProps) => {
   return (
-    <Link position={'relative'} top={5} left={5}>
+    <Link
+      as={RouteLink}
+      to={`/groups/${id}`}
+      position={'relative'}
+      top={5}
+      left={5}
+    >
       {/*TODO:Change from link to box? We may want items within each GroupListItems to be individually clickable */}
       <Box //TODO: Change border colors?
         border="1px"
@@ -81,7 +100,7 @@ const GroupListItem: React.FC<GroupListItemProps> = ({
               w={'40px'}
             />
           </Box>
-          <Box w={'150px'} top={'5px'} left={'45px'} margin="5px">
+          <Box w={'200px'} top={'5px'} left={'45px'} margin="5px">
             <Text fontWeight={'bold'}>{name}</Text>
           </Box>
           <Spacer />
@@ -127,49 +146,60 @@ const GroupListItem: React.FC<GroupListItemProps> = ({
 export const Groups: React.FC = () => {
   //TODO: Replace mockgroups array with actual group data from API
   const {isOpen, onOpen, onClose} = useDisclosure();
-  const mockGroups = [
-    {
-      id: 0,
-      name: 'De kule kidsa',
-      members: ['test', 'test2', 'test3', 'test4'],
-      interests: ['Skape trøbbel', 'Røyke ostepop'],
-    },
-    {
-      id: 1,
-      name: 'Bowlerne',
-      members: ['test', 'test2'],
-      interests: ['Wii Sports', 'Wii Sports Resort'],
-    },
-    {
-      id: 2,
-      name: 'Gutta Krutt',
-      members: ['Bob', 'Kåre', 'Ole'],
-      interests: ['Fisking', 'Pils', 'Rosenborg'],
-    },
-  ];
+  const [groups, setGroups] = useState<GroupObject[]>([]);
+  const [refresh, toggleRefresh] = useToggle();
+  useEffect(() => {
+    fetchWithToken<GroupObject[]>('/api/groups/getMyGroups', 'GET').then(
+      res => {
+        console.log(res);
+        if (!res.missingToken && res.body !== null) setGroups(res.body);
+      }
+    );
+  }, [refresh]);
+  // const mockGroups = [
+  //   {
+  //     id: 0,
+  //     name: 'De kule kidsa',
+  //     members: ['test', 'test2', 'test3', 'test4'],
+  //     interests: ['Skape trøbbel', 'Røyke ostepop'],
+  //   },
+  //   {
+  //     id: 1,
+  //     name: 'Bowlerne',
+  //     members: ['test', 'test2'],
+  //     interests: ['Wii Sports', 'Wii Sports Resort'],
+  //   },
+  //   {
+  //     id: 2,
+  //     name: 'Gutta Krutt',
+  //     members: ['Bob', 'Kåre', 'Ole'],
+  //     interests: ['Fisking', 'Pils', 'Rosenborg'],
+  //   },
+  // ];
 
   const onSubmit = (values: CreateGroupObject) => {
     onClose();
     const interestArr = values.interests.split(',').map(interest => ({
       name: interest,
-      description: ' ',
+      description: 'beskrivelse',
     }));
     const body = {
-      name: values.groupname,
-      description: values.groupdesc,
+      name: values.name,
+      quote: values.quote,
+      description: values.description,
       interests: interestArr,
       location: values.location,
       date: values.date,
-      wantToDoNext: values.quote,
     };
-    fetchWithToken('/api/groups/', 'POST', body).then(response =>
-      console.log(response)
-    );
+    fetchWithToken('/api/groups/', 'POST', body).then(response => {
+      toggleRefresh();
+      console.log(response);
+    });
   };
 
   return (
     <>
-      {mockGroups.map((group, index) => {
+      {groups.map((group, index) => {
         return (
           <GroupListItem
             key={index.toString()}

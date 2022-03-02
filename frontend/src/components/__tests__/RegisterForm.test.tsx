@@ -7,10 +7,16 @@ const mockLogin = jest.fn((values: RegisterUserObject) => {
   return Promise.resolve(values.username.length);
 });
 
+const mockNavigate = jest.fn((path: string) => {
+  return;
+});
 describe('RegisterForm', () => {
   beforeEach(() => {
-    render(<RegisterForm onSubmit={mockLogin} />);
+    render(
+      <RegisterForm navigate={mockNavigate} registerAndGetStatus={mockLogin} />
+    );
   });
+  //TODO: test navigation to home screen
 
   it('should display required error for all fields when they are empty', async () => {
     fireEvent.submit(screen.getByRole('button'));
@@ -58,25 +64,25 @@ describe('RegisterForm', () => {
     expect(mockLogin).not.toBeCalled();
   });
 
-  it('should display error when firstname is invalid', async () => {
+  it('should display error when first_name is invalid', async () => {
     fireEvent.input(screen.getByRole('textbox', {name: /First name/i}), {
       target: {
         value: '123456789',
       },
     });
     fireEvent.submit(screen.getByRole('button'));
-    expect(await screen.findByTestId('firstName-error')).toBeDefined();
+    expect(await screen.findByTestId('first_name-error')).toBeDefined();
     expect(mockLogin).not.toBeCalled();
   });
 
-  it('should display error when lastname is invalid', async () => {
+  it('should display error when last_name is invalid', async () => {
     fireEvent.input(screen.getByRole('textbox', {name: /Last name/i}), {
       target: {
         value: '123456789',
       },
     });
     fireEvent.submit(screen.getByRole('button'));
-    expect(await screen.findByTestId('lastName-error')).toBeDefined();
+    expect(await screen.findByTestId('last_name-error')).toBeDefined();
     expect(mockLogin).not.toBeCalled();
   });
 

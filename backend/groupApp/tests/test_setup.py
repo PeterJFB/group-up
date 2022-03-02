@@ -14,7 +14,7 @@ class TestSetUp(APITestCase):
             "email": "test@gmail.com",
             "password": "pass",
         }
-        user = User.objects.create_user(
+        self.user = User.objects.create_user(
             self.user_data["username"],
             self.user_data["email"],
             self.user_data["password"],
@@ -26,8 +26,7 @@ class TestSetUp(APITestCase):
             format="json",
         )  # log in
 
-        self.tokenString = "Token " + Token.objects.get(user=user).key
-        self.userID = user.id
+        self.tokenString = "Token " + Token.objects.get(user=self.user).key
 
         return super().setUp()
 
