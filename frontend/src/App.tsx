@@ -1,11 +1,23 @@
-import React, {useState} from 'react';
+import React, {useRef} from 'react';
 import {Box, Flex} from '@chakra-ui/react';
 import {BrowserRouter, Navigate, Route, Routes} from 'react-router-dom';
 import {LoginProvider} from './components/LoginProvider';
-import {Navigation} from './components/Navigation';
-import {Header} from './components/Header';
 import {Groups} from './components/Groups';
 import GroupProfile from './components/GroupProfile';
+import Navigation from './components/Navigation';
+import Header from './components/Header';
+import {FindGroupUp} from './components/FindGroupUp';
+
+export type ReturnButtonProps = {
+  showReturnButton: (
+    visible: boolean,
+    onClick?: React.MouseEventHandler<HTMLDivElement>
+  ) => void;
+};
+
+export type NavigationProps = {
+  showNavigation: (visible: boolean) => void;
+};
 
 const Temp: React.FC = ({children}) => {
   return (
@@ -27,14 +39,23 @@ const Temp: React.FC = ({children}) => {
 };
 
 function App() {
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const [showReturnButton, setShowReturnButton] = useState(false);
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const [onReturnButtonClick, setOnReturnButtonClick] = useState<
-    React.MouseEventHandler<HTMLDivElement>
-  >(() => {
-    return;
-  });
+  const rbRef = useRef<Header>(null);
+  const nRef = useRef<Navigation>(null);
+
+  const showReturnButton: ReturnButtonProps['showReturnButton'] = (
+    visible,
+    onClick
+  ) => {
+    if (onClick) {
+      rbRef.current?.setState({onReturnButtonClick: onClick});
+    }
+    rbRef.current?.setState({showReturnButton: visible});
+  };
+
+  const showNavigation: NavigationProps['showNavigation'] = visible => {
+    nRef.current?.setState({visible});
+  };
+
   return (
     <BrowserRouter>
       <LoginProvider>
@@ -43,23 +64,32 @@ function App() {
           height="100vh"
           direction={'column'}
           maxW={'container.md'}
+          bgColor="groupWhite.100"
         >
-          <Header
-            showReturnButton={showReturnButton}
-            onReturnButtonClick={onReturnButtonClick}
-          />
-          <Box overflowX={'scroll'} flex={1}>
+          <Header ref={rbRef} />
+          <Box overflowY={'auto'} flex={1}>
             <Routes>
               {/* <Route path="/" element={<Temp>Home</Temp>} /> */}
               <Route path="/groups" element={<Groups />} />
-              <Route path="/groups/:id" element={<GroupProfile />} />
-              <Route path="/find" element={<Temp>find</Temp>} />
-              <Route path="/gmatches" element={<Temp>gmatches</Temp>} />
+              <Route
+                path="/groups/:id"
+                element={<GroupProfile showReturnButton={showReturnButton} />}
+              />
+              <Route
+                path="/findgroupup"
+                element={
+                  <FindGroupUp
+                    showReturnButton={showReturnButton}
+                    showNavigation={showNavigation}
+                  />
+                }
+              />
+              <Route path="/groupups" element={<Temp>gmatches</Temp>} />
               <Route path="/profile" element={<Temp>profile</Temp>} />
-              <Route path="*" element={<Navigate to={'/gmatches'} />} />
+              <Route path="*" element={<Navigate to={'/groupups'} />} />
             </Routes>
           </Box>
-          <Navigation />
+          <Navigation ref={nRef} />
         </Flex>
       </LoginProvider>
     </BrowserRouter>

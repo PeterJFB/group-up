@@ -29,7 +29,7 @@ type fetchWithTokenResponse<responseBody> =
       missingToken: false;
       headers: Headers;
       status: number;
-      body: responseBody;
+      body?: responseBody;
     };
 
 import {RegisterUserObject} from '../components/types';
@@ -62,16 +62,26 @@ export async function fetchWithToken<ResponseBody>(
       'Content-Type': 'application/json',
       Authorization: `Token ${token}`,
     },
-    body: body ? JSON.stringify(body) : null,
+    ...(body && {body: JSON.stringify(body)}),
   });
 
-  // Return response
-  let responseBody;
-  try {
-    responseBody = await response.json();
-  } catch {
-    responseBody = null;
+  // Attempt to parse response body if it exists
+  let responseBody: ResponseBody | undefined = undefined;
+  const contentLength = response.headers.get('Content-Length');
+  if (contentLength && parseInt(contentLength)) {
+    await response
+      .json()
+      .then(body => {
+        responseBody = body;
+      })
+      .catch(e => {
+        console.error('Parsing of body failed');
+        console.error(e);
+        console.error(response);
+      });
   }
+
+  // Return response
   return {
     missingToken: !token,
     headers: response.headers,
