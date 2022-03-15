@@ -159,3 +159,37 @@ class GroupMatchViewSet(viewsets.ModelViewSet):
     queryset = GroupMatch.objects.all()
     serializer_class = GroupMatchSerializer
     permission_classes = [permissions.IsAuthenticated, UserAccessToMatchPermission]
+
+    @action(
+        methods=["get"],
+        detail=False,
+        url_path="getGroupUps",
+        url_name="getGroupUps",
+    )
+    def getGroupUps(self, request, pk=None):
+        user_groups = InterestGroup.objects.filter(members__in=[request.user])
+        groupUps = GroupMatch.objects.filter(
+            Q(group1__in=user_groups) | Q(group2__in=user_groups)
+        )
+        groupData = {
+            id: InterestGroupSerializer(InterestGroup.objects.get(id=id)).data
+            for id in list(
+                set(
+                    [
+                        j
+                        for sub in [
+                            [group.group1.id, group.group2.id] for group in groupUps
+                        ]
+                        for j in sub
+                    ]
+                )
+            )
+        }
+        matches = {
+            groupUp.id: {
+                "group1": groupData[groupUp.group1.id],
+                "group2": groupData[groupUp.group2.id],
+            }
+            for groupUp in groupUps
+        }
+        return Response(matches, status=200)
