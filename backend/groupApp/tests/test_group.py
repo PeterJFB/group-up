@@ -1,6 +1,6 @@
 from django.test import TestCase
 from core.models import User
-from groupApp.models import InterestGroup
+from groupApp.models import InterestGroup, Interest
 from django.urls import reverse
 from .test_setup import TestSetUp
 
@@ -95,3 +95,70 @@ class InterestGroupTestCaseApi(TestSetUp):
 
         self.assertEqual(response.status_code, 200)
         self.assertEqual(len(response.data["members"]), 0)
+
+    def testInterestGroupUpdate(self):
+        group = InterestGroup.objects.create(
+            name="TestGroup",
+            description="HEIHIE",
+            location="Rommet",
+            quote="quote",
+            groupAdmin=self.user,
+            date="2023-10-03",
+        )
+
+        url = reverse("interestgroup-detail", kwargs={"pk": group.id})
+
+        data = {
+            "name": "newName",
+            "description": "newDesc",
+            "location": "newLoc",
+            "quote": "newQuote",
+            "date": "2024-10-03",
+            "interests": [{"name": "Fotball", "description": "Sport"}],
+        }
+
+        response = self.client.patch(
+            url, data, HTTP_AUTHORIZATION=self.tokenString, format="json"
+        )
+
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.data["name"], "newName")
+        self.assertEqual(response.data["description"], "newDesc")
+        self.assertEqual(response.data["location"], "newLoc")
+        self.assertEqual(response.data["quote"], "newQuote")
+        self.assertEqual(response.data["date"], "2024-10-03")
+        self.assertEqual(
+            response.data["interests"], [{"name": "Fotball", "description": "Sport"}]
+        )
+
+    def testInterestGroupUpdateUnauthorized(self):
+
+        extraUser = User.objects.create_user(
+            email="extraUser@mail.com", username="extraUser", password="123"
+        )
+
+        group = InterestGroup.objects.create(
+            name="TestGroup",
+            description="HEIHIE",
+            location="Rommet",
+            quote="quote",
+            groupAdmin=extraUser,
+            date="2023-10-03",
+        )
+
+        url = reverse("interestgroup-detail", kwargs={"pk": group.id})
+
+        data = {
+            "name": "newName",
+            "description": "newDesc",
+            "location": "newLoc",
+            "quote": "newQuote",
+            "date": "2024-10-03",
+            "interests": [{"name": "Fotball", "description": "Sport"}],
+        }
+
+        response = self.client.patch(
+            url, data, HTTP_AUTHORIZATION=self.tokenString, format="json"
+        )
+
+        self.assertEqual(response.status_code, 403)
