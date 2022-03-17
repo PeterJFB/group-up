@@ -1,14 +1,8 @@
 import {Flex, Image, Link} from '@chakra-ui/react';
-import React, {RefObject} from 'react';
+import React from 'react';
 import {Link as ReactLink, useLocation} from 'react-router-dom';
-
-type Props = {
-  ref: RefObject<Navigation>;
-};
-
-type State = {
-  visible: boolean;
-};
+import {useRecoilValue} from 'recoil';
+import {nState} from '../state';
 
 type NavItemProps = {
   image: string;
@@ -40,45 +34,37 @@ const NavItem: React.FC<NavItemProps> = ({image, to}) => {
   );
 };
 
-// Using class component as it will be handled with useRef
-class Navigation extends React.Component<Props, State> {
-  constructor(props: Props) {
-    super(props);
-    this.state = {visible: true};
-  }
-  render() {
-    if (!this.state.visible) {
-      return null;
-    }
-    return (
-      <Flex
-        boxShadow="0px 0px 20px rgba(0, 0, 0, 20%)"
-        zIndex={200}
-        maxW="container.md"
-        width={'100%'}
-        bottom={0}
-        justifyContent="space-evenly"
-        bgColor="groupWhite.200"
-      >
-        <NavItem
-          image={`${process.env.PUBLIC_URL}/navicons/groups.svg`}
-          to="/groups"
-        />
-        <NavItem
-          image={`${process.env.PUBLIC_URL}/navicons/search.svg`}
-          to="/findgroupup"
-        />
-        <NavItem
-          image={`${process.env.PUBLIC_URL}/navicons/groupup.svg`}
-          to="/groupups"
-        />
-        <NavItem
-          image={`${process.env.PUBLIC_URL}/navicons/profile.svg`}
-          to="/profile"
-        />
-      </Flex>
-    );
-  }
-}
+const Navigation: React.FC = () => {
+  const showNavigation = useRecoilValue(nState);
+  if (!showNavigation) return null;
+  return (
+    <Flex
+      boxShadow="0px 0px 20px rgba(0, 0, 0, 20%)"
+      zIndex={200}
+      maxW="container.md"
+      width={'100%'}
+      bottom={0}
+      justifyContent="space-evenly"
+      bgColor="groupWhite.200"
+    >
+      <NavItem
+        image={`${process.env.PUBLIC_URL}/navicons/groups.svg`}
+        to="/groups"
+      />
+      <NavItem
+        image={`${process.env.PUBLIC_URL}/navicons/search.svg`}
+        to="/findgroupup"
+      />
+      <NavItem
+        image={`${process.env.PUBLIC_URL}/navicons/groupup.svg`}
+        to="/groupups"
+      />
+      <NavItem
+        image={`${process.env.PUBLIC_URL}/navicons/profile.svg`}
+        to="/profile"
+      />
+    </Flex>
+  );
+};
 
 export default Navigation;
