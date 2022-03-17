@@ -35,6 +35,13 @@ class GroupMatchSerializer(serializers.ModelSerializer):
         return instance
 
 
+def interestToId(interest):
+    obj, created = Interest.objects.get_or_create(
+        name=interest["name"], description=interest["description"]
+    )
+    return obj.id
+
+
 class InterestGroupSerializer(serializers.ModelSerializer):
     interests = InterestSerializer(many=True)
     # members = UserSerializer(many=True)
@@ -54,6 +61,7 @@ class InterestGroupSerializer(serializers.ModelSerializer):
             # "matches",
             # "sentLikes",
         ]
+        read_only_fields = ["members"]
 
     def create(self, validated_data):
         request = self.context.get("request")
@@ -62,13 +70,7 @@ class InterestGroupSerializer(serializers.ModelSerializer):
         interests = validated_data.pop("interests")
         interestGroup = InterestGroup.objects.create(**validated_data)
 
-        def toId(interest):
-            obj, created = Interest.objects.get_or_create(
-                name=interest["name"], description=interest["description"]
-            )
-            return obj.id
-
-        interestArr = list(map(lambda i: toId(i), interests))
+        interestArr = list(map(lambda i: interestToId(i), interests))
 
         interestGroup.interests.set(interestArr)
         interestGroup.members.set([request.user])
@@ -76,20 +78,17 @@ class InterestGroupSerializer(serializers.ModelSerializer):
         return interestGroup
 
     def update(self, instance, validated_data):
-        # TODO: fix update of interests
         instance.name = validated_data.get("name", instance.name)
         instance.description = validated_data.get("description", instance.description)
         instance.date = validated_data.get("date", instance.date)
         instance.location = validated_data.get("location", instance.location)
         instance.quote = validated_data.get("quote", instance.quote)
 
-        if "members" in validated_data:
-            instance.members.set(validated_data.get("members"))
-        # if "matches" in validated_data:
-        #     instance.matches.set(validated_data.get("matches"))
-        # if "sentLikes" in validated_data:
-        #     instance.sentLikes.set(validated_data.get("sentLikes"))
         if "interests" in validated_data:
-            instance.interests.set(validated_data.get("interests"))
+            interests = list(
+                map(lambda i: interestToId(i), validated_data.get("interests"))
+            )
+            instance.interests.set(interests)
+
         instance.save()
         return instance
