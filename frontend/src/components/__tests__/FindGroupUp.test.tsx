@@ -4,7 +4,7 @@ import {NavigationProps, ReturnButtonProps} from '../../App';
 import {FindGroupUp} from '../FindGroupUp';
 import {GroupObject} from '../../api/types';
 import {MemoryRouter} from 'react-router-dom';
-
+import {RecoilRoot} from 'recoil';
 /* eslint-disable @typescript-eslint/no-unused-vars */
 const mockReturnButton: ReturnButtonProps['showReturnButton'] = (
   visible,
@@ -77,10 +77,12 @@ describe('FindGroupUp', () => {
     act(() => {
       render(
         <MemoryRouter>
-          <FindGroupUp
-            showReturnButton={mockReturnButton}
-            showNavigation={mockShowNavigation}
-          />
+          <RecoilRoot>
+            <FindGroupUp
+              showReturnButton={mockReturnButton}
+              showNavigation={mockShowNavigation}
+            />
+          </RecoilRoot>
         </MemoryRouter>
       );
     });
@@ -98,10 +100,12 @@ describe('FindGroupUp', () => {
     act(() => {
       render(
         <MemoryRouter>
-          <FindGroupUp
-            showReturnButton={mockReturnButton}
-            showNavigation={mockShowNavigation}
-          />
+          <RecoilRoot>
+            <FindGroupUp
+              showReturnButton={mockReturnButton}
+              showNavigation={mockShowNavigation}
+            />
+          </RecoilRoot>
         </MemoryRouter>
       );
     });

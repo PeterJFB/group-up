@@ -4,6 +4,7 @@ import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
 import {ChakraProvider, extendTheme} from '@chakra-ui/react';
+import {RecoilRoot} from 'recoil';
 
 const theme = extendTheme({
   colors: {
@@ -20,9 +21,11 @@ const theme = extendTheme({
 
 ReactDOM.render(
   <React.StrictMode>
-    <ChakraProvider theme={theme}>
-      <App />
-    </ChakraProvider>
+    <RecoilRoot>
+      <ChakraProvider theme={theme}>
+        <App />
+      </ChakraProvider>
+    </RecoilRoot>
   </React.StrictMode>,
   document.getElementById('root')
 );

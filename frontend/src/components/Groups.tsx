@@ -15,19 +15,29 @@ import {CreateGroupObject} from './types';
 import {fetchWithToken} from '../api/api';
 import {GroupObject} from '../api/types';
 import {GroupListItem} from './GroupListItem';
+import {useSetRecoilState} from 'recoil';
+import {alertState, AlertType} from '../state';
 
 export const Groups: React.FC = () => {
   //TODO: Replace mockgroups array with actual group data from API
   const {isOpen, onOpen, onClose} = useDisclosure();
   const [groups, setGroups] = useState<GroupObject[]>([]);
   const [refresh, toggleRefresh] = useState(false);
+  const setAlertState = useSetRecoilState(alertState);
   useEffect(() => {
-    fetchWithToken<GroupObject[]>('/api/groups/getMyGroups/', 'GET').then(
-      res => {
-        console.log(res);
+    fetchWithToken<GroupObject[]>('/api/groups/getMyGroups/', 'GET')
+      .then(res => {
         if (!res.missingToken && res.body !== undefined) setGroups(res.body);
-      }
-    );
+      })
+      .catch(e => {
+        console.error(e);
+        setAlertState({
+          type: AlertType.ERROR,
+          message:
+            'Could not get groups from server, please restart the application.',
+          active: true,
+        });
+      });
   }, [refresh]);
   // const mockGroups = [
   //   {

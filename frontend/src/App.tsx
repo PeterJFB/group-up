@@ -1,4 +1,4 @@
-import React, {useRef} from 'react';
+import React from 'react';
 import {Box, Flex} from '@chakra-ui/react';
 import {BrowserRouter, Navigate, Route, Routes} from 'react-router-dom';
 import {LoginProvider} from './components/LoginProvider';
@@ -7,17 +7,7 @@ import GroupProfile from './components/GroupProfile';
 import Navigation from './components/Navigation';
 import Header from './components/Header';
 import {FindGroupUp} from './components/FindGroupUp';
-
-export type ReturnButtonProps = {
-  showReturnButton: (
-    visible: boolean,
-    onClick?: React.MouseEventHandler<HTMLDivElement>
-  ) => void;
-};
-
-export type NavigationProps = {
-  showNavigation: (visible: boolean) => void;
-};
+import AlertModal from './components/AlertModal';
 
 const Temp: React.FC = ({children}) => {
   return (
@@ -39,23 +29,6 @@ const Temp: React.FC = ({children}) => {
 };
 
 function App() {
-  const rbRef = useRef<Header>(null);
-  const nRef = useRef<Navigation>(null);
-
-  const showReturnButton: ReturnButtonProps['showReturnButton'] = (
-    visible,
-    onClick
-  ) => {
-    if (onClick) {
-      rbRef.current?.setState({onReturnButtonClick: onClick});
-    }
-    rbRef.current?.setState({showReturnButton: visible});
-  };
-
-  const showNavigation: NavigationProps['showNavigation'] = visible => {
-    nRef.current?.setState({visible});
-  };
-
   return (
     <BrowserRouter>
       <LoginProvider>
@@ -66,30 +39,20 @@ function App() {
           maxW={'container.md'}
           bgColor="groupWhite.100"
         >
-          <Header ref={rbRef} />
+          <Header />
           <Box overflowY={'auto'} flex={1}>
             <Routes>
               {/* <Route path="/" element={<Temp>Home</Temp>} /> */}
               <Route path="/groups" element={<Groups />} />
-              <Route
-                path="/groups/:id"
-                element={<GroupProfile showReturnButton={showReturnButton} />}
-              />
-              <Route
-                path="/findgroupup"
-                element={
-                  <FindGroupUp
-                    showReturnButton={showReturnButton}
-                    showNavigation={showNavigation}
-                  />
-                }
-              />
+              <Route path="/groups/:id" element={<GroupProfile />} />
+              <Route path="/findgroupup" element={<FindGroupUp />} />
               <Route path="/groupups" element={<Temp>gmatches</Temp>} />
               <Route path="/profile" element={<Temp>profile</Temp>} />
               <Route path="*" element={<Navigate to={'/groupups'} />} />
             </Routes>
           </Box>
-          <Navigation ref={nRef} />
+          <Navigation />
+          <AlertModal />
         </Flex>
       </LoginProvider>
     </BrowserRouter>

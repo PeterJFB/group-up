@@ -1,29 +1,37 @@
 import React, {useEffect, useState} from 'react';
 import {Box, Flex} from '@chakra-ui/react';
-import {NavigationProps, ReturnButtonProps} from '../../App';
 import {Filter} from './Filter';
 import {findGroupUp} from './api';
 import {fetchWithToken} from '../../api/api';
 import {GroupObject} from '../../api/types';
 import {ChosenGroup, GroupOption, GroupUpOption} from './GroupOption';
+import {useSetRecoilState} from 'recoil';
+import {rbState, nState} from '../../state';
 
-export const FindGroupUp: React.FC<ReturnButtonProps & NavigationProps> = ({
-  showReturnButton,
-  showNavigation,
-}) => {
+export const FindGroupUp: React.FC = () => {
   const [chosenGroup, setChosenGroup] = useState<GroupObject>();
   const [groupOptions, setGroupOptions] = useState<GroupObject[]>();
+  const setRbState = useSetRecoilState(rbState);
+  const setNState = useSetRecoilState(nState);
 
   /* Execute every time the chosen group changes */
   useEffect(() => {
     if (chosenGroup) {
       /* Hide navigation and show return button */
-      showNavigation(false);
-      showReturnButton(true, () => {
-        setChosenGroup(undefined);
-        showReturnButton(false);
-        showNavigation(true);
-      });
+      setNState(false);
+      setRbState([
+        true,
+        () => {
+          setChosenGroup(undefined);
+          setNState(true);
+          setRbState([
+            false,
+            () => {
+              return;
+            },
+          ]);
+        },
+      ]);
 
       /* Retrieve the users potential groupups */
       fetchWithToken<GroupObject[]>(
