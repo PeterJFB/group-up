@@ -94,7 +94,7 @@ const CreateGroupForm: React.FC<CreateGroupFormProps> = ({
                 {...register('description', {
                   required: 'This is required',
                   pattern: {
-                    value: /^[A-Za-zÆæØøÅå \\\-.,']*$/i,
+                    value: /^[A-Za-zÆæØøÅå \\\-.?!,']*$/i,
                     message: 'Invalid description',
                   },
                 })}

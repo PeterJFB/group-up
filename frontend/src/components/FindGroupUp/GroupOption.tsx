@@ -19,6 +19,8 @@ import {GroupListItem} from '../GroupListItem';
 import {fetchGroupAges} from '../GroupProfile/api';
 import GroupProfileDetail from '../GroupProfile/GroupProfileDetail';
 import Confetti from 'react-confetti';
+import {useRecoilValue} from 'recoil';
+import {confettiState} from '../../state';
 
 type GroupOptionProps = {
   group: GroupObject;
@@ -59,6 +61,7 @@ export const GroupUpOption: React.FC<GroupUpOptionProps> = ({
   const announce = useDisclosure();
 
   const [birthdays, setBirthdays] = useState<string[]>();
+  const confetti = useRecoilValue(confettiState);
 
   const fetchGroupUpRequest = () => {
     fetchWithToken<GroupUpObject>('/api/groupups/', 'POST', {
@@ -121,7 +124,7 @@ export const GroupUpOption: React.FC<GroupUpOptionProps> = ({
 
       {/* Announce a successful GroupUp */}
       <Modal isOpen={announce.isOpen} onClose={announce.onClose}>
-        <Confetti />
+        {confetti.active && <Confetti />}
         <ModalOverlay />
         <ModalContent>
           <ModalHeader textAlign={'center'}>Congratulations!</ModalHeader>

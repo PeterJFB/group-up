@@ -31,30 +31,33 @@ const Temp: React.FC = ({children}) => {
 function App() {
   return (
     <BrowserRouter>
-      <LoginProvider>
-        <Flex
-          flex={1}
-          height="100vh"
-          direction={'column'}
-          maxW={'container.md'}
-          bgColor="groupWhite.100"
-        >
-          <Header />
-          <Box overflowY={'auto'} flex={1}>
-            <Routes>
-              {/* <Route path="/" element={<Temp>Home</Temp>} /> */}
-              <Route path="/groups" element={<Groups />} />
-              <Route path="/groups/:id" element={<GroupProfile />} />
-              <Route path="/findgroupup" element={<FindGroupUp />} />
-              <Route path="/groupups" element={<Temp>gmatches</Temp>} />
-              <Route path="/profile" element={<Temp>profile</Temp>} />
-              <Route path="*" element={<Navigate to={'/groupups'} />} />
-            </Routes>
-          </Box>
-          <Navigation />
-          <AlertModal />
-        </Flex>
-      </LoginProvider>
+      <Flex flex={1} direction={'column'} height="100vh" maxW={'container.md'}>
+        <Header />
+        <LoginProvider>
+          <Flex
+            flex={1}
+            direction={'column'}
+            // height="100vh"
+            maxW={'container.md'}
+            bgColor="groupWhite.100"
+            overflowY={'scroll'}
+          >
+            <Box flex={1} overflowY={'scroll'}>
+              <Routes>
+                {/* <Route path="/" element={<Temp>Home</Temp>} /> */}
+                <Route path="/groups" element={<Groups />} />
+                <Route path="/groups/:id" element={<GroupProfile />} />
+                <Route path="/findgroupup" element={<FindGroupUp />} />
+                <Route path="/groupups" element={<Temp>gmatches</Temp>} />
+                <Route path="/profile" element={<Temp>profile</Temp>} />
+                <Route path="*" element={<Navigate to={'/groupups'} />} />
+              </Routes>
+            </Box>
+            <Navigation />
+            <AlertModal />
+          </Flex>
+        </LoginProvider>
+      </Flex>
     </BrowserRouter>
   );
 }

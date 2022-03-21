@@ -1,18 +1,15 @@
-import {VStack} from '@chakra-ui/react';
+import {Box} from '@chakra-ui/react';
 import React, {useEffect, useState} from 'react';
-import {Route, Routes, useNavigate} from 'react-router-dom';
-import {
-  fetchWithToken,
-  registerAndSaveToken,
-  signInAndSaveToken,
-} from '../../api/api';
+import {Route, Routes} from 'react-router-dom';
+import {fetchWithToken, signInAndSaveToken} from '../../api/api';
+import {useRerender} from '../../utils/hooks';
 import LoginForm from '../LoginForm';
 import RegisterForm from '../RegisterForm';
 
 export const LoginProvider: React.FC = ({children}) => {
   const [loggedIn, setLoggedIn] = useState(false);
 
-  const navigate = useNavigate();
+  const [listener, rerender] = useRerender();
 
   useEffect(() => {
     // Using an IIFE
@@ -23,33 +20,28 @@ export const LoginProvider: React.FC = ({children}) => {
         setLoggedIn(true);
       }
     });
-  }, []);
+  }, [listener]);
 
   return (
     <>
       {!loggedIn ? (
-        <VStack>
+        <Box flex={1} overflow="auto">
           <Routes>
             <Route
               path="/register"
-              element={
-                <RegisterForm
-                  registerAndGetStatus={registerAndSaveToken}
-                  navigate={navigate}
-                />
-              }
+              element={<RegisterForm rerender={rerender} />}
             />
             <Route
               path="/*"
               element={
                 <LoginForm
-                  navigate={navigate}
+                  rerender={rerender}
                   signInAndGetStatus={signInAndSaveToken}
                 />
               }
             />
           </Routes>
-        </VStack>
+        </Box>
       ) : (
         <>{children}</>
       )}

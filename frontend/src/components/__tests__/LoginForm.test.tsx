@@ -3,17 +3,25 @@ import {screen, render, fireEvent} from '@testing-library/react';
 import '@testing-library/jest-dom';
 import LoginForm from '../LoginForm';
 import {MemoryRouter} from 'react-router-dom';
+import {RecoilRoot} from 'recoil';
 const mockLogin = async (email: string, password: string) =>
   email == 'email@email.com' && password == 'password' ? 200 : 404;
 
 const mockNavigate = jest.fn((path: string) => {
   return;
 });
+
+const mockRerender = () => {
+  return;
+};
+
 describe('LoginForm', () => {
   beforeEach(() => {
     render(
       <MemoryRouter>
-        <LoginForm navigate={mockNavigate} signInAndGetStatus={mockLogin} />
+        <RecoilRoot>
+          <LoginForm rerender={mockRerender} signInAndGetStatus={mockLogin} />
+        </RecoilRoot>
       </MemoryRouter>
     );
   });

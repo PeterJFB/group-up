@@ -1,6 +1,6 @@
 import {useForm} from 'react-hook-form';
-import React, {useState} from 'react';
-import {Link as RouteLink} from 'react-router-dom';
+import React, {useEffect, useState} from 'react';
+import {Link as RouteLink, useNavigate} from 'react-router-dom';
 
 import {
   FormErrorMessage,
@@ -14,6 +14,8 @@ import {
   Box,
   Container,
 } from '@chakra-ui/react';
+import {useSetRecoilState} from 'recoil';
+import {rbState} from '../state';
 
 type LoginUserObject = {
   email: string;
@@ -21,13 +23,13 @@ type LoginUserObject = {
 };
 
 type LoginFormProps = {
+  rerender: () => void;
   signInAndGetStatus: (email: string, password: string) => Promise<number>;
-  navigate: (path: string) => void;
 };
 
 const LoginForm: React.FC<LoginFormProps> = ({
+  rerender,
   signInAndGetStatus,
-  navigate,
 }) => {
   /**
    * Login form using email and password
@@ -41,6 +43,17 @@ const LoginForm: React.FC<LoginFormProps> = ({
   } = useForm<LoginUserObject>();
 
   const [wrongPassword, setWrongPassword] = useState(false);
+  const setRBState = useSetRecoilState(rbState);
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    setRBState([
+      false,
+      () => {
+        return;
+      },
+    ]);
+  }, []);
 
   const onSubmit = async (values: LoginUserObject) => {
     const status = await signInAndGetStatus(values.email, values.password);
@@ -48,8 +61,7 @@ const LoginForm: React.FC<LoginFormProps> = ({
     if (status != 200) {
       setWrongPassword(true);
     } else {
-      navigate('/groups');
-      //window.location.reload() <- makes tests fail
+      rerender();
     }
   };
 
@@ -118,7 +130,18 @@ const LoginForm: React.FC<LoginFormProps> = ({
               )}
               <br></br>
               <Box py={'2'}>
-                <Link as={RouteLink} to="/register">
+                <Link
+                  as={RouteLink}
+                  to="/register"
+                  onClick={() => {
+                    setRBState([
+                      true,
+                      () => {
+                        navigate('/');
+                      },
+                    ]);
+                  }}
+                >
                   <Button mt={4} colorScheme="teal">
                     Sign Up
                   </Button>

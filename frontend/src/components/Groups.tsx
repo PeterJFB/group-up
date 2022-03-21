@@ -17,9 +17,9 @@ import {GroupListItem} from './GroupListItem';
 import {useSetRecoilState} from 'recoil';
 import {alertState, AlertType} from '../state';
 import {GroupObject} from '../types/api';
+import CenteredMessage from './CenteredMessage';
 
 export const Groups: React.FC = () => {
-  //TODO: Replace mockgroups array with actual group data from API
   const {isOpen, onOpen, onClose} = useDisclosure();
   const [groups, setGroups] = useState<GroupObject[]>([]);
   const [refresh, toggleRefresh] = useState(false);
@@ -81,15 +81,19 @@ export const Groups: React.FC = () => {
 
   return (
     <>
-      {groups.map(group => {
-        return (
-          <GroupListItem
-            key={group.name}
-            to={`/groups/${group.id}`}
-            group={group}
-          />
-        );
-      })}
+      {groups.length ? (
+        groups.map(group => {
+          return (
+            <GroupListItem
+              key={group.name}
+              to={`/groups/${group.id}`}
+              group={group}
+            />
+          );
+        })
+      ) : (
+        <CenteredMessage>Create or join a group to begin :)</CenteredMessage>
+      )}
       <Circle
         bgColor="groupGreen"
         size="80px"
