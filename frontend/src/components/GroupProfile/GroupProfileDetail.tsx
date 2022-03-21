@@ -9,7 +9,7 @@ import {
   Image,
 } from '@chakra-ui/react';
 import React from 'react';
-import {GroupObject} from '../../api/types';
+import {GroupObject} from '../../types/api';
 import {generateAgeGapText} from './api';
 import InterestItem from './InterestItem';
 import MembersNumber from './MembersNumber';

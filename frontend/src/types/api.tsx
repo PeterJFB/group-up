@@ -8,11 +8,12 @@ export type UserObject = {
   first_name: string;
   last_name: string;
   email: string;
-  birthdate: Date;
+  birthdate: string | Date;
   password: string;
 };
 
-export type GroupType = {
+export type GroupObject = {
+  id: number;
   name: string;
   quote: string;
   description: string;
@@ -20,5 +21,12 @@ export type GroupType = {
   groupAdmin: UserObject;
   interests: Interest[];
   location: string;
-  meetingDate: string;
+  meetingDate: string | Date;
+};
+
+export type GroupUpObject = {
+  group1: number;
+  group2: number;
+  groupUpAccept?: boolean;
+  isSuperGroupup?: boolean;
 };

@@ -1,5 +1,5 @@
-import {UserObject} from '../types/api';
-export type RegisterUserObject = UserObject & {confirmPassword?: string};
+import { UserObject } from '../types/api';
+export type RegisterUserObject = UserObject & { confirmPassword?: string };
 export type CreateGroupObject = {
   id: number;
   name: string;
@@ -8,6 +8,6 @@ export type CreateGroupObject = {
   members: string[];
   interests: string;
   location: string;
-  date: string;
+  meetingDate: string;
   //...
 };

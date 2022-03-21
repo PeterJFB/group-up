@@ -13,10 +13,10 @@ import {AddIcon} from '@chakra-ui/icons';
 import CreateGroupForm from './CreateGroupForm';
 import {CreateGroupObject} from './types';
 import {fetchWithToken} from '../api/api';
-import {GroupObject} from '../api/types';
 import {GroupListItem} from './GroupListItem';
 import {useSetRecoilState} from 'recoil';
 import {alertState, AlertType} from '../state';
+import {GroupObject} from '../types/api';
 
 export const Groups: React.FC = () => {
   //TODO: Replace mockgroups array with actual group data from API
@@ -72,11 +72,10 @@ export const Groups: React.FC = () => {
       description: values.description,
       interests: interestArr,
       location: values.location,
-      date: values.date,
+      meetingDate: values.meetingDate,
     };
-    fetchWithToken('/api/groups/', 'POST', body).then(response => {
+    fetchWithToken('/api/groups/', 'POST', body).then(() => {
       toggleRefresh(!refresh);
-      console.log(response);
     });
   };
 

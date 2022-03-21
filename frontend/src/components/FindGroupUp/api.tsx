@@ -1,5 +1,5 @@
 import {fetchWithToken} from '../../api/api';
-import {GroupObject} from '../../api/types';
+import {GroupObject} from '../../types/api';
 import {FilterProps} from './Filter';
 
 export const findGroupUp =
@@ -14,7 +14,7 @@ export const findGroupUp =
         ''
       ) ?? '';
     allParams['location'] = values.location ?? '';
-    allParams['date'] = values.meetingDate ?? '';
+    allParams['meetingDate'] = values.meetingDate ?? '';
     allParams['ageMin'] = values.ageMin?.toString() ?? '';
     allParams['ageMax'] = values.ageMax?.toString() ?? '';
 

@@ -2,10 +2,12 @@ from django.test import TestCase
 from django.urls import reverse
 from .test_setup import TestSetUp
 from core.models import User
-from groupApp.models import InterestGroup, GroupMatch
+from groupApp.models import InterestGroup, GroupUp
+from rest_framework.test import APITestCase
+from rest_framework import status
 
 
-class GroupMatchTestCase(TestCase):
+class GroupUpTestCase(TestCase):
     def setUp(self):
         admin1 = User.objects.create_user(
             email="abc@123.no", username="admin", password="123"
@@ -20,14 +22,14 @@ class GroupMatchTestCase(TestCase):
             name="group2", description="Test2", groupAdmin=admin2
         )
 
-    def testGroupMatchCreation(self):
-        test = GroupMatch.objects.create(group1=self.group1, group2=self.group2)
+    def testGroupUpCreation(self):
+        test = GroupUp.objects.create(group1=self.group1, group2=self.group2)
         self.assertEqual(test.group1, self.group1)
         self.assertEqual(test.group2, self.group2)
 
 
 class GroupMatchTestCaseApi(TestSetUp):
-    def testGroupMatchCreation(self):
+    def testGroupUpCreation(self):
         admin1 = User.objects.create_user(
             email="abc@123.no", username="admin", password="123"
         )
@@ -41,11 +43,26 @@ class GroupMatchTestCaseApi(TestSetUp):
             name="group2", description="Test2", groupAdmin=admin2
         )
 
-        url = reverse("groupmatch-list")
+        url = reverse("groupup-list")
         data = {"group1": self.group1.id, "group2": self.group2.id}
         response = self.client.post(
             url, data, HTTP_AUTHORIZATION=self.tokenString, format="json"
         )
-        self.assertEqual(response.status_code, 201)
+        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
         self.assertEqual(response.data["group1"], self.group1.id)
         self.assertEqual(response.data["group2"], self.group2.id)
+
+    def testInvalidGroupUpWithOneself(self):
+        admin1 = User.objects.create_user(
+            email="abc@123.no", username="admin", password="123"
+        )
+        self.group1 = InterestGroup.objects.create(
+            name="group1", description="Test", groupAdmin=admin1
+        )
+
+        url = reverse("groupup-list")
+        data = {"group1": self.group1.id, "group2": self.group1.id}
+        response = self.client.post(
+            url, data, HTTP_AUTHORIZATION=self.tokenString, format="json"
+        )
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)

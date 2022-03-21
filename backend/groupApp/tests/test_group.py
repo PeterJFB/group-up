@@ -34,7 +34,7 @@ class InterestGroupTestCaseApi(TestSetUp):
             "name": "test",
             "description": "heihei",
             "location": "fredrikstad",
-            "date": "2023-10-05",
+            "meetingDate": "2023-10-05",
             "quote": "fiske",
             "interests": [{"name": "asd", "description": "asd"}],
         }

@@ -1,5 +1,5 @@
 import {fetchWithToken} from '../../api/api';
-import {GroupObject} from '../../api/types';
+import {GroupObject} from '../../types/api';
 
 export async function fetchGroupInfo(id: number) {
   const response = await fetchWithToken<GroupObject>(
