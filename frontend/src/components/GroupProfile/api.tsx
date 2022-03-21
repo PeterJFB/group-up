@@ -1,6 +1,32 @@
 import {fetchWithToken} from '../../api/api';
 import {GroupObject} from '../../types/api';
 
+// type AddGroupMemberObject = {
+//   groupId: number;
+//   email: string;
+// };
+
+// type AddGroupMemberResponseObject = {
+//   groupMembers: number[];
+// };
+
+// const addMemberToGroup = async (values: AddGroupMemberObject) => {
+//   const body = {
+//     email: values.email,
+//   };
+//   return await fetchWithToken<AddGroupMemberResponseObject>(
+//     `/api/groups/${values.groupId}/addMember/`,
+//     'POST',
+//     body
+//   ).then(response => {
+//     let members;
+//     if (response.missingToken) return {success: false, members};
+//     if (response.body) members = response.body.groupMembers;
+//     if (response.status === 200) return {success: true, members};
+//     else return {success: false, members};
+//   });
+// };
+
 export async function fetchGroupInfo(id: number) {
   const response = await fetchWithToken<GroupObject>(
     `/api/groups/${id}/`,
