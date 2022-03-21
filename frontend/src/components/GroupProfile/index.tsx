@@ -1,11 +1,11 @@
 import React, {useState, useEffect} from 'react';
 import {Container} from '@chakra-ui/react';
 import {useNavigate, useParams} from 'react-router-dom';
-import {GroupObject} from '../../api/types';
-import GroupProfileDetail from './GroupProfileDetail';
-import {fetchGroupAges, fetchGroupInfo} from './api';
 import {useSetRecoilState} from 'recoil';
 import {nState, rbState} from '../../state';
+import GroupProfileDetail from './GroupProfileDetail';
+import {fetchGroupAges, fetchGroupInfo} from './api';
+import {GroupObject} from '../../types/api';
 
 const GroupProfile: React.FC = () => {
   const {id} = useParams();
@@ -17,15 +17,14 @@ const GroupProfile: React.FC = () => {
 
   useEffect(() => {
     if (!id) {
-      console.log(id);
       return;
     }
     fetchGroupInfo(parseInt(id))
       .then(resp => setGroupDetails(resp))
-      .catch(err => console.log(err));
+      .catch(err => console.error(err));
     fetchGroupAges(parseInt(id))
       .then(resp => setAgeDetails(resp))
-      .catch(err => console.log(err));
+      .catch(err => console.error(err));
 
     setNState(false);
     setRbState([

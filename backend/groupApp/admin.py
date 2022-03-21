@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import InterestGroup, Interest, GroupMatch
+from .models import InterestGroup, Interest, GroupUp
 
 # Register your models here.
 
@@ -13,10 +13,10 @@ class InterestAdmin(admin.ModelAdmin):
     list_display = ["name"]
 
 
-class GroupMatchAdmin(admin.ModelAdmin):
+class GroupUpAdmin(admin.ModelAdmin):
     list_display = ["group1", "group2"]
 
 
 admin.site.register(InterestGroup, InterestGroupAdmin)
 admin.site.register(Interest, InterestAdmin)
-admin.site.register(GroupMatch, GroupMatchAdmin)
+admin.site.register(GroupUp, GroupUpAdmin)

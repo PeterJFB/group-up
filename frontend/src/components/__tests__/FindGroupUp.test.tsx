@@ -1,32 +1,37 @@
 import React from 'react';
 import {act, fireEvent, render, screen, waitFor} from '@testing-library/react';
-import {NavigationProps, ReturnButtonProps} from '../../App';
 import {FindGroupUp} from '../FindGroupUp';
-import {GroupObject} from '../../api/types';
 import {MemoryRouter} from 'react-router-dom';
 import {RecoilRoot} from 'recoil';
-/* eslint-disable @typescript-eslint/no-unused-vars */
-const mockReturnButton: ReturnButtonProps['showReturnButton'] = (
-  visible,
-  onClick
-) => {
-  return;
-};
+import {GroupObject, UserObject} from '../../types/api';
 
-const mockShowNavigation: NavigationProps['showNavigation'] = visible => {
-  return;
-};
 /* eslint-enable @typescript-eslint/no-unused-vars */
+
+const mockUserWithName = (name: string): UserObject => {
+  return {
+    username: name,
+    first_name: name,
+    last_name: name,
+    email: name,
+    birthdate: name,
+    password: name,
+  };
+};
 
 const mockedGroupObject1: GroupObject = {
   id: 0,
   name: 'mock',
   quote: 'mockQuote',
   description: 'mocking a description',
-  members: ['0', '1', '2'],
+  members: [
+    mockUserWithName('Anna'),
+    mockUserWithName('Ola'),
+    mockUserWithName('Jens'),
+  ],
   interests: [{name: 'mocking', description: 'we like to mock'}],
   location: 'Mockingland',
-  date: '2020-02-2',
+  meetingDate: '2020-02-2',
+  groupAdmin: mockUserWithName('Jens'),
 };
 
 const mockedGroupObject2: GroupObject = {
@@ -34,10 +39,15 @@ const mockedGroupObject2: GroupObject = {
   name: 'mock2',
   quote: 'mockQuote',
   description: 'mocking a description',
-  members: ['1', '2', '3'],
+  members: [
+    mockUserWithName('Jonas'),
+    mockUserWithName('Ola'),
+    mockUserWithName('Jens'),
+  ],
   interests: [{name: 'mocking', description: 'we like to mock'}],
   location: 'Mockingworld',
-  date: '2020-02-2',
+  meetingDate: '2020-02-2',
+  groupAdmin: mockUserWithName('Jens'),
 };
 
 describe('FindGroupUp', () => {
@@ -78,10 +88,7 @@ describe('FindGroupUp', () => {
       render(
         <MemoryRouter>
           <RecoilRoot>
-            <FindGroupUp
-              showReturnButton={mockReturnButton}
-              showNavigation={mockShowNavigation}
-            />
+            <FindGroupUp />
           </RecoilRoot>
         </MemoryRouter>
       );
@@ -101,10 +108,7 @@ describe('FindGroupUp', () => {
       render(
         <MemoryRouter>
           <RecoilRoot>
-            <FindGroupUp
-              showReturnButton={mockReturnButton}
-              showNavigation={mockShowNavigation}
-            />
+            <FindGroupUp />
           </RecoilRoot>
         </MemoryRouter>
       );

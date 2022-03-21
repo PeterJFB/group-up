@@ -1,5 +1,6 @@
+from django.forms import ValidationError
 from rest_framework import serializers
-from .models import InterestGroup, Interest, GroupMatch
+from .models import InterestGroup, Interest, GroupUp
 from authorization.serializers import UserSerializer
 
 
@@ -19,20 +20,53 @@ class InterestSerializer(serializers.ModelSerializer):
         return instance
 
 
-class GroupMatchSerializer(serializers.ModelSerializer):
+class GroupUpSerializer(serializers.ModelSerializer):
     class Meta:
-        model = GroupMatch
-        fields = ["group1", "group2"]
+        model = GroupUp
+        fields = ["group1", "group2", "groupUpAccept", "isSuperGroupup"]
 
     def create(self, validated_data):
-        groupMatch = GroupMatch.objects.create(**validated_data)
-        return groupMatch
+        # Outgoing: We should ensure that the requester is a member of this group
+        group1 = validated_data.get("group1")
+        # Incoming
+        group2 = validated_data.get("group2")
+
+        isSuperGroupup = validated_data.get("isSuperGroupUp")
+        mirror_groupup = (
+            GroupUp.objects.all()
+            .filter(group2_id=group1.id)
+            .filter(group1_id=group2.id)
+        )
+
+        # Update existing object if the mirror groupup exists.
+        # This implies that both groups have approved to groupup
+        if mirror_groupup.exists():
+            groupup = mirror_groupup.first()
+
+            # Ignore request if the groupup is already approved
+            if groupup.groupUpAccept:
+                return groupup
+
+            if not groupup.isSuperGroupup and isSuperGroupup:
+                groupup.isSuperGroupup = True
+
+            groupup.groupUpAccept = True
+            groupup.save()
+            return groupup
+        else:
+            groupup = GroupUp.objects.create(**validated_data)
+            return groupup
 
     def update(self, instance, validated_data):
         instance.group1 = validated_data.get("group1", instance.group1)
         instance.group2 = validated_data.get("group2", instance.group2)
         instance.save()
         return instance
+
+    def validate(self, data):
+        if data["group1"] == data["group2"]:
+            raise serializers.ValidationError("A group cannot GroupUp with oneself.")
+        return data
 
 
 def interestToId(interest):
@@ -57,7 +91,7 @@ class InterestGroupSerializer(serializers.ModelSerializer):
             "quote",
             "members",
             "interests",
-            "date",
+            "meetingDate",
             # "matches",
             # "sentLikes",
         ]
@@ -80,7 +114,7 @@ class InterestGroupSerializer(serializers.ModelSerializer):
     def update(self, instance, validated_data):
         instance.name = validated_data.get("name", instance.name)
         instance.description = validated_data.get("description", instance.description)
-        instance.date = validated_data.get("date", instance.date)
+        instance.meetingDate = validated_data.get("meetingDate", instance.meetingDate)
         instance.location = validated_data.get("location", instance.location)
         instance.quote = validated_data.get("quote", instance.quote)
 

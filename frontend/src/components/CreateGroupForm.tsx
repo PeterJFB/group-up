@@ -30,8 +30,8 @@ const CreateGroupForm: React.FC<CreateGroupFormProps> = ({
   } = useForm<CreateGroupObject>();
 
   const dateIsLaterThanToday = (): boolean => {
-    const date = getValues('date');
-    const delta = new Date(date).getTime() - new Date().getTime();
+    const meetingDate = getValues('meetingDate');
+    const delta = new Date(meetingDate).getTime() - new Date().getTime();
     return delta > 0;
   };
 
@@ -156,21 +156,21 @@ const CreateGroupForm: React.FC<CreateGroupFormProps> = ({
             </FormControl>
           </Box>
           <Box py={2}>
-            <FormControl isInvalid={!!errors.date} isRequired>
+            <FormControl isInvalid={!!errors.meetingDate} isRequired>
               <FormLabel>Date for meet</FormLabel>
               <Input
                 type="date"
-                id="date"
-                {...register('date', {
+                id="meetingDate"
+                {...register('meetingDate', {
                   required: 'This is required',
                   validate: dateIsLaterThanToday,
                 })}
               />
               <FormErrorMessage>
-                {errors.date && (
+                {errors.meetingDate && (
                   <span data-testid="date-error" role="alert">
-                    {errors.date.message ||
-                      (errors.date.type === 'validate' &&
+                    {errors.meetingDate.message ||
+                      (errors.meetingDate.type === 'validate' &&
                         'The date must be in the future')}
                   </span>
                 )}

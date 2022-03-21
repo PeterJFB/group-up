@@ -20,9 +20,8 @@ import {
   Spacer,
   Text,
 } from '@chakra-ui/react';
-import React, {KeyboardEventHandler, useRef, useState} from 'react';
+import React, {KeyboardEventHandler, useEffect, useRef, useState} from 'react';
 import {SubmitHandler, useForm} from 'react-hook-form';
-import {GroupObject} from '../../api/types';
 import AddInterest from './AddInterest';
 import InterestButton from './InterestButton';
 
@@ -37,15 +36,10 @@ export type InterestGroupFilter = {
 
 export type FilterProps = {
   onSubmit: SubmitHandler<InterestGroupFilter>;
+  listener: boolean;
 };
 
-export const Filter: React.FC<
-  FilterProps & {
-    setGroupOptions: React.Dispatch<
-      React.SetStateAction<GroupObject[] | undefined>
-    >;
-  }
-> = ({onSubmit}) => {
+export const Filter: React.FC<FilterProps> = ({onSubmit, listener}) => {
   const [expanded, setExpanded] = useState(false);
 
   const gRef = useRef<HTMLDivElement>(null);
@@ -58,6 +52,12 @@ export const Filter: React.FC<
     watch,
     formState: {errors},
   } = useForm<InterestGroupFilter>({defaultValues: {interests: []}});
+
+  useEffect(() => {
+    handleSubmit(async e => {
+      await onSubmit(e);
+    })();
+  }, [listener]);
 
   // Tell useForm to update fields whenever "interests" change
   // eslint-disable-next-line @typescript-eslint/no-unused-vars

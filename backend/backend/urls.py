@@ -32,7 +32,7 @@ from groupApp import views as groupAppViews
 router = routers.DefaultRouter()
 router.register(r"groups", groupAppViews.InterestGroupViewSet)
 router.register(r"interests", groupAppViews.InterestViewSet)
-router.register(r"groupMatches", groupAppViews.GroupMatchViewSet)
+router.register(r"groupups", groupAppViews.GroupUpViewSet)
 
 urlpatterns = [
     path("admin/", admin.site.urls),

@@ -1,7 +1,7 @@
 from datetime import datetime
 from django.db.models import Q
 from rest_framework import viewsets, permissions
-from .models import InterestGroup, Interest, GroupMatch
+from .models import InterestGroup, Interest, GroupUp
 from rest_framework.response import Response
 from rest_framework.decorators import action
 from core.permissions import UserAccesToGroupPermission, UserAccessToMatchPermission
@@ -10,7 +10,7 @@ import json
 from .serializers import (
     InterestGroupSerializer,
     InterestSerializer,
-    GroupMatchSerializer,
+    GroupUpSerializer,
 )
 
 
@@ -79,16 +79,20 @@ class InterestGroupViewSet(viewsets.ModelViewSet):
     def findGroupUp(self, request, pk=None):
         queryset = self.queryset.exclude(pk=pk)
 
-        queryset = [
-            q
-            for q in queryset
-            if not GroupMatch.objects.all()
-            .filter(
-                (Q(group1__pk=pk) & Q(group2__pk=q.pk))
-                | (Q(group1__pk=q.pk) & Q(group2__pk=pk))
-            )
-            .exists()
-        ]
+        # Using existing groupups to filter
+        outgoing_groupup = GroupUp.objects.all().filter(group1_id=pk)
+        incoming_groupup = GroupUp.objects.all().filter(group2_id=pk)
+
+        accepted_incoming_groupup = incoming_groupup.filter(groupUpAccept=True)
+        incoming_superGroupup = incoming_groupup.filter(isSuperGroupup=True).exclude(
+            groupUpAccept=True
+        )
+
+        # Exclude groupups which the group have already requested or accepted
+        outgoing_groupids = [g.group2.id for g in outgoing_groupup]
+        accepted_incoming_groupids = [g.group1.id for g in accepted_incoming_groupup]
+        queryset = queryset.exclude(pk__in=outgoing_groupids)
+        queryset = queryset.exclude(pk__in=accepted_incoming_groupids)
 
         interests = request.query_params.get("interests")
         if interests is not None and len(interests):
@@ -118,7 +122,6 @@ class InterestGroupViewSet(viewsets.ModelViewSet):
         ageMin = request.query_params.get("ageMin")
         if ageMin is not None:
             ageMin = int(ageMin)
-            print(queryset[0].members.all().values_list("birthdate", flat=True))
             queryset = [
                 q
                 for q in queryset
@@ -146,6 +149,9 @@ class InterestGroupViewSet(viewsets.ModelViewSet):
                 )
             ]
 
+        incoming_superGroupup_groups = [gu.group1.id for gu in incoming_superGroupup]
+        list(queryset).sort(key=lambda ig: ig.id in incoming_superGroupup_groups)
+
         return Response(InterestGroupSerializer(queryset, many=True).data, status=200)
 
 
@@ -155,9 +161,9 @@ class InterestViewSet(viewsets.ModelViewSet):
     permission_classes = [permissions.IsAuthenticated]
 
 
-class GroupMatchViewSet(viewsets.ModelViewSet):
-    queryset = GroupMatch.objects.all()
-    serializer_class = GroupMatchSerializer
+class GroupUpViewSet(viewsets.ModelViewSet):
+    queryset = GroupUp.objects.all()
+    serializer_class = GroupUpSerializer
     permission_classes = [permissions.IsAuthenticated, UserAccessToMatchPermission]
 
     @action(

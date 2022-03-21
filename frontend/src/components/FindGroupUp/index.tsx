@@ -1,18 +1,38 @@
 import React, {useEffect, useState} from 'react';
-import {Box, Flex} from '@chakra-ui/react';
+import {Box, Flex, Spinner} from '@chakra-ui/react';
 import {Filter} from './Filter';
 import {findGroupUp} from './api';
 import {fetchWithToken} from '../../api/api';
-import {GroupObject} from '../../api/types';
 import {ChosenGroup, GroupOption, GroupUpOption} from './GroupOption';
 import {useSetRecoilState} from 'recoil';
 import {rbState, nState} from '../../state';
+import {useRerender} from '../../utils/hooks';
+import {GroupObject} from '../../types/api';
 
 export const FindGroupUp: React.FC = () => {
   const [chosenGroup, setChosenGroup] = useState<GroupObject>();
   const [groupOptions, setGroupOptions] = useState<GroupObject[]>();
   const setRbState = useSetRecoilState(rbState);
   const setNState = useSetRecoilState(nState);
+  const [isLoading, setIsLoading] = useState(true);
+
+  const [listener, rerender] = useRerender();
+
+  const CenteredMessage: React.FC = ({children}) => {
+    return (
+      <Flex
+        direction={'column'}
+        justify="center"
+        align="center"
+        height="100%"
+        width="100%"
+        textAlign={'center'}
+        p="20px"
+      >
+        {children}
+      </Flex>
+    );
+  };
 
   /* Execute every time the chosen group changes */
   useEffect(() => {
@@ -30,61 +50,26 @@ export const FindGroupUp: React.FC = () => {
               return;
             },
           ]);
+          setIsLoading(true);
         },
       ]);
-
-      /* Retrieve the users potential groupups */
-      fetchWithToken<GroupObject[]>(
-        `/api/groups/${chosenGroup.id}/findGroupUp/`,
-        'GET'
-      ).then(g => {
-        if (g.missingToken === false) {
-          setGroupOptions(g.body);
-        }
-      });
     }
 
     if (!chosenGroup) {
       /* Retireve the users groups */
-      fetchWithToken<GroupObject[]>('/api/groups/getMyGroups/', 'GET').then(
-        g => {
+      fetchWithToken<GroupObject[]>('/api/groups/getMyGroups/', 'GET')
+        .then(g => {
           if (g.missingToken === false) {
             setGroupOptions(g.body);
+            setIsLoading(false);
           }
-        }
-      );
+        })
+        .catch(e => {
+          console.error(e);
+          setIsLoading(false);
+        });
     }
   }, [chosenGroup]);
-
-  if (groupOptions === undefined)
-    return (
-      <Flex
-        direction={'column'}
-        justify="center"
-        align="center"
-        height="100%"
-        width="100%"
-        textAlign={'center'}
-        p="20px"
-      >
-        Fetching groups ...
-      </Flex>
-    );
-
-  if (!chosenGroup && groupOptions.length === 0)
-    return (
-      <Flex
-        direction={'column'}
-        justify="center"
-        align="center"
-        height="100%"
-        width="100%"
-        textAlign={'center'}
-        p="20px"
-      >
-        You need to join a group before you can GroupUp
-      </Flex>
-    );
 
   if (chosenGroup)
     return (
@@ -92,28 +77,48 @@ export const FindGroupUp: React.FC = () => {
         {/* Header */}
         <ChosenGroup group={chosenGroup} />
         <Filter
-          onSubmit={values => {
-            findGroupUp(chosenGroup.id)(values).then(
-              ({body}: {body: GroupObject[]}) => {
+          onSubmit={async values => {
+            setIsLoading(true);
+            await findGroupUp(chosenGroup.id)(values)
+              .then(({body}: {body: GroupObject[]}) => {
                 setGroupOptions(body);
-              }
-            );
+                setIsLoading(false);
+              })
+              .catch((e: unknown) => {
+                console.error(e);
+                setGroupOptions(undefined);
+                setIsLoading(false);
+              });
           }}
-          setGroupOptions={setGroupOptions}
+          listener={listener}
         />
 
         {/* Selection */}
-        <Box bgColor="groupWhite.100" overflowY="auto" flex={1}>
-          {groupOptions &&
-            groupOptions.length > 0 &&
-            groupOptions.map(group => (
-              <GroupUpOption
-                key={group.name}
-                group={group}
-                setChosenGroup={setChosenGroup}
-              />
-            ))}
-        </Box>
+        {isLoading && (
+          <CenteredMessage>
+            Finding potential GroupUps
+            <Spinner />
+          </CenteredMessage>
+        )}
+        {groupOptions && (
+          <Box bgColor="groupWhite.100" overflowY="auto" flex={1}>
+            {groupOptions.length > 0 ? (
+              groupOptions.map(group => (
+                <GroupUpOption
+                  key={group.name}
+                  group={group}
+                  chosenGroup={chosenGroup}
+                  refresh={rerender}
+                />
+              ))
+            ) : (
+              <CenteredMessage>No groups found</CenteredMessage>
+            )}
+          </Box>
+        )}
+        {!isLoading && !groupOptions && (
+          <CenteredMessage>Fetching failed</CenteredMessage>
+        )}
       </Flex>
     );
 
@@ -125,17 +130,29 @@ export const FindGroupUp: React.FC = () => {
       </Flex>
 
       {/* Selection */}
-      <Box bgColor="groupWhite.100" overflowY="auto" flex={1}>
-        {groupOptions.map(group => {
-          return (
-            <GroupOption
-              key={group.name}
-              group={group}
-              setChosenGroup={setChosenGroup}
-            />
-          );
-        })}
-      </Box>
+      {!isLoading && groupOptions && (
+        <Box bgColor="groupWhite.100" overflowY="auto" flex={1}>
+          {groupOptions.length > 0 ? (
+            groupOptions.map(group => {
+              return (
+                <GroupOption
+                  key={group.name}
+                  group={group}
+                  setChosenGroup={setChosenGroup}
+                  setIsLoading={setIsLoading}
+                />
+              );
+            })
+          ) : (
+            <CenteredMessage>
+              You need to join a group before you can GroupUp
+            </CenteredMessage>
+          )}
+        </Box>
+      )}
+      {!isLoading && !groupOptions && (
+        <CenteredMessage>Fetching of groups failed</CenteredMessage>
+      )}
     </Flex>
   );
 };

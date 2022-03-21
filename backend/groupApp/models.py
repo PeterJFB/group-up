@@ -1,4 +1,6 @@
+from xml.dom import ValidationErr
 from django.db import models
+from django.forms import ValidationError
 from core.models import User
 
 
@@ -12,8 +14,8 @@ class InterestGroup(models.Model):  # TODO: Set more realistic lengths for field
         User, on_delete=models.DO_NOTHING, default=None, related_name="admin"
     )
     interests = models.ManyToManyField("Interest", blank=True)
-    date = models.DateField("Date", blank=True, null=True)
-    matches = models.ManyToManyField("GroupMatch", blank=True)
+    meetingDate = models.DateField("MeetingDate", blank=True, null=True)
+    groupups = models.ManyToManyField("GroupUp", blank=True)
     sentLikes = models.ManyToManyField(
         "InterestGroup", blank=True, related_name="SentLikes"
     )
@@ -34,17 +36,29 @@ class Interest(models.Model):
         return self.name
 
 
-class GroupMatch(models.Model):
+class GroupUp(models.Model):
+
     group1 = models.ForeignKey(
-        InterestGroup, on_delete=models.CASCADE, related_name="group1"
+        InterestGroup,
+        on_delete=models.CASCADE,
+        related_name="group1",
     )
 
     group2 = models.ForeignKey(
         InterestGroup, on_delete=models.CASCADE, related_name="group2"
     )
-    group2Accept = models.BooleanField(default=False)
+    groupUpAccept = models.BooleanField(default=False)
+    isSuperGroupup = models.BooleanField(default=False)
 
     REQUIRED_FIELDS = ["group1", "group2"]
 
+    class Meta:
+        unique_together = ("group1", "group2")
+
     def __str__(self):
-        return self.group1.name + " " + self.group2.name
+        return (
+            self.group1.name
+            + " "
+            + self.group2.name
+            + ("(*)" if self.isSuperGroupup else "")
+        )

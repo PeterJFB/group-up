@@ -1,6 +1,6 @@
 import {Flex, Box, Image} from '@chakra-ui/react';
 import React from 'react';
-import {GroupObject} from '../../api/types';
+import {GroupObject} from '../../types/api';
 
 type Props = {
   members: GroupObject['members'];

@@ -10,9 +10,9 @@ import {
   VStack,
 } from '@chakra-ui/react';
 import {Link as RouteLink} from 'react-router-dom';
-import {GroupObject} from '../api/types';
 import InterestItem from './GroupProfile/InterestItem';
 import MembersNumber from './GroupProfile/MembersNumber';
+import {GroupObject} from '../types/api';
 
 export type GroupListItemProps = {
   group: GroupObject;
