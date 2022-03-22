@@ -3,7 +3,7 @@ from tokenize import group
 from rest_framework.reverse import reverse
 from rest_framework import status
 from core.models import User
-from groupApp.models import Interest, InterestGroup
+from groupApp.models import GroupUp, Interest, InterestGroup
 from .test_setup import TestSetUp
 
 
@@ -39,6 +39,14 @@ class FindGroupUpFilterTestCase(TestSetUp):
         )
 
         self.group2.interests.add(self.interest1)
+
+        self.group3 = InterestGroup.objects.create(
+            name="group3",
+            description="Test3",
+            groupAdmin=self.admin2,
+        )
+
+        self.group3.members.add(self.admin2)
 
         return super().setUp()
 
@@ -127,3 +135,21 @@ class FindGroupUpFilterTestCase(TestSetUp):
 
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertIs(len(response.data), 1)
+
+    def testSuperGroupUpPrioritization(self):
+        response = self.client.get(
+            self.url, {}, HTTP_AUTHORIZATION=self.tokenString, format="json"
+        )
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertIs(response.data[0]["id"], self.group2.id)
+
+        # Create superGroupUp
+        self.groupUp = GroupUp.objects.create(
+            group1=self.group3, group2=self.group1, isSuperGroupup=True
+        )
+
+        response = self.client.get(
+            self.url, {}, HTTP_AUTHORIZATION=self.tokenString, format="json"
+        )
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertIs(response.data[0]["id"], self.group3.id)
