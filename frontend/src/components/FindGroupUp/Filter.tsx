@@ -250,7 +250,6 @@ export const Filter: React.FC<FilterProps> = ({onSubmit, listener}) => {
               {errors.ageMin && (
                 <span data-testid="name-error" role="alert">
                   {errors.ageMin.message}
-                  {console.log(errors.ageMin.message)}
                 </span>
               )}
             </FormErrorMessage>

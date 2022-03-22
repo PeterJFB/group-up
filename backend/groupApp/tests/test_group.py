@@ -63,7 +63,7 @@ class InterestGroupTestCaseApi(TestSetUp):
 
         url = reverse("interestgroup-addMember", kwargs={"pk": group.id})
 
-        data = {"user": extraUser.id}
+        data = {"email": extraUser.email}
 
         response = self.client.post(
             url, data, HTTP_AUTHORIZATION=self.tokenString, format="json"
@@ -87,7 +87,7 @@ class InterestGroupTestCaseApi(TestSetUp):
 
         url = reverse("interestgroup-removeMember", kwargs={"pk": group.id})
 
-        data = {"user": extraUser.id}
+        data = {"email": extraUser.email}
 
         response = self.client.post(
             url, data, HTTP_AUTHORIZATION=self.tokenString, format="json"

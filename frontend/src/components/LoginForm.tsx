@@ -57,7 +57,6 @@ const LoginForm: React.FC<LoginFormProps> = ({
 
   const onSubmit = async (values: LoginUserObject) => {
     const status = await signInAndGetStatus(values.email, values.password);
-    console.log('STATUS', status);
     if (status != 200) {
       setWrongPassword(true);
     } else {
