@@ -9,6 +9,7 @@ const Header: React.FC = () => {
   const [visible, onClick] = useRecoilValue(rbState);
   const ReturnButton = () => (
     <Box
+      role="returnButton"
       position="absolute"
       left={0}
       onClick={e => {

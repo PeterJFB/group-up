@@ -8,6 +8,7 @@ import {useSetRecoilState} from 'recoil';
 import {rbState, nState} from '../../state';
 import {useRerender} from '../../utils/hooks';
 import {GroupObject} from '../../types/api';
+import CenteredMessage from '../CenteredMessage';
 
 export const FindGroupUp: React.FC = () => {
   const [chosenGroup, setChosenGroup] = useState<GroupObject>();
@@ -17,22 +18,6 @@ export const FindGroupUp: React.FC = () => {
   const [isLoading, setIsLoading] = useState(true);
 
   const [listener, rerender] = useRerender();
-
-  const CenteredMessage: React.FC = ({children}) => {
-    return (
-      <Flex
-        direction={'column'}
-        justify="center"
-        align="center"
-        height="100%"
-        width="100%"
-        textAlign={'center'}
-        p="20px"
-      >
-        {children}
-      </Flex>
-    );
-  };
 
   /* Execute every time the chosen group changes */
   useEffect(() => {

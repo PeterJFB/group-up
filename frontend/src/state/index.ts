@@ -1,6 +1,6 @@
 // Recoil states
 
-import {atom} from 'recoil';
+import { atom } from 'recoil';
 
 // Provides values to related components without rerendering the entire application
 export type ReturnButtonState = [
@@ -41,4 +41,15 @@ export const alertState = atom<AlertState>({
     message: '',
     active: false,
   },
+});
+
+export type ConfettiState = {
+  active: boolean
+};
+
+export const confettiState = atom<ConfettiState>({
+  key: "ConfettiState",
+  default: {
+    active: true
+  }
 });

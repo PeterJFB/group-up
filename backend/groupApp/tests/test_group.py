@@ -103,7 +103,7 @@ class InterestGroupTestCaseApi(TestSetUp):
             location="Rommet",
             quote="quote",
             groupAdmin=self.user,
-            date="2023-10-03",
+            meetingDate="2023-10-03",
         )
 
         url = reverse("interestgroup-detail", kwargs={"pk": group.id})
@@ -113,7 +113,7 @@ class InterestGroupTestCaseApi(TestSetUp):
             "description": "newDesc",
             "location": "newLoc",
             "quote": "newQuote",
-            "date": "2024-10-03",
+            "meetingDate": "2024-10-03",
             "interests": [{"name": "Fotball", "description": "Sport"}],
         }
 
@@ -126,7 +126,7 @@ class InterestGroupTestCaseApi(TestSetUp):
         self.assertEqual(response.data["description"], "newDesc")
         self.assertEqual(response.data["location"], "newLoc")
         self.assertEqual(response.data["quote"], "newQuote")
-        self.assertEqual(response.data["date"], "2024-10-03")
+        self.assertEqual(response.data["meetingDate"], "2024-10-03")
         self.assertEqual(
             response.data["interests"], [{"name": "Fotball", "description": "Sport"}]
         )
@@ -143,7 +143,7 @@ class InterestGroupTestCaseApi(TestSetUp):
             location="Rommet",
             quote="quote",
             groupAdmin=extraUser,
-            date="2023-10-03",
+            meetingDate="2023-10-03",
         )
 
         url = reverse("interestgroup-detail", kwargs={"pk": group.id})
@@ -153,7 +153,7 @@ class InterestGroupTestCaseApi(TestSetUp):
             "description": "newDesc",
             "location": "newLoc",
             "quote": "newQuote",
-            "date": "2024-10-03",
+            "meetingDate": "2024-10-03",
             "interests": [{"name": "Fotball", "description": "Sport"}],
         }
 
