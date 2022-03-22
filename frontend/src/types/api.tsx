@@ -4,6 +4,7 @@ export type Interest = {
 };
 
 export type UserObject = {
+  id: number;
   username: string;
   first_name: string;
   last_name: string;
@@ -18,7 +19,7 @@ export type GroupObject = {
   quote: string;
   description: string;
   members: UserObject[];
-  groupAdmin: UserObject;
+  groupAdmin: number;
   interests: Interest[];
   location: string;
   meetingDate: string | Date;

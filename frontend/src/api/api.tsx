@@ -16,7 +16,8 @@ type HttpRequestMethod =
   | 'TRACE'
   | 'OPTIONS';
 
-type TokenBody = {
+import {UserObject} from '../types/api';
+type UserAndTokenBody = UserObject & {
   token: string;
 };
 
@@ -90,6 +91,13 @@ export async function fetchWithToken<ResponseBody>(
   };
 }
 
+const saveUserToLocalStorage = (responseBody: UserObject) => {
+  const body = {...responseBody, token: undefined};
+  const user: UserObject = body;
+  const userJSON = JSON.stringify(user);
+  localStorage.setItem('user', userJSON);
+};
+
 /**
  * Wrapper for any registration request. When successful, it saves a token, allowing the use of `fetchWithToken` for later requests.
  *
@@ -106,13 +114,15 @@ export async function registerAndSaveToken(user: RegisterUserObject) {
     },
     body: JSON.stringify(user),
   });
-  const responseBody: TokenBody = await response.json();
+  const responseBody: UserAndTokenBody = await response.json();
 
   // TODO: return status from an invalid registration
 
   // Retrieve and store token
   const token = responseBody.token;
   localStorage.setItem('token', token);
+
+  saveUserToLocalStorage(responseBody);
 
   return response.status;
   // return {
@@ -141,13 +151,14 @@ export async function signInAndSaveToken(email: string, password: string) {
       password,
     }),
   }); //TODO ADD ERROR HANDLING
-  const responseBody: TokenBody = await response.json();
+  const responseBody: UserAndTokenBody = await response.json();
 
   // TODO: return status from an invalid authentication
 
   // Retrieve and store token
   const token = responseBody.token;
   localStorage.setItem('token', token);
+  saveUserToLocalStorage(responseBody);
 
   return response.status;
 }

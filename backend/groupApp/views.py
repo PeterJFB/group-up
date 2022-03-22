@@ -5,6 +5,7 @@ from .models import InterestGroup, Interest, GroupUp
 from rest_framework.response import Response
 from rest_framework.decorators import action
 from core.permissions import UserAccesToGroupPermission, UserAccessToMatchPermission
+from core.models import User
 import json
 
 from .serializers import (
@@ -27,7 +28,8 @@ class InterestGroupViewSet(viewsets.ModelViewSet):
     )
     def addMember(self, request, pk=None):
         data = json.loads(request.body)
-        user = data["user"]
+        email = data["email"]
+        user = User.objects.get(email=email)
         group = InterestGroup.objects.get(id=pk)
         group.members.add(user)
         group.save()
@@ -41,7 +43,8 @@ class InterestGroupViewSet(viewsets.ModelViewSet):
     )
     def removeMember(self, request, pk=None):
         data = json.loads(request.body)
-        user = data["user"]
+        email = data["email"]
+        user = User.objects.get(email=email)
         group = InterestGroup.objects.get(id=pk)
         group.members.remove(user)
         group.save()

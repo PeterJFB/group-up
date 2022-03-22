@@ -92,10 +92,11 @@ class InterestGroupSerializer(serializers.ModelSerializer):
             "members",
             "interests",
             "meetingDate",
+            "groupAdmin"
             # "matches",
             # "sentLikes",
         ]
-        read_only_fields = ["members"]
+        read_only_fields = ["members, groupAdmin"]
 
     def create(self, validated_data):
         request = self.context.get("request")

@@ -28,6 +28,12 @@ class LoginView(ObtainAuthToken):
             return Response(
                 {
                     "token": token.key,
+                    "id": user.id,
+                    "username": user.username,
+                    "birthdate": user.birthdate,
+                    "email": user.email,
+                    "first_name": user.first_name,
+                    "last_name": user.last_name,
                 }
             )
         except:
@@ -56,4 +62,5 @@ class RegisterView(CreateAPIView):
 
         token, created = Token.objects.get_or_create(user_id=response.data["id"])
         response.data["token"] = str(token)
+        del response.data["password"]
         return response
