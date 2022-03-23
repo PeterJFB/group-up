@@ -2,10 +2,13 @@ from datetime import datetime
 from django.db.models import Q
 from rest_framework import viewsets, permissions
 from .models import InterestGroup, Interest, GroupUp
+from core.models import User
 from rest_framework.response import Response
 from rest_framework.decorators import action
-from core.permissions import UserAccesToGroupPermission, UserAccessToMatchPermission
-from core.models import User
+from core.permissions import (
+    UserAccessToMatchPermission,
+    UserAdminForGroupPermission,
+)
 import json
 
 from .serializers import (
@@ -18,7 +21,7 @@ from .serializers import (
 class InterestGroupViewSet(viewsets.ModelViewSet):
     queryset = InterestGroup.objects.all()
     serializer_class = InterestGroupSerializer
-    permission_classes = [permissions.IsAuthenticated, UserAccesToGroupPermission]
+    permission_classes = [permissions.IsAuthenticated, UserAdminForGroupPermission]
 
     @action(
         methods=["post"],
@@ -27,10 +30,9 @@ class InterestGroupViewSet(viewsets.ModelViewSet):
         url_name="addMember",
     )
     def addMember(self, request, pk=None):
+        group = self.get_object()
         data = json.loads(request.body)
-        email = data["email"]
-        user = User.objects.get(email=email)
-        group = InterestGroup.objects.get(id=pk)
+        user = User.objects.get(email=data["email"])
         group.members.add(user)
         group.save()
         return Response(InterestGroupSerializer(group).data, status=200)
@@ -42,10 +44,9 @@ class InterestGroupViewSet(viewsets.ModelViewSet):
         url_name="removeMember",
     )
     def removeMember(self, request, pk=None):
+        group = self.get_object()
         data = json.loads(request.body)
-        email = data["email"]
-        user = User.objects.get(email=email)
-        group = InterestGroup.objects.get(id=pk)
+        user = User.objects.get(email=data["email"])
         group.members.remove(user)
         group.save()
         return Response(InterestGroupSerializer(group).data, status=200)
@@ -57,7 +58,7 @@ class InterestGroupViewSet(viewsets.ModelViewSet):
         url_name="getAges",
     )
     def getAges(self, request, pk=None):
-        group = InterestGroup.objects.get(id=pk)
+        group = self.get_object()
         ages = group.members.all().values_list("birthdate", flat=True)
         return Response(ages, status=200)
 
@@ -68,8 +69,7 @@ class InterestGroupViewSet(viewsets.ModelViewSet):
         url_name="getMyGroups",
     )
     def getMyGroups(self, request):
-        groups = InterestGroup.objects.filter(members__in=[request.user])
-
+        groups = self.user.my_groups.all()
         serialized = InterestGroupSerializer(groups, many=True).data
         return Response(serialized, status=200)
 
@@ -177,7 +177,7 @@ class GroupUpViewSet(viewsets.ModelViewSet):
     )
     def getGroupUps(self, request, pk=None):
         user_groups = InterestGroup.objects.filter(members__in=[request.user])
-        groupUps = GroupMatch.objects.filter(
+        groupUps = GroupUp.objects.filter(
             Q(group1__in=user_groups) | Q(group2__in=user_groups)
         )
         groupData = {

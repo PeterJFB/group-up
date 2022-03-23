@@ -7,7 +7,7 @@ from core.models import User
 class InterestGroup(models.Model):  # TODO: Set more realistic lengths for fields
     name = models.CharField(max_length=255, default="")
     description = models.TextField(max_length=500, default="")
-    members = models.ManyToManyField(User, blank=True)
+    members = models.ManyToManyField(User, blank=True, related_name="my_groups")
     location = models.CharField(max_length=255, default="")
     quote = models.TextField(max_length=500, default="")
     groupAdmin = models.ForeignKey(
