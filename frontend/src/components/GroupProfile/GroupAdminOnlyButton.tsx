@@ -5,8 +5,9 @@ import {getStoredUser} from './api';
 export const GroupAdminOnlyButton: React.FC<{
   groupAdmin: number;
   buttonText: string;
+  bg: string;
   onClick: () => void;
-}> = ({groupAdmin, onClick, buttonText}) => {
+}> = ({groupAdmin, onClick, buttonText, bg}) => {
   const [hidden, setHidden] = useState(true);
   useEffect(() => {
     const user = getStoredUser();
@@ -15,9 +16,9 @@ export const GroupAdminOnlyButton: React.FC<{
   }, [groupAdmin]);
   return (
     <Button
-      bg="groupGreen"
+      bg={bg}
       textColor="groupWhite.200"
-      mt="10"
+      mt="5"
       onClick={onClick}
       hidden={hidden}
     >
