@@ -49,16 +49,12 @@ class InterestGroupTestCaseApi(TestSetUp):
         self.assertEqual(group.groupAdmin, self.user)
 
     def testInterestGroupAddMember(self):
-        admin = User.objects.create_user(
-            email="test123@test456.no", username="test123", password="test123"
-        )
-
         extraUser = User.objects.create_user(
             email="extraUser@mail.com", username="extraUser", password="123"
         )
 
         group = InterestGroup.objects.create(
-            name="Test", description="Test", groupAdmin=admin
+            name="Test", description="Test", groupAdmin=self.user
         )
 
         url = reverse("interestgroup-addMember", kwargs={"pk": group.id})
@@ -73,15 +69,12 @@ class InterestGroupTestCaseApi(TestSetUp):
         self.assertEqual(response.data["members"][0], extraUser.id)
 
     def testInterestGroupRemoveMember(self):
-        admin = User.objects.create_user(
-            email="test123@test456.no", username="test123", password="test123"
-        )
         extraUser = User.objects.create_user(
             email="extraUser@mail.com", username="extraUser", password="123"
         )
 
         group = InterestGroup.objects.create(
-            name="Test", description="Test", groupAdmin=admin
+            name="Test", description="Test", groupAdmin=self.user
         )
         group.members.add(extraUser)
 
