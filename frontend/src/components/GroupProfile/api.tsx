@@ -70,3 +70,15 @@ export const getStoredUser = (): UserObject | undefined => {
   if (userJSON) user = JSON.parse(userJSON);
   return user;
 };
+
+export const deleteGroup = async (
+  groupId: number
+): Promise<{success: boolean}> => {
+  const response = await fetchWithToken<undefined>(
+    `/api/groups/${groupId}/`,
+    'DELETE'
+  );
+  if (!response.missingToken)
+    return {success: response.status == 204 || response.status == 200};
+  return {success: false};
+};
