@@ -1,5 +1,5 @@
 from datetime import datetime
-from django.db.models import Q
+from django.db.models import Q, Case, When, Value, IntegerField
 from rest_framework import viewsets, permissions
 from .models import InterestGroup, Interest, GroupUp
 from rest_framework.response import Response
@@ -152,8 +152,12 @@ class InterestGroupViewSet(viewsets.ModelViewSet):
                 )
             ]
 
-        incoming_superGroupup_groups = [gu.group1.id for gu in incoming_superGroupup]
-        list(queryset).sort(key=lambda ig: ig.id in incoming_superGroupup_groups)
+        # Prioritize superGroupUps
+        incoming_superGroupup_groupids = [gu.group1.id for gu in incoming_superGroupup]
+        queryset = list(queryset)
+        queryset.sort(
+            key=lambda ig: 0 if ig.id in incoming_superGroupup_groupids else 1
+        )
 
         return Response(InterestGroupSerializer(queryset, many=True).data, status=200)
 
@@ -177,7 +181,7 @@ class GroupUpViewSet(viewsets.ModelViewSet):
     )
     def getGroupUps(self, request, pk=None):
         user_groups = InterestGroup.objects.filter(members__in=[request.user])
-        groupUps = GroupMatch.objects.filter(
+        groupUps = GroupUp.objects.filter(
             Q(group1__in=user_groups) | Q(group2__in=user_groups)
         )
         groupData = {
