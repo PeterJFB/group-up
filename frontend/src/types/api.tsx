@@ -23,11 +23,14 @@ export type GroupObject = {
   interests: Interest[];
   location: string;
   meetingDate: string | Date;
+  contactInfo: string;
 };
 
 export type GroupUpObject = {
+  id: number;
   group1: number;
   group2: number;
   groupUpAccept?: boolean;
   isSuperGroupup?: boolean;
+  plannedDate: string;
 };

@@ -7,17 +7,26 @@ from core.models import User
 class InterestGroup(models.Model):  # TODO: Set more realistic lengths for fields
     name = models.CharField(max_length=255, default="")
     description = models.TextField(max_length=500, default="")
-    members = models.ManyToManyField(User, blank=True, related_name="my_groups")
+    members = models.ManyToManyField(User, blank=True, related_name="groups_member_in")
     location = models.CharField(max_length=255, default="")
     quote = models.TextField(max_length=500, default="")
     groupAdmin = models.ForeignKey(
-        User, on_delete=models.DO_NOTHING, default=None, related_name="admin"
+        "core.User",
+        on_delete=models.DO_NOTHING,
+        default=None,
+        related_name="groups_admin_in",
     )
     interests = models.ManyToManyField("Interest", blank=True)
-    meetingDate = models.DateField("MeetingDate", blank=True, null=True)
+    meetingDate = models.DateField(blank=True, null=True)
     groupups = models.ManyToManyField("GroupUp", blank=True)
     sentLikes = models.ManyToManyField(
-        "InterestGroup", blank=True, related_name="SentLikes"
+        "InterestGroup", blank=True, related_name="liked_groups"
+    )
+    contactInfo = models.ForeignKey(
+        "core.User",
+        on_delete=models.SET_NULL,
+        null=True,
+        to_field="email",
     )
 
     REQUIRED_FIELDS = ["name", "description", "groupAdmin"]
@@ -39,16 +48,18 @@ class Interest(models.Model):
 class GroupUp(models.Model):
 
     group1 = models.ForeignKey(
-        InterestGroup,
+        "InterestGroup",
         on_delete=models.CASCADE,
-        related_name="group1",
+        related_name="groupUps_group1",
     )
 
     group2 = models.ForeignKey(
-        InterestGroup, on_delete=models.CASCADE, related_name="group2"
+        "InterestGroup", on_delete=models.CASCADE, related_name="groupUps_group2"
     )
     groupUpAccept = models.BooleanField(default=False)
     isSuperGroupup = models.BooleanField(default=False)
+
+    plannedDate = models.DateField(blank=True, null=True)
 
     REQUIRED_FIELDS = ["group1", "group2"]
 

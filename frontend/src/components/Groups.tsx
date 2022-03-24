@@ -73,6 +73,7 @@ export const Groups: React.FC = () => {
       interests: interestArr,
       location: values.location,
       meetingDate: values.meetingDate,
+      //contactInfo: values.contactInfo,
     };
     fetchWithToken('/api/groups/', 'POST', body).then(() => {
       toggleRefresh(!refresh);

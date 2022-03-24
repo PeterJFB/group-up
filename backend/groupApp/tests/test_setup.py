@@ -10,23 +10,18 @@ class TestSetUp(APITestCase):
         self.login_url = reverse("login")
 
         self.user_data = {
-            "username": "testmann",
             "email": "test@gmail.com",
+            "username": "testmann",
             "password": "pass",
         }
         self.user = User.objects.create_user(
-            self.user_data["username"],
-            self.user_data["email"],
-            self.user_data["password"],
+            email=self.user_data["email"],
+            username=self.user_data["username"],
+            password=self.user_data["password"],
         )
 
-        self.client.post(
-            self.login_url,
-            self.user_data,
-            format="json",
-        )  # log in
-
-        self.tokenString = "Token " + Token.objects.get(user=self.user).key
+        token = Token.objects.get_or_create(user=self.user)[0]
+        self.tokenString = "Token " + token.key
 
         return super().setUp()
 
