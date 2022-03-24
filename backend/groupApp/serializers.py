@@ -23,7 +23,14 @@ class InterestSerializer(serializers.ModelSerializer):
 class GroupUpSerializer(serializers.ModelSerializer):
     class Meta:
         model = GroupUp
-        fields = ["group1", "group2", "groupUpAccept", "isSuperGroupup"]
+        fields = [
+            "group1",
+            "group2",
+            "groupUpAccept",
+            "isSuperGroupup",
+            "plannedDate",
+            "id",
+        ]
 
     def create(self, validated_data):
         # Outgoing: We should ensure that the requester is a member of this group
@@ -60,10 +67,13 @@ class GroupUpSerializer(serializers.ModelSerializer):
     def update(self, instance, validated_data):
         instance.group1 = validated_data.get("group1", instance.group1)
         instance.group2 = validated_data.get("group2", instance.group2)
+        instance.plannedDate = validated_data.get("plannedDate", instance.plannedDate)
         instance.save()
         return instance
 
     def validate(self, data):
+        if "group1" not in data or "group2" not in data:
+            return data
         if data["group1"] == data["group2"]:
             raise serializers.ValidationError("A group cannot GroupUp with oneself.")
         return data
@@ -92,15 +102,15 @@ class InterestGroupSerializer(serializers.ModelSerializer):
             "members",
             "interests",
             "meetingDate",
-            "groupAdmin"
-            # "matches",
-            # "sentLikes",
+            "groupAdmin",
+            "contactInfo",
         ]
-        read_only_fields = ["members, groupAdmin"]
+        read_only_fields = ["members", "groupAdmin", "contactInfo"]
 
     def create(self, validated_data):
         request = self.context.get("request")
         validated_data["groupAdmin"] = request.user
+        validated_data["contactInfo"] = request.user
 
         interests = validated_data.pop("interests")
         interestGroup = InterestGroup.objects.create(**validated_data)

@@ -8,6 +8,7 @@ import Navigation from './components/Navigation';
 import Header from './components/Header';
 import {FindGroupUp} from './components/FindGroupUp';
 import AlertModal from './components/AlertModal';
+import GroupUpPage from './components/GroupUps/GroupUpPage';
 
 const Temp: React.FC = ({children}) => {
   return (
@@ -49,6 +50,7 @@ function App() {
                 <Route path="/groups/:id" element={<GroupProfile />} />
                 <Route path="/findgroupup" element={<FindGroupUp />} />
                 <Route path="/groupups" element={<Temp>gmatches</Temp>} />
+                <Route path="/groupups/:id" element={<GroupUpPage />} />
                 <Route path="/profile" element={<Temp>profile</Temp>} />
                 <Route path="*" element={<Navigate to={'/groupups'} />} />
               </Routes>

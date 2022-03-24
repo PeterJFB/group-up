@@ -177,6 +177,29 @@ const CreateGroupForm: React.FC<CreateGroupFormProps> = ({
               </FormErrorMessage>
             </FormControl>
           </Box>
+          {/* <Box py={2}>
+            <FormControl isInvalid={!!errors.contactInfo} isRequired>
+              <FormLabel htmlFor="contactInfo">Contact email</FormLabel>
+              <Input
+                id="contactInfo"
+                placeholder="example@gmail.com"
+                {...register('contactInfo', {
+                  required: 'This is required',
+                  pattern: {
+                    value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i,
+                    message: 'Invalid email',
+                  },
+                })}
+              />
+              <FormErrorMessage>
+                {errors.contactInfo && (
+                  <span data-testid="contactInfo-error" role="alert">
+                    {errors.contactInfo.message}
+                  </span>
+                )}
+              </FormErrorMessage>
+            </FormControl>
+          </Box> */}
           <Box>
             <Button
               mt={4}

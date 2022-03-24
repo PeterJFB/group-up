@@ -47,6 +47,7 @@ class InterestGroupTestCaseApi(TestSetUp):
         self.assertEqual(response.data["description"], "heihei")
         group = InterestGroup.objects.get(name="test", description="heihei")
         self.assertEqual(group.groupAdmin, self.user)
+        self.assertEqual(response.data["contactInfo"], self.user.email)
 
     def testInterestGroupAddMember(self):
         extraUser = User.objects.create_user(

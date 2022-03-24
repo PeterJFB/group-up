@@ -11,6 +11,7 @@ type HttpRequestMethod =
   | 'HEAD'
   | 'POST'
   | 'PUT'
+  | 'PATCH'
   | 'DELETE'
   | 'CONNECT'
   | 'TRACE'

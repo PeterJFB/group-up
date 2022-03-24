@@ -69,7 +69,7 @@ class InterestGroupViewSet(viewsets.ModelViewSet):
         url_name="getMyGroups",
     )
     def getMyGroups(self, request):
-        groups = self.user.my_groups.all()
+        groups = request.user.groups_member_in.all()
         serialized = InterestGroupSerializer(groups, many=True).data
         return Response(serialized, status=200)
 
