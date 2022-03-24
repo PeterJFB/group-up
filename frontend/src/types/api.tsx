@@ -23,7 +23,7 @@ export type GroupObject = {
   interests: Interest[];
   location: string;
   meetingDate: string | Date;
-  contactInfo: string;
+  contactInfo?: string;
 };
 
 export type GroupUpObject = {

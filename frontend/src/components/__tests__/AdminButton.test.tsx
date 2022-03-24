@@ -1,12 +1,10 @@
 import React from 'react';
-import {act, fireEvent, render, screen, waitFor} from '@testing-library/react';
+import {fireEvent, render, screen} from '@testing-library/react';
 import {MemoryRouter} from 'react-router-dom';
 import GroupProfileDetail from '../GroupProfile/GroupProfileDetail';
 import {GroupObject, UserObject} from '../../types/api';
-import Header from '../Header';
-import {StringMappingType} from 'typescript';
 class LocalStorageMock {
-  private store: any;
+  private store: Record<string, string>;
   public length: number;
   constructor() {
     this.store = {};

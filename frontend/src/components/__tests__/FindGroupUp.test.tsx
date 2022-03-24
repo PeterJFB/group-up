@@ -22,6 +22,7 @@ export const DisableConfetti: React.FC = ({children}) => {
 
 const mockUserWithName = (name: string): UserObject => {
   return {
+    id: 0,
     username: name,
     first_name: name,
     last_name: name,
@@ -44,7 +45,7 @@ const mockedGroupObject1: GroupObject = {
   interests: [{name: 'mocking', description: 'we like to mock'}],
   location: 'Mockingland',
   meetingDate: '2020-02-2',
-  groupAdmin: mockUserWithName('Jens'),
+  groupAdmin: 0,
 };
 
 const mockedGroupObject2: GroupObject = {
@@ -60,7 +61,7 @@ const mockedGroupObject2: GroupObject = {
   interests: [{name: 'mocking', description: 'we like to mock'}],
   location: 'Mockingworld',
   meetingDate: '2020-02-2',
-  groupAdmin: mockUserWithName('Jens'),
+  groupAdmin: 0,
 };
 
 describe('FindGroupUp', () => {
@@ -118,7 +119,12 @@ describe('FindGroupUp', () => {
           }
           return Promise.resolve(
             new Response(
-              JSON.stringify({group1: 0, group2: 1, groupUpAccept: true}),
+              JSON.stringify({
+                group1: 0,
+                group2: 1,
+                groupUpAccept: true,
+                isSuperGroupup: body?.isSuperGroupup,
+              }),
               {
                 headers: {'Content-Length': '1'},
               }
@@ -253,6 +259,57 @@ describe('FindGroupUp', () => {
 
     await waitFor(() => {
       expect(screen.getByText('Congratulations!')).toBeInTheDocument();
+    });
+  });
+
+  it('should inform two users when they supergroup up', async () => {
+    // Disable canvas
+    await act(async () => {
+      render(
+        <MemoryRouter>
+          <RecoilRoot>
+            <DisableConfetti>
+              <Header />
+              <FindGroupUp />
+            </DisableConfetti>
+          </RecoilRoot>
+        </MemoryRouter>
+      );
+    });
+
+    await waitFor(() => {
+      expect(screen.getAllByRole('groupListItem')).toHaveLength(2);
+    });
+
+    // Perform a GroupUp with first group
+    fireEvent.click(await screen.findByText(mockedGroupObject1.name));
+
+    await waitFor(() => {
+      expect(screen.getAllByRole('groupListItem')).toHaveLength(1);
+    });
+
+    fireEvent.click(await screen.findByText(mockedGroupObject2.name));
+
+    fireEvent.click(screen.getByText('GroupUp'));
+
+    await waitFor(() => {
+      expect.not.objectContaining(screen.getAllByRole('groupListItem'));
+    });
+
+    // Return and do the same for the second group
+    fireEvent.click(await screen.findByRole('returnButton'));
+
+    fireEvent.click(await screen.findByText(mockedGroupObject2.name));
+    await waitFor(() => {
+      expect(screen.getAllByRole('groupListItem')).toHaveLength(1);
+    });
+
+    fireEvent.click(await screen.findByText(mockedGroupObject1.name));
+
+    fireEvent.click(screen.getByText('SuperGroupUp'));
+
+    await waitFor(() => {
+      expect(screen.getByText(/SuperGrouped/i)).toBeInTheDocument();
     });
   });
 });

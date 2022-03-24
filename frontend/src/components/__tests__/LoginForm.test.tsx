@@ -7,10 +7,6 @@ import {RecoilRoot} from 'recoil';
 const mockLogin = async (email: string, password: string) =>
   email == 'email@email.com' && password == 'password' ? 200 : 404;
 
-const mockNavigate = jest.fn((path: string) => {
-  return;
-});
-
 const mockRerender = () => {
   return;
 };

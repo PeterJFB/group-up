@@ -7,14 +7,9 @@ const mockLogin = jest.fn((values: RegisterUserObject) => {
   return Promise.resolve(values.username.length);
 });
 
-const mockNavigate = jest.fn((path: string) => {
-  return;
-});
 describe('RegisterForm', () => {
   beforeEach(() => {
-    render(
-      <RegisterForm navigate={mockNavigate} registerAndGetStatus={mockLogin} />
-    );
+    render(<RegisterForm registerAndGetStatus={mockLogin} />);
   });
   //TODO: test navigation to home screen
 
