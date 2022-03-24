@@ -53,3 +53,27 @@ export const confettiState = atom<ConfettiState>({
     active: true
   }
 });
+
+export type GoldState = {
+  active: boolean
+};
+
+
+export const goldState = atom<GoldState>({
+  key: "GoldState",
+  default: {
+    active: false
+  }
+});
+
+export type CheckLoginState = {
+  toggle: boolean
+};
+
+
+export const checkLoginState = atom<CheckLoginState>({
+  key: "CheckLoginState",
+  default: {
+    toggle: false
+  }
+});

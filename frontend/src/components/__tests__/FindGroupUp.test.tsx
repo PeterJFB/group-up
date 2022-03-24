@@ -5,7 +5,7 @@ import {MemoryRouter} from 'react-router-dom';
 import {RecoilRoot, useSetRecoilState} from 'recoil';
 import {GroupObject, UserObject} from '../../types/api';
 import Header from '../Header';
-import {confettiState} from '../../state';
+import {confettiState, goldState} from '../../state';
 
 /* eslint-enable @typescript-eslint/no-unused-vars */
 
@@ -15,6 +15,19 @@ export const DisableConfetti: React.FC = ({children}) => {
   useEffect(() => {
     setConfetti({
       active: false,
+    });
+  }, []);
+  return <>{children}</>;
+};
+
+export const SetGroupUpGold: React.FC<{active: boolean}> = ({
+  children,
+  active,
+}) => {
+  const setGs = useSetRecoilState(goldState);
+  useEffect(() => {
+    setGs({
+      active,
     });
   }, []);
   return <>{children}</>;
@@ -268,10 +281,12 @@ describe('FindGroupUp', () => {
       render(
         <MemoryRouter>
           <RecoilRoot>
-            <DisableConfetti>
-              <Header />
-              <FindGroupUp />
-            </DisableConfetti>
+            <SetGroupUpGold active={true}>
+              <DisableConfetti>
+                <Header />
+                <FindGroupUp />
+              </DisableConfetti>
+            </SetGroupUpGold>
           </RecoilRoot>
         </MemoryRouter>
       );
@@ -310,6 +325,44 @@ describe('FindGroupUp', () => {
 
     await waitFor(() => {
       expect(screen.getByText(/SuperGrouped/i)).toBeInTheDocument();
+    });
+  });
+
+  it('should prevent supergroupup if they dont have groupup gold', async () => {
+    await act(async () => {
+      render(
+        <MemoryRouter>
+          <RecoilRoot>
+            <SetGroupUpGold active={false}>
+              <DisableConfetti>
+                <Header />
+                <FindGroupUp />
+              </DisableConfetti>
+            </SetGroupUpGold>
+          </RecoilRoot>
+        </MemoryRouter>
+      );
+    });
+
+    await waitFor(() => {
+      expect(screen.getAllByRole('groupListItem')).toHaveLength(2);
+    });
+
+    // Perform a GroupUp with first group
+    fireEvent.click(await screen.findByText(mockedGroupObject1.name));
+
+    await waitFor(() => {
+      expect(screen.getAllByRole('groupListItem')).toHaveLength(1);
+    });
+
+    fireEvent.click(await screen.findByText(mockedGroupObject2.name));
+
+    fireEvent.click(screen.getByText('SuperGroupUp'));
+
+    await waitFor(() => {
+      expect(
+        screen.getByText(/Support us with GroupUp Gold/i)
+      ).toBeInTheDocument();
     });
   });
 });
