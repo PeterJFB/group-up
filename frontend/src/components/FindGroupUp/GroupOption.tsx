@@ -62,16 +62,23 @@ export const GroupUpOption: React.FC<GroupUpOptionProps> = ({
 
   const [birthdays, setBirthdays] = useState<string[]>();
   const confetti = useRecoilValue(confettiState);
+  const [isSGU, setIsSuperGroupUp] = useState(false);
 
-  const fetchGroupUpRequest = () => {
+  const fetchGroupUpRequest: React.MouseEventHandler<HTMLButtonElement> = e => {
+    const outGoingSuperGroupUp = (e.target as HTMLButtonElement).id === 'super';
+
+    // Check of user is eligble to superGroupUp
+
     fetchWithToken<GroupUpObject>('/api/groupups/', 'POST', {
       group1: chosenGroup.id,
       group2: group.id,
+      isSuperGroupup: outGoingSuperGroupUp,
     }).then(e => {
       if (e.missingToken) {
         return;
       }
       if (e.body?.groupUpAccept) {
+        setIsSuperGroupUp(e.body?.isSuperGroupup ?? false);
         detail.onClose();
         announce.onOpen();
       } else {
@@ -87,7 +94,7 @@ export const GroupUpOption: React.FC<GroupUpOptionProps> = ({
         if (birthdays) setBirthdays(birthdays);
       })
       .catch(e => {
-        console.log(e);
+        console.error(e);
       });
     return () => {
       detail.onClose();
@@ -102,11 +109,38 @@ export const GroupUpOption: React.FC<GroupUpOptionProps> = ({
         <ModalOverlay />
         <ModalContent bgColor="groupWhite.200">
           <ModalBody p={0}>
-            <GroupProfileDetail group={group} birthdays={birthdays} />
+            <GroupProfileDetail
+              hideAdminControls
+              group={group}
+              birthdays={birthdays}
+            />
           </ModalBody>
 
-          <ModalFooter>
+          <ModalFooter flexDir={'column'} gap="20px">
             <Button
+              id="super"
+              w={'200px'}
+              shadow={'xl'}
+              color="groupGreen"
+              bgColor="#ffc107"
+              onClick={fetchGroupUpRequest}
+              variant="ghost"
+              mr={3}
+              outline="none"
+              _focus={{outline: 'none'}}
+              justifyContent="flex-start"
+              alignItems={'center'}
+            >
+              <Image
+                src={`${process.env.PUBLIC_URL}/navicons/groupup.svg`}
+                color="red"
+                maxH="40px"
+                m={1}
+              />
+              SuperGroupUp
+            </Button>
+            <Button
+              w={'200px'}
               bgColor="groupGreen"
               color="groupWhite.200"
               onClick={fetchGroupUpRequest}
@@ -123,13 +157,22 @@ export const GroupUpOption: React.FC<GroupUpOptionProps> = ({
       </Modal>
 
       {/* Announce a successful GroupUp */}
-      <Modal isOpen={announce.isOpen} onClose={announce.onClose}>
-        {confetti.active && <Confetti />}
+      <Modal
+        isOpen={announce.isOpen}
+        onClose={() => {
+          announce.onClose();
+          refresh();
+        }}
+      >
+        {confetti.active && (
+          <Confetti colors={isSGU ? ['#ffc107'] : undefined} />
+        )}
         <ModalOverlay />
         <ModalContent>
           <ModalHeader textAlign={'center'}>Congratulations!</ModalHeader>
           <ModalBody textAlign={'center'}>
-            {chosenGroup.name} and {group.name} has now Grouped Up!
+            {chosenGroup.name} and {group.name} has now {isSGU && 'Super'}
+            Grouped Up!
           </ModalBody>
           <ModalFooter>
             <Button
@@ -142,7 +185,11 @@ export const GroupUpOption: React.FC<GroupUpOptionProps> = ({
             >
               Close
             </Button>
-            <Button colorScheme="blue" bgColor="groupGreen">
+            <Button
+              bgColor={isSGU ? '#ffc107' : 'groupGreen'}
+              color={isSGU ? 'black' : 'groupWhite.200'}
+              shadow={isSGU ? 'xl' : 'none'}
+            >
               Go to GroupUp page
             </Button>
           </ModalFooter>

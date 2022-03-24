@@ -53,7 +53,6 @@ const GroupUpDetail: React.FC<props> = ({groupUp, group1, group2}) => {
     const delta = new Date(plannedDate).getTime() - new Date().getTime();
     return delta > 0;
   };
-  console.log(group1, group2, groupUp);
 
   const onChangeDate = async (values: ChangeDate) => {
     onClose();

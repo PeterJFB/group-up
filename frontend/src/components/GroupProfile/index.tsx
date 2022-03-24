@@ -1,11 +1,11 @@
 import React, {useState, useEffect} from 'react';
-import {Container} from '@chakra-ui/react';
 import {useNavigate, useParams} from 'react-router-dom';
 import {useSetRecoilState} from 'recoil';
 import {nState, rbState} from '../../state';
 import GroupProfileDetail from './GroupProfileDetail';
 import {fetchGroupAges, fetchGroupInfo} from './api';
 import {GroupObject} from '../../types/api';
+import CenteredMessage from '../CenteredMessage';
 
 const GroupProfile: React.FC = () => {
   const {id} = useParams();
@@ -43,7 +43,7 @@ const GroupProfile: React.FC = () => {
   }, []);
 
   if (groupDetails == undefined || ageDetails == undefined)
-    return <Container>Loading...</Container>;
+    return <CenteredMessage>Loading</CenteredMessage>;
 
   return <GroupProfileDetail group={groupDetails} birthdays={ageDetails} />;
 };
