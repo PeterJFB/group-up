@@ -10,30 +10,26 @@ import {
   Textarea,
 } from '@chakra-ui/react';
 import {CreateGroupObject} from './types';
+import {GroupObject} from '../types/api';
 type CreateGroupFormProps = {
   onSubmit: (values: CreateGroupObject) => void;
+  initialValues?: GroupObject;
 };
 
 const CreateGroupForm: React.FC<CreateGroupFormProps> = ({
   onSubmit,
+  initialValues = undefined,
 }: CreateGroupFormProps) => {
   /**
    * Register user form with fields First name, last name, username, email, password, and confirm password
    * Should send a register post request to the backend, and if successful should login user and redirect to
-   * home screen
+   * home screenSubmit
    */
   const {
     handleSubmit,
     register,
-    getValues,
     formState: {errors, isSubmitting},
   } = useForm<CreateGroupObject>();
-
-  const dateIsLaterThanToday = (): boolean => {
-    const meetingDate = getValues('meetingDate');
-    const delta = new Date(meetingDate).getTime() - new Date().getTime();
-    return delta > 0;
-  };
 
   return (
     <Container maxW="container.lg.xl" p={0}>
@@ -43,6 +39,7 @@ const CreateGroupForm: React.FC<CreateGroupFormProps> = ({
             <FormControl isInvalid={!!errors.name} isRequired>
               <FormLabel>Group Name</FormLabel>
               <Input
+                defaultValue={initialValues?.name ?? ''}
                 id="name"
                 placeholder="Weekend Fishing Group"
                 {...register('name', {
@@ -66,6 +63,7 @@ const CreateGroupForm: React.FC<CreateGroupFormProps> = ({
             <FormControl isInvalid={!!errors.quote} isRequired>
               <FormLabel>One-Liner</FormLabel>
               <Input
+                defaultValue={initialValues?.quote ?? ''}
                 id="quote"
                 placeholder="We want to go fishing"
                 {...register('quote', {
@@ -89,6 +87,7 @@ const CreateGroupForm: React.FC<CreateGroupFormProps> = ({
             <FormControl isInvalid={!!errors.description} isRequired>
               <FormLabel>Group description</FormLabel>
               <Textarea
+                defaultValue={initialValues?.description ?? ''}
                 id="description"
                 placeholder="We like to fish, there's nothing like the smell of fresh bait and gasoline on the lake."
                 {...register('description', {
@@ -112,6 +111,7 @@ const CreateGroupForm: React.FC<CreateGroupFormProps> = ({
             <FormControl isInvalid={!!errors.location} isRequired>
               <FormLabel>Location</FormLabel>
               <Input
+                defaultValue={initialValues?.location ?? ''}
                 id="location"
                 placeholder="Nidelva"
                 {...register('location', {
@@ -135,6 +135,9 @@ const CreateGroupForm: React.FC<CreateGroupFormProps> = ({
             <FormControl isInvalid={!!errors.interests} isRequired>
               <FormLabel>interests</FormLabel>
               <Input
+                defaultValue={
+                  initialValues?.interests.map(interest => interest.name) ?? ''
+                }
                 id="interests"
                 placeholder="Fishing, Boating, Chilling"
                 {...register('interests', {
@@ -159,11 +162,12 @@ const CreateGroupForm: React.FC<CreateGroupFormProps> = ({
             <FormControl isInvalid={!!errors.meetingDate} isRequired>
               <FormLabel>Date for meet</FormLabel>
               <Input
+                defaultValue={initialValues?.meetingDate.toString() ?? ''}
                 type="date"
                 id="meetingDate"
+                min={new Date().toISOString().split('T')[0]}
                 {...register('meetingDate', {
                   required: 'This is required',
-                  validate: dateIsLaterThanToday,
                 })}
               />
               <FormErrorMessage>

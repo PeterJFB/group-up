@@ -15,7 +15,7 @@ import UserProfile from './components/UserProfile';
 function App() {
   return (
     <BrowserRouter>
-      <Flex flex={1} direction={'column'} height="100vh" maxW={'container.md'}>
+      <Flex flex={1} direction={'column'} height="100%" maxW={'container.md'}>
         <Header />
         <LoginProvider>
           <Flex

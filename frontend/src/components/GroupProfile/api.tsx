@@ -1,4 +1,5 @@
 import {fetchWithToken} from '../../api/api';
+import {CreateGroupObject} from '../types';
 import {GroupObject, UserObject} from '../../types/api';
 
 type AddGroupMemberObject = {
@@ -71,12 +72,36 @@ export const getStoredUser = (): UserObject | undefined => {
   return user;
 };
 
-export const deleteGroup = async (
-  groupId: number
-): Promise<{success: boolean}> => {
+export const deleteGroup = async (groupId: number) => {
   const response = await fetchWithToken<undefined>(
     `/api/groups/${groupId}/`,
     'DELETE'
+  );
+  if (!response.missingToken)
+    return {success: response.status == 204 || response.status == 200};
+  return {success: false};
+};
+
+export const updateGroup = async (
+  groupId: number,
+  group: CreateGroupObject
+) => {
+  const interestArr = group.interests.split(',').map(interest => ({
+    name: interest,
+    description: 'beskrivelse',
+  }));
+  const body = {
+    name: group.name,
+    quote: group.quote,
+    description: group.description,
+    interests: interestArr,
+    location: group.location,
+    meetingDate: group.meetingDate,
+  };
+  const response = await fetchWithToken<GroupObject>(
+    `/api/groups/${groupId}/`,
+    'PUT',
+    body
   );
   if (!response.missingToken)
     return {success: response.status == 204 || response.status == 200};

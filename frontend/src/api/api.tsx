@@ -15,7 +15,8 @@ type HttpRequestMethod =
   | 'DELETE'
   | 'CONNECT'
   | 'TRACE'
-  | 'OPTIONS';
+  | 'OPTIONS'
+  | 'PATCH';
 
 import {UserObject} from '../types/api';
 type UserAndTokenBody = UserObject & {

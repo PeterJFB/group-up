@@ -62,6 +62,7 @@ const mockedGroupObject1: GroupObject = {
   interests: [{name: 'mocking', description: 'we like to mock'}],
   location: 'Mockingland',
   meetingDate: '2022-10-06',
+  contactInfo: 'contact@gmail.com',
 };
 
 const localStorageMock = new LocalStorageMock();

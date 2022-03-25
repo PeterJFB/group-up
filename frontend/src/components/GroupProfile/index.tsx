@@ -2,6 +2,7 @@ import React, {useState, useEffect} from 'react';
 import {useLocation, useNavigate, useParams} from 'react-router-dom';
 import {useSetRecoilState} from 'recoil';
 import {nState, rbState} from '../../state';
+import {useRerender} from '../../utils/hooks';
 import GroupProfileDetail from './GroupProfileDetail';
 import {fetchGroupAges, fetchGroupInfo} from './api';
 import {GroupObject} from '../../types/api';
@@ -23,6 +24,8 @@ const GroupProfile: React.FC = () => {
   const navigate = useNavigate();
   const setRbState = useSetRecoilState(rbState);
   const setNState = useSetRecoilState(nState);
+
+  const [listener, rerender] = useRerender();
 
   useEffect(() => {
     if (!id) {
@@ -51,12 +54,18 @@ const GroupProfile: React.FC = () => {
         ]);
       },
     ]);
-  }, []);
+  }, [listener]);
 
   if (groupDetails == undefined || ageDetails == undefined)
     return <CenteredMessage>Loading</CenteredMessage>;
 
-  return <GroupProfileDetail group={groupDetails} birthdays={ageDetails} />;
+  return (
+    <GroupProfileDetail
+      refresh={rerender}
+      group={groupDetails}
+      birthdays={ageDetails}
+    />
+  );
 };
 
 export default GroupProfile;

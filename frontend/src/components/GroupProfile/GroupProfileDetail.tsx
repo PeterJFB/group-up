@@ -24,7 +24,12 @@ import {
 } from '@chakra-ui/react';
 import React from 'react';
 import {GroupObject} from '../../types/api';
-import {generateAgeGapText, addMemberToGroup, deleteGroup} from './api';
+import {
+  generateAgeGapText,
+  addMemberToGroup,
+  deleteGroup,
+  updateGroup,
+} from './api';
 import InterestItem from './InterestItem';
 import MembersNumber from './MembersNumber';
 import {GroupAdminOnlyButton} from './GroupAdminOnlyButton';
@@ -32,14 +37,22 @@ import AddUser, {AddUserObject} from './AddUser';
 import {useSetRecoilState} from 'recoil';
 import {alertState, AlertType, nState, rbState} from '../../state';
 import {useNavigate} from 'react-router-dom';
+import {CreateGroupObject} from '../types';
+import CreateGroupForm from '../CreateGroupForm';
 
 const GroupProfileDetail: React.FC<{
   group: GroupObject;
   birthdays?: string[];
   hideAdminControls?: boolean;
-}> = ({group, birthdays, hideAdminControls = false}) => {
+  refresh?: () => void;
+}> = ({birthdays, hideAdminControls = false, refresh, group}) => {
   const ageGapText = birthdays ? generateAgeGapText(birthdays) : '...';
 
+  const {
+    isOpen: editIsOpen,
+    onOpen: editOnOpen,
+    onClose: editOnClose,
+  } = useDisclosure();
   const {
     isOpen: addIsOpen,
     onOpen: addOnOpen,
@@ -68,6 +81,7 @@ const GroupProfileDetail: React.FC<{
         message: 'Succesfully added member to group',
         active: true,
       });
+      if (refresh) refresh();
     } else {
       setAlertState({
         type: AlertType.ERROR,
@@ -107,6 +121,25 @@ const GroupProfileDetail: React.FC<{
       }
     } catch (err) {
       console.error(err);
+    }
+  };
+
+  const onSubmitEdit = async (values: CreateGroupObject) => {
+    editOnClose();
+    const {success} = await updateGroup(group.id, values);
+    if (success) {
+      setAlertState({
+        type: AlertType.NOTIFY,
+        message: 'Succesfully edited group',
+        active: true,
+      });
+      if (refresh) refresh();
+    } else {
+      setAlertState({
+        type: AlertType.ERROR,
+        message: 'An error occured. Please try again later.',
+        active: true,
+      });
     }
   };
 
@@ -193,7 +226,7 @@ const GroupProfileDetail: React.FC<{
                   groupAdmin={group.groupAdmin}
                   buttonText="Add member"
                   onClick={addOnOpen}
-                ></GroupAdminOnlyButton>
+                />
                 <Modal isOpen={addIsOpen} onClose={addOnClose}>
                   <ModalOverlay />
                   <ModalContent>
@@ -201,6 +234,27 @@ const GroupProfileDetail: React.FC<{
                     <ModalCloseButton />
                     <ModalBody>
                       <AddUser onSubmit={onSubmit} />
+                    </ModalBody>
+                  </ModalContent>
+                </Modal>
+              </Box>
+              <Box pt="0">
+                <GroupAdminOnlyButton
+                  bg="groupGreen"
+                  groupAdmin={group.groupAdmin}
+                  buttonText="Edit group"
+                  onClick={editOnOpen}
+                />
+                <Modal isOpen={editIsOpen} onClose={editOnClose}>
+                  <ModalOverlay />
+                  <ModalContent>
+                    <ModalHeader>Edit group</ModalHeader>
+                    <ModalCloseButton />
+                    <ModalBody>
+                      <CreateGroupForm
+                        onSubmit={onSubmitEdit}
+                        initialValues={group}
+                      />
                     </ModalBody>
                   </ModalContent>
                 </Modal>
