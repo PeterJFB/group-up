@@ -19,9 +19,10 @@ import {GroupListItem} from '../GroupListItem';
 import {fetchGroupAges} from '../GroupProfile/api';
 import GroupProfileDetail from '../GroupProfile/GroupProfileDetail';
 import Confetti from 'react-confetti';
+import GroupUpGoldPromoteModal from '../GroupUpGoldPromoteModal';
 import {useRecoilValue} from 'recoil';
 import {confettiState, goldState} from '../../state';
-import GroupUpGoldPromoteModal from '../GroupUpGoldPromoteModal';
+import {useNavigate} from 'react-router-dom';
 
 type GroupOptionProps = {
   group: GroupObject;
@@ -61,6 +62,8 @@ export const GroupUpOption: React.FC<GroupUpOptionProps> = ({
   const detail = useDisclosure();
   const announce = useDisclosure();
   const promote = useDisclosure();
+  const [groupUpId, setGroupUpId] = useState<number | undefined>();
+  const navigate = useNavigate();
 
   const [birthdays, setBirthdays] = useState<string[]>();
   const confetti = useRecoilValue(confettiState);
@@ -80,12 +83,13 @@ export const GroupUpOption: React.FC<GroupUpOptionProps> = ({
       group1: chosenGroup.id,
       group2: group.id,
       isSuperGroupup: outGoingSuperGroupUp,
-    }).then(e => {
-      if (e.missingToken) {
+    }).then(response => {
+      if (response.missingToken) {
         return;
       }
-      if (e.body?.groupUpAccept) {
-        setIsSuperGroupUp(e.body?.isSuperGroupup ?? false);
+      if (response.body?.groupUpAccept) {
+        setIsSuperGroupUp(response.body?.isSuperGroupup ?? false);
+        setGroupUpId(response.body?.id);
         detail.onClose();
         announce.onOpen();
       } else {
@@ -195,6 +199,12 @@ export const GroupUpOption: React.FC<GroupUpOptionProps> = ({
               bgColor={isSGU ? 'groupGold' : 'groupGreen'}
               color={isSGU ? 'black' : 'groupWhite.200'}
               shadow={isSGU ? 'xl' : 'none'}
+              colorScheme="blue"
+              onClick={() => {
+                if (groupUpId) {
+                  navigate(`/groupups/${groupUpId}`);
+                }
+              }}
             >
               Go to GroupUp page
             </Button>

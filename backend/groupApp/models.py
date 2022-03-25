@@ -4,7 +4,7 @@ from django.forms import ValidationError
 from core.models import User
 
 
-class InterestGroup(models.Model):  # TODO: Set more realistic lengths for fields
+class InterestGroup(models.Model):
     name = models.CharField(max_length=255, default="")
     description = models.TextField(max_length=500, default="")
     members = models.ManyToManyField(User, blank=True, related_name="groups_member_in")

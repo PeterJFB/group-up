@@ -1,31 +1,47 @@
-import {GroupObject, GroupUpObject} from '../../types/api';
+import {GroupUpObject} from '../../types/api';
 import React, {useEffect, useState} from 'react';
-import {useParams} from 'react-router-dom';
-import {getGroupUpAndGroupInfo} from './api';
+import {useNavigate, useParams} from 'react-router-dom';
+import {getGroupUp} from './api';
 import GroupUpDetail from './GroupUpDetail';
-import {Container} from '@chakra-ui/react';
+import CenteredMessage from '../CenteredMessage';
+import {useSetRecoilState} from 'recoil';
+import {nState, rbState} from '../../state';
 const GroupUpPage: React.FC = () => {
   const [groupUp, setGroupUp] = useState<GroupUpObject>();
-  const [group1, setGroup1] = useState<GroupObject>();
-  const [group2, setGroup2] = useState<GroupObject>();
   const {id} = useParams();
+  const setRbState = useSetRecoilState(rbState);
+  const setNState = useSetRecoilState(nState);
+  const navigate = useNavigate();
 
   useEffect(() => {
     if (!id) return;
-    getGroupUpAndGroupInfo(parseInt(id))
-      .then(data => {
-        if (data) {
-          setGroupUp(data.groupUp);
-          setGroup1(data.group1);
-          setGroup2(data.group2);
+    getGroupUp(parseInt(id))
+      .then(groupUp => {
+        if (groupUp) {
+          setGroupUp(groupUp);
         }
+
+        setNState(false);
+        setRbState([
+          true,
+          () => {
+            navigate('/groupups');
+            setNState(true);
+            setRbState([
+              false,
+              () => {
+                return;
+              },
+            ]);
+          },
+        ]);
       })
       .catch(err => console.error(err));
   }, []);
 
-  if (groupUp == undefined || group1 == undefined || group2 == undefined)
-    return <Container>Loading...</Container>;
+  if (groupUp == undefined)
+    return <CenteredMessage>Loading...</CenteredMessage>;
 
-  return <GroupUpDetail group1={group1} group2={group2} groupUp={groupUp} />;
+  return <GroupUpDetail groupUp={groupUp} />;
 };
 export default GroupUpPage;

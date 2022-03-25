@@ -39,26 +39,6 @@ export const Groups: React.FC = () => {
         });
       });
   }, [refresh]);
-  // const mockGroups = [
-  //   {
-  //     id: 0,
-  //     name: 'De kule kidsa',
-  //     members: ['test', 'test2', 'test3', 'test4'],
-  //     interests: ['Skape trøbbel', 'Røyke ostepop'],
-  //   },
-  //   {
-  //     id: 1,
-  //     name: 'Bowlerne',
-  //     members: ['test', 'test2'],
-  //     interests: ['Wii Sports', 'Wii Sports Resort'],
-  //   },
-  //   {
-  //     id: 2,
-  //     name: 'Gutta Krutt',
-  //     members: ['Bob', 'Kåre', 'Ole'],
-  //     interests: ['Fisking', 'Pils', 'Rosenborg'],
-  //   },
-  // ];
 
   const onSubmit = (values: CreateGroupObject) => {
     onClose();

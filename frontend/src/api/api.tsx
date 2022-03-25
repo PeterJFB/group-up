@@ -115,22 +115,29 @@ export async function registerAndSaveToken(user: RegisterUserObject) {
     },
     body: JSON.stringify(user),
   });
-  const responseBody: UserAndTokenBody = await response.json();
-
-  // TODO: return status from an invalid registration
+  let responseBody: UserAndTokenBody | undefined;
+  const contentLength = response.headers.get('Content-Length');
+  if (contentLength && parseInt(contentLength)) {
+    await response
+      .json()
+      .then((body: UserAndTokenBody) => {
+        responseBody = body;
+      })
+      .catch(e => {
+        console.error('Parsing of body failed');
+        console.error(e);
+        console.error(response);
+      });
+  }
 
   // Retrieve and store token
-  const token = responseBody.token;
-  localStorage.setItem('token', token);
-
-  saveUserToLocalStorage(responseBody);
-
-  return response.status;
-  // return {
-  //   headers: response.headers,
-  //   status: response.status,
-  //   token: token,
-  // };
+  if (responseBody) {
+    const token = responseBody.token;
+    localStorage.setItem('token', token);
+    saveUserToLocalStorage(responseBody);
+    return response.status;
+  }
+  return 400;
 }
 
 /**
@@ -151,17 +158,30 @@ export async function signInAndSaveToken(email: string, password: string) {
       username: email,
       password,
     }),
-  }); //TODO ADD ERROR HANDLING
-  const responseBody: UserAndTokenBody = await response.json();
-
-  // TODO: return status from an invalid authentication
+  });
+  let responseBody: UserAndTokenBody | undefined;
+  const contentLength = response.headers.get('Content-Length');
+  if (contentLength && parseInt(contentLength)) {
+    await response
+      .json()
+      .then((body: UserAndTokenBody) => {
+        responseBody = body;
+      })
+      .catch(e => {
+        console.error('Parsing of body failed');
+        console.error(e);
+        console.error(response);
+      });
+  }
 
   // Retrieve and store token
-  const token = responseBody.token;
-  localStorage.setItem('token', token);
-  saveUserToLocalStorage(responseBody);
-
-  return response.status;
+  if (responseBody) {
+    const token = responseBody.token;
+    localStorage.setItem('token', token);
+    saveUserToLocalStorage(responseBody);
+    return response.status;
+  }
+  return 400;
 }
 
 const removeUserFromLocalStorage = () => {

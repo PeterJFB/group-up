@@ -14,7 +14,7 @@ import {useRecoilState} from 'recoil';
 import {alertState} from '../../state';
 
 //Can be invoked by setting the Modalstate.active to true
-const ErrorModal: React.FC = () => {
+const AlertModal: React.FC = () => {
   const {isOpen, onOpen, onClose} = useDisclosure();
 
   const [aState, setAState] = useRecoilState(alertState);
@@ -58,4 +58,4 @@ const ErrorModal: React.FC = () => {
   );
 };
 
-export default ErrorModal;
+export default AlertModal;

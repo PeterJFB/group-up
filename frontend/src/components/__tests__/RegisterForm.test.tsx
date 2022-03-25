@@ -11,7 +11,6 @@ describe('RegisterForm', () => {
   beforeEach(() => {
     render(<RegisterForm registerAndGetStatus={mockLogin} />);
   });
-  //TODO: test navigation to home screen
 
   it('should display required error for all fields when they are empty', async () => {
     fireEvent.submit(screen.getByRole('button'));

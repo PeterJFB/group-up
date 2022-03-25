@@ -1,9 +1,10 @@
 import React from 'react';
-import {screen, render, fireEvent} from '@testing-library/react';
+import {screen, render, fireEvent, waitFor} from '@testing-library/react';
 import '@testing-library/jest-dom';
 import LoginForm from '../LoginForm';
 import {MemoryRouter} from 'react-router-dom';
 import {RecoilRoot} from 'recoil';
+import AlertModal from '../AlertModal';
 const mockLogin = async (email: string, password: string) =>
   email == 'email@email.com' && password == 'password' ? 200 : 404;
 
@@ -16,14 +17,12 @@ describe('LoginForm', () => {
     render(
       <MemoryRouter>
         <RecoilRoot>
+          <AlertModal />
           <LoginForm rerender={mockRerender} signInAndGetStatus={mockLogin} />
         </RecoilRoot>
       </MemoryRouter>
     );
   });
-
-  //TODO: test routing to register
-  //TODO: test navigation to home screen
 
   it('should display required error for all fields when they are empty', async () => {
     fireEvent.submit(screen.getByText('Log in'));
@@ -61,9 +60,12 @@ describe('LoginForm', () => {
       },
     });
 
-    fireEvent.submit(screen.getByText('Log in'));
+    fireEvent.click(screen.getByText('Log in'));
 
-    expect(await screen.findByTestId('wrongPassword-error')).toBeDefined();
+    await waitFor(() => {
+      expect(screen.getByText('An error occured!')).toBeInTheDocument();
+    });
+
     // expect(mockLogin).toBeCalled();
   });
 

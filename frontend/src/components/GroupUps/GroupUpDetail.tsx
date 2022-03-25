@@ -1,4 +1,4 @@
-import {GroupObject, GroupUpObject} from '../../types/api';
+import {GroupUpObject} from '../../types/api';
 import {
   Flex,
   VStack,
@@ -26,40 +26,33 @@ import {useSetRecoilState} from 'recoil';
 import {alertState, AlertType} from '../../state';
 import {changePlannedDate} from './api';
 import {useForm} from 'react-hook-form';
-
-type props = {
-  groupUp: GroupUpObject;
-  group1: GroupObject;
-  group2: GroupObject;
-};
+import {useNavigate} from 'react-router-dom';
 
 type ChangeDate = {
   plannedDate: string;
 };
 
-const GroupUpDetail: React.FC<props> = ({groupUp, group1, group2}) => {
+const GroupUpDetail: React.FC<{groupUp: GroupUpObject}> = ({groupUp}) => {
   const {isOpen, onOpen, onClose} = useDisclosure();
   const setAlertState = useSetRecoilState(alertState);
   const cancelRef = React.useRef<HTMLButtonElement>(null);
+  const navigate = useNavigate();
   const {
     handleSubmit,
     register,
-    getValues,
     formState: {errors, isSubmitting},
   } = useForm<ChangeDate>();
-
-  const dateIsLaterThanToday = (): boolean => {
-    const plannedDate = getValues('plannedDate');
-    const delta = new Date(plannedDate).getTime() - new Date().getTime();
-    return delta > 0;
-  };
 
   const onChangeDate = async (values: ChangeDate) => {
     onClose();
     const {success, plannedDate} = await changePlannedDate(
       groupUp.id,
       values.plannedDate
-    );
+    ).catch(e => {
+      console.error(e);
+      return {success: false, plannedDate: undefined};
+    });
+
     if (success && plannedDate) {
       setAlertState({
         type: AlertType.NOTIFY,
@@ -70,123 +63,120 @@ const GroupUpDetail: React.FC<props> = ({groupUp, group1, group2}) => {
     } else {
       setAlertState({
         type: AlertType.ERROR,
-        message: 'An error occured.',
+        message: 'An error occured while updating the date.',
         active: true,
       });
     }
   };
 
-  return (
-    <Flex flexDir="column" height="100%" width="100%">
-      <Flex flex={8} py={20} bg="groupWhite.200">
-        <VStack w="full">
-          <HStack w="full">
-            <Spacer />
-            <Box>
-              <Image
-                borderRadius="full"
-                boxShadow="xl"
-                w="150px"
-                src={process.env.PUBLIC_URL + '/images/groupImage2.png'}
-              />
-              {/* TODO: SPRINT 3: Personal profile picture */}
-            </Box>
-            <Box>
-              <Image
-                borderRadius="full"
-                boxShadow="xl"
-                w="50px"
-                src={process.env.PUBLIC_URL + '/navicons/groupup.svg'}
-              />
-            </Box>
-            <Box>
-              <Image
-                borderRadius="full"
-                boxShadow="xl"
-                w="150px"
-                src={process.env.PUBLIC_URL + '/images/groupImage2.png'}
-              />
-            </Box>
-            <Spacer />
-          </HStack>
-          <HStack>
-            <Spacer />
-            <Heading w={'150px'} size="lg" color="black" textAlign={'center'}>
-              {group1.name}
-            </Heading>
-            <Heading w={'50px'} size="lg" color="black" textAlign={'center'}>
-              |
-            </Heading>
-            <Heading w={'150px'} size="lg" color="black" textAlign={'center'}>
-              {group2.name}
-            </Heading>
-            <Spacer />
-          </HStack>
-          <HStack>
-            <Spacer />
-            <Heading w={'300px'} size="sm" color="black" textAlign={'right'}>
-              {group1.location}
-            </Heading>
-            <Box>
-              <Image
-                w="24px"
-                src={process.env.PUBLIC_URL + '/images/LocationIcon.svg'}
-              />
-            </Box>
-            <Heading w={'300px'} size="sm" color="black" textAlign={'left'}>
-              {group2.location}
-            </Heading>
-            <Spacer />
-          </HStack>
+  const displayGroup = (groupId: number) => {
+    navigate(
+      `/groups/${groupId}?redirect=/groupups/${groupUp.id}&redirectNState=false`
+    );
+  };
 
-          {/* You have matched text */}
-          <VStack flex={2} p="0 10%">
-            <Box pt="30px">
-              <Text fontSize="20px" color="black" textAlign={'center'}>
-                You have matched!
-              </Text>
-            </Box>
-            <Box pt="10px">
-              <Text fontSize="20px" color="black" textAlign={'center'}>
-                {(() => {
-                  if (groupUp.plannedDate) {
-                    return `The current planned date for meeting is ${groupUp.plannedDate}`;
-                  } else {
-                    return 'There is not set any planned date for meeting';
-                  }
-                })()}
-                {/* {// The current planned date for meeting is {groupUp.plannedDate}} */}
-              </Text>
-              <Box textAlign={'center'}>
-                <Button
-                  bg="groupGreen"
-                  onClick={onOpen}
-                  textColor="groupWhite.200"
-                  mt="5"
-                >
-                  Change Date
-                </Button>
-              </Box>
-            </Box>
-            <Box pt="30px">
-              <Text fontSize="20px" color="black" textAlign={'center'}>
-                Use the contact info provided below to decide a meeting date.
-              </Text>
-            </Box>
-          </VStack>
-          <HStack>
-            <Spacer />
-            <Text fontSize="20px" color="black" textAlign={'left'}>
-              {group1.contactInfo}
-            </Text>
-            <Spacer />
-            <Text fontSize="20px" color="black" textAlign={'right'}>
-              {group2.contactInfo}
-            </Text>
-            <Spacer />
-          </HStack>
-        </VStack>
+  return (
+    <Flex direction="column" height="100%" maxWidth="100%" py={20}>
+      <Flex justify="space-evenly" align="center">
+        <Flex maxW="45%">
+          <Image
+            onClick={() => displayGroup(groupUp.group1.id)}
+            borderRadius="full"
+            boxShadow="xl"
+            w="150px"
+            src={process.env.PUBLIC_URL + '/images/groupImage.png'}
+          />
+          {/* TODO: SPRINT 3: Personal profile picture */}
+        </Flex>
+        <Flex justify="center" maxW={'10px'} overflow="visible" zIndex={2}>
+          <Image
+            w="50px"
+            maxW="none"
+            src={
+              process.env.PUBLIC_URL +
+              (groupUp.isSuperGroupup
+                ? '/images/groupupGold.svg'
+                : '/navicons/groupup.svg')
+            }
+          />
+        </Flex>
+        <Flex maxW="45%">
+          <Image
+            onClick={() => displayGroup(groupUp.group2.id)}
+            borderRadius="full"
+            boxShadow="xl"
+            w="150px"
+            src={process.env.PUBLIC_URL + '/images/GroupImage2.svg'}
+          />
+        </Flex>
       </Flex>
+      <Flex justify="space-evenly" align="center">
+        <Heading size="lg" w="45%" color="black" textAlign="center">
+          {groupUp.group1.name}
+        </Heading>
+        <Heading size="lg" w="10px" color="black" textAlign={'center'}>
+          |
+        </Heading>
+        <Heading w="45%" size="lg" color="black" textAlign={'center'}>
+          {groupUp.group2.name}
+        </Heading>
+      </Flex>
+      <Flex justify="center" align="center">
+        <Heading w={'45%'} size="sm" color="black" textAlign={'right'}>
+          {groupUp.group1.location}
+        </Heading>
+        <Box>
+          <Image
+            w="24px"
+            src={process.env.PUBLIC_URL + '/images/LocationIcon.svg'}
+          />
+        </Box>
+        <Heading w="45%" size="sm" color="black" textAlign={'left'}>
+          {groupUp.group2.location}
+        </Heading>
+      </Flex>
+
+      {/* You have matched text */}
+      <VStack flex={2} p="0 10%">
+        <Box pt="30px">
+          <Text fontSize="20px" color="black" textAlign={'center'}>
+            You have matched!
+          </Text>
+        </Box>
+        <Box pt="10px">
+          <Text fontSize="20px" color="black" textAlign={'center'}>
+            {groupUp.plannedDate
+              ? `The current planned date for meeting is ${groupUp.plannedDate}`
+              : 'There is not set any planned date for meeting'}
+          </Text>
+          <Box textAlign={'center'}>
+            <Button
+              bg="groupGreen"
+              onClick={onOpen}
+              textColor="groupWhite.200"
+              mt="5"
+            >
+              Change Date
+            </Button>
+          </Box>
+        </Box>
+        <Box pt="30px">
+          <Text fontSize="20px" color="black" textAlign={'center'}>
+            Use the contact info provided below to decide a meeting date.
+          </Text>
+        </Box>
+      </VStack>
+      <HStack>
+        <Spacer />
+        <Text fontSize="20px" color="black" textAlign={'left'}>
+          {groupUp.group1.contactInfo}
+        </Text>
+        <Spacer />
+        <Text fontSize="20px" color="black" textAlign={'right'}>
+          {groupUp.group2.contactInfo}
+        </Text>
+        <Spacer />
+      </HStack>
       <AlertDialog
         isOpen={isOpen}
         leastDestructiveRef={cancelRef}
@@ -206,9 +196,9 @@ const GroupUpDetail: React.FC<props> = ({groupUp, group1, group2}) => {
                       data-testid="plannedDate"
                       type="date"
                       id="plannedDate"
+                      min={new Date().toISOString().split('T')[0]}
                       {...register('plannedDate', {
                         required: 'This is required',
-                        validate: dateIsLaterThanToday,
                       })}
                     />
                     <FormErrorMessage>

@@ -8,27 +8,9 @@ import Navigation from './components/Navigation';
 import Header from './components/Header';
 import {FindGroupUp} from './components/FindGroupUp';
 import AlertModal from './components/AlertModal';
+import {GroupUps} from './components/GroupUps';
 import GroupUpPage from './components/GroupUps/GroupUpPage';
 import UserProfile from './components/UserProfile';
-
-const Temp: React.FC = ({children}) => {
-  return (
-    <Box>
-      Youre currently in:
-      <Flex
-        h={'80vh'}
-        bg={'twitter.300'}
-        justifyContent="center"
-        alignItems={'center'}
-      >
-        <Box as="span" textAlign={'center'} fontWeight={'extrabold'}>
-          {children}
-        </Box>
-      </Flex>
-      Youve reached the bottom
-    </Box>
-  );
-};
 
 function App() {
   return (
@@ -49,16 +31,16 @@ function App() {
                 <Route path="/groups" element={<Groups />} />
                 <Route path="/groups/:id" element={<GroupProfile />} />
                 <Route path="/findgroupup" element={<FindGroupUp />} />
-                <Route path="/groupups" element={<Temp>gmatches</Temp>} />
+                <Route path="/groupups" element={<GroupUps />} />
                 <Route path="/groupups/:id" element={<GroupUpPage />} />
                 <Route path="/profile" element={<UserProfile />} />
                 <Route path="*" element={<Navigate to={'/groupups'} />} />
               </Routes>
             </Box>
             <Navigation />
-            <AlertModal />
           </Flex>
         </LoginProvider>
+        <AlertModal />
       </Flex>
     </BrowserRouter>
   );

@@ -1,5 +1,5 @@
 import {useForm} from 'react-hook-form';
-import React, {useEffect, useState} from 'react';
+import React, {useEffect} from 'react';
 import {Link as RouteLink, useNavigate} from 'react-router-dom';
 
 import {
@@ -15,7 +15,7 @@ import {
   Container,
 } from '@chakra-ui/react';
 import {useSetRecoilState} from 'recoil';
-import {rbState} from '../state';
+import {alertState, AlertType, rbState} from '../state';
 
 type LoginUserObject = {
   email: string;
@@ -42,12 +42,12 @@ const LoginForm: React.FC<LoginFormProps> = ({
     formState: {errors, isSubmitting},
   } = useForm<LoginUserObject>();
 
-  const [wrongPassword, setWrongPassword] = useState(false);
-  const setRBState = useSetRecoilState(rbState);
+  const setRbState = useSetRecoilState(rbState);
   const navigate = useNavigate();
+  const setAlertState = useSetRecoilState(alertState);
 
   useEffect(() => {
-    setRBState([
+    setRbState([
       false,
       () => {
         return;
@@ -56,9 +56,29 @@ const LoginForm: React.FC<LoginFormProps> = ({
   }, []);
 
   const onSubmit = async (values: LoginUserObject) => {
-    const status = await signInAndGetStatus(values.email, values.password);
+    const status = await signInAndGetStatus(
+      values.email,
+      values.password
+    ).catch(() => {
+      return -1;
+    });
     if (status != 200) {
-      setWrongPassword(true);
+      if (status === 400) {
+        setAlertState({
+          type: AlertType.ERROR,
+          message:
+            'Could not log in. Email or password was incorrect. Please try again.',
+          active: true,
+        });
+      } else {
+        setAlertState({
+          type: AlertType.ERROR,
+          message:
+            'Could not log in because of unexpected server error. Please try again later.',
+          active: true,
+        });
+      }
+      console.log(status);
     } else {
       rerender();
     }
@@ -122,18 +142,13 @@ const LoginForm: React.FC<LoginFormProps> = ({
                   Log in
                 </Button>
               </Box>
-              {wrongPassword && (
-                <span role="alert" data-testid="wrongPassword-error">
-                  Wrong email or password
-                </span>
-              )}
               <br></br>
               <Box py={'2'}>
                 <Link
                   as={RouteLink}
                   to="/register"
                   onClick={() => {
-                    setRBState([
+                    setRbState([
                       true,
                       () => {
                         navigate('/');
