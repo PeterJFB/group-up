@@ -16,6 +16,7 @@ const theme = extendTheme({
     },
     groupBlue: '#95BFFF',
     groupOrange: '#FF9960',
+    groupGold: '#FFC107',
   },
 });
 

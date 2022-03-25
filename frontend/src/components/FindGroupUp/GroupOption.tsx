@@ -20,7 +20,8 @@ import {fetchGroupAges} from '../GroupProfile/api';
 import GroupProfileDetail from '../GroupProfile/GroupProfileDetail';
 import Confetti from 'react-confetti';
 import {useRecoilValue} from 'recoil';
-import {confettiState} from '../../state';
+import {confettiState, goldState} from '../../state';
+import GroupUpGoldPromoteModal from '../GroupUpGoldPromoteModal';
 
 type GroupOptionProps = {
   group: GroupObject;
@@ -59,13 +60,19 @@ export const GroupUpOption: React.FC<GroupUpOptionProps> = ({
 }) => {
   const detail = useDisclosure();
   const announce = useDisclosure();
+  const promote = useDisclosure();
 
   const [birthdays, setBirthdays] = useState<string[]>();
   const confetti = useRecoilValue(confettiState);
   const [isSGU, setIsSuperGroupUp] = useState(false);
+  const gs = useRecoilValue(goldState);
 
   const fetchGroupUpRequest: React.MouseEventHandler<HTMLButtonElement> = e => {
     const outGoingSuperGroupUp = (e.target as HTMLButtonElement).id === 'super';
+
+    if (outGoingSuperGroupUp && !gs.active) {
+      return promote.onOpen();
+    }
 
     // Check of user is eligble to superGroupUp
 
@@ -122,7 +129,7 @@ export const GroupUpOption: React.FC<GroupUpOptionProps> = ({
               w={'200px'}
               shadow={'xl'}
               color="groupGreen"
-              bgColor="#ffc107"
+              bgColor="groupGold"
               onClick={fetchGroupUpRequest}
               variant="ghost"
               mr={3}
@@ -133,7 +140,6 @@ export const GroupUpOption: React.FC<GroupUpOptionProps> = ({
             >
               <Image
                 src={`${process.env.PUBLIC_URL}/navicons/groupup.svg`}
-                color="red"
                 maxH="40px"
                 m={1}
               />
@@ -165,7 +171,7 @@ export const GroupUpOption: React.FC<GroupUpOptionProps> = ({
         }}
       >
         {confetti.active && (
-          <Confetti colors={isSGU ? ['#ffc107'] : undefined} />
+          <Confetti colors={isSGU ? ['#FFC107'] : undefined} />
         )}
         <ModalOverlay />
         <ModalContent>
@@ -186,7 +192,7 @@ export const GroupUpOption: React.FC<GroupUpOptionProps> = ({
               Close
             </Button>
             <Button
-              bgColor={isSGU ? '#ffc107' : 'groupGreen'}
+              bgColor={isSGU ? 'groupGold' : 'groupGreen'}
               color={isSGU ? 'black' : 'groupWhite.200'}
               shadow={isSGU ? 'xl' : 'none'}
             >
@@ -195,6 +201,13 @@ export const GroupUpOption: React.FC<GroupUpOptionProps> = ({
           </ModalFooter>
         </ModalContent>
       </Modal>
+      <GroupUpGoldPromoteModal
+        isOpen={promote.isOpen}
+        onClose={promote.onClose}
+      >
+        Use SuperGroupUp to be first priority to whoever you want to GroupUp
+        with!
+      </GroupUpGoldPromoteModal>
     </>
   );
 };

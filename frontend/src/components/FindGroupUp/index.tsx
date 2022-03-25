@@ -54,6 +54,16 @@ export const FindGroupUp: React.FC = () => {
           setIsLoading(false);
         });
     }
+
+    return () => {
+      setNState(true);
+      setRbState([
+        false,
+        () => {
+          return;
+        },
+      ]);
+    };
   }, [chosenGroup]);
 
   if (chosenGroup)

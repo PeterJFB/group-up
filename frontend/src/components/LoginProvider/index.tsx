@@ -1,7 +1,9 @@
 import {Box} from '@chakra-ui/react';
 import React, {useEffect, useState} from 'react';
 import {Route, Routes} from 'react-router-dom';
+import {useRecoilValue} from 'recoil';
 import {fetchWithToken, signInAndSaveToken} from '../../api/api';
+import {checkLoginState} from '../../state';
 import {useRerender} from '../../utils/hooks';
 import LoginForm from '../LoginForm';
 import RegisterForm from '../RegisterForm';
@@ -10,6 +12,8 @@ export const LoginProvider: React.FC = ({children}) => {
   const [loggedIn, setLoggedIn] = useState(false);
 
   const [listener, rerender] = useRerender();
+
+  const checkLogin = useRecoilValue(checkLoginState);
 
   useEffect(() => {
     // Using an IIFE
@@ -20,7 +24,7 @@ export const LoginProvider: React.FC = ({children}) => {
         setLoggedIn(true);
       }
     });
-  }, [listener]);
+  }, [listener, checkLogin]);
 
   return (
     <>

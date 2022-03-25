@@ -163,3 +163,12 @@ export async function signInAndSaveToken(email: string, password: string) {
 
   return response.status;
 }
+
+const removeUserFromLocalStorage = () => {
+  localStorage.removeItem('user');
+};
+
+export function singOutAndDeleteToken() {
+  removeUserFromLocalStorage();
+  localStorage.removeItem('token');
+}
