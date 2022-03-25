@@ -28,8 +28,8 @@ export type GroupObject = {
 
 export type GroupUpObject = {
   id: number;
-  group1: number;
-  group2: number;
+  group1: GroupObject;
+  group2: GroupObject;
   groupUpAccept?: boolean;
   isSuperGroupup?: boolean;
   plannedDate: string;

@@ -2,6 +2,7 @@ import React from 'react';
 import {render, screen, fireEvent} from '@testing-library/react';
 import GroupUpDetail from '../GroupUpDetail';
 import {GroupObject, GroupUpObject} from '../../../types/api';
+import {MemoryRouter} from 'react-router-dom';
 
 const mock1: GroupObject = {
   id: 0,
@@ -29,8 +30,8 @@ const mock2: GroupObject = {
 };
 
 const mockGroupUp: GroupUpObject = {
-  group1: 0,
-  group2: 0,
+  group1: mock1,
+  group2: mock2,
   id: 0,
   plannedDate: '2022-05-20',
 };
@@ -38,7 +39,9 @@ const mockGroupUp: GroupUpObject = {
 describe('RegisterForm', () => {
   beforeEach(() => {
     render(
-      <GroupUpDetail groupUp={mockGroupUp} group1={mock1} group2={mock2} />
+      <MemoryRouter>
+        <GroupUpDetail groupUp={mockGroupUp} />
+      </MemoryRouter>
     );
   });
 

@@ -30,7 +30,7 @@ import MembersNumber from './MembersNumber';
 import {GroupAdminOnlyButton} from './GroupAdminOnlyButton';
 import AddUser, {AddUserObject} from './AddUser';
 import {useSetRecoilState} from 'recoil';
-import {alertState, AlertType, rbState} from '../../state';
+import {alertState, AlertType, nState, rbState} from '../../state';
 import {useNavigate} from 'react-router-dom';
 
 const GroupProfileDetail: React.FC<{
@@ -53,7 +53,8 @@ const GroupProfileDetail: React.FC<{
 
   const setAlertState = useSetRecoilState(alertState);
   const navigate = useNavigate();
-  const setRBState = useSetRecoilState(rbState);
+  const setRbState = useSetRecoilState(rbState);
+  const setNState = useSetRecoilState(nState);
 
   const onSubmit = async (values: AddUserObject) => {
     addOnClose();
@@ -89,7 +90,8 @@ const GroupProfileDetail: React.FC<{
           message: `Group ${group.name} was successfully deleted.`,
           active: true,
         });
-        setRBState([
+        setNState(true);
+        setRbState([
           false,
           () => {
             return;
@@ -126,9 +128,10 @@ const GroupProfileDetail: React.FC<{
                 borderRadius="full"
                 boxShadow="xl"
                 w="150px"
-                src={process.env.PUBLIC_URL + '/images/groupImage2.png'}
+                src={
+                  process.env.PUBLIC_URL + '/images/groupImageTransparent.png'
+                }
               />
-              {/* TODO: SPRINT 2: Personal profile picture */}
             </Box>
             <Heading w={'300px'} size="lg" color="black" textAlign={'center'}>
               {group.name}
@@ -146,7 +149,6 @@ const GroupProfileDetail: React.FC<{
             <Text fontSize={'20px'} textAlign={'center'}>
               {ageGapText}
             </Text>
-            {/*TODO: Replace text object above with multi-line text object containing ages, time and rating. */}
           </Box>
           <Spacer />
           <Box flex={1} color="black">
@@ -163,8 +165,6 @@ const GroupProfileDetail: React.FC<{
         <Flex pt="5" wrap={'wrap'} gap="4px">
           {group.interests.map(interest => {
             return <InterestItem key={interest.name} interest={interest} />;
-            //TODO: Add max length to interest fields to avoid overflow
-            //TODO: In case of overflow, show as many as will fit, then [+N] as the last field to show they have N more interests
           })}
         </Flex>
 

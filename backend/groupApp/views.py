@@ -173,36 +173,36 @@ class GroupUpViewSet(viewsets.ModelViewSet):
     serializer_class = GroupUpSerializer
     permission_classes = [permissions.IsAuthenticated, UserAccessToMatchPermission]
 
+    def retrieve(self, request, pk=None):
+        groupUp = self.serializer_class(self.get_object()).data
+        groupUp["group1"] = InterestGroupSerializer(
+            InterestGroup.objects.get(id=groupUp["group1"])
+        ).data
+        groupUp["group2"] = InterestGroupSerializer(
+            InterestGroup.objects.get(id=groupUp["group2"])
+        ).data
+
+        return Response(groupUp, status=200)
+
     @action(
         methods=["get"],
         detail=False,
         url_path="getGroupUps",
         url_name="getGroupUps",
     )
-    def getGroupUps(self, request, pk=None):
-        user_groups = InterestGroup.objects.filter(members__in=[request.user])
-        groupUps = GroupUp.objects.filter(
+    def getGroupUps(self, request):
+        user_groups = request.user.groups_member_in.all()
+        queryset = GroupUp.objects.filter(
             Q(group1__in=user_groups) | Q(group2__in=user_groups)
         )
-        groupData = {
-            id: InterestGroupSerializer(InterestGroup.objects.get(id=id)).data
-            for id in list(
-                set(
-                    [
-                        j
-                        for sub in [
-                            [group.group1.id, group.group2.id] for group in groupUps
-                        ]
-                        for j in sub
-                    ]
-                )
-            )
-        }
-        matches = {
-            groupUp.id: {
-                "group1": groupData[groupUp.group1.id],
-                "group2": groupData[groupUp.group2.id],
-            }
-            for groupUp in groupUps
-        }
-        return Response(matches, status=200)
+
+        serializer = self.serializer_class(queryset, many=True)
+        for groupUp in serializer.data:
+            groupUp["group1"] = InterestGroupSerializer(
+                InterestGroup.objects.get(id=groupUp["group1"])
+            ).data
+            groupUp["group2"] = InterestGroupSerializer(
+                InterestGroup.objects.get(id=groupUp["group2"])
+            ).data
+
+        return Response(serializer.data, status=200)

@@ -13,6 +13,8 @@ import {
 } from '@chakra-ui/react';
 import {RegisterUserObject} from './types';
 import {registerAndSaveToken} from '../api/api';
+import {useSetRecoilState} from 'recoil';
+import {alertState, AlertType} from '../state';
 type RegisterFormProps = {
   rerender: () => void;
 };
@@ -41,9 +43,20 @@ const RegisterForm: React.FC<RegisterFormProps> = ({
     return getValues('password') == getValues('confirmPassword');
   };
 
+  const setAlertState = useSetRecoilState(alertState);
+
   const onSubmit = async (values: RegisterUserObject) => {
-    const status = await registerAndSaveToken(values);
-    if (status == 201) rerender();
+    const status = await registerAndSaveToken(values).catch(() => {
+      return -1;
+    });
+    if (status != 200)
+      setAlertState({
+        type: AlertType.ERROR,
+        message:
+          'Could not register because of unexpected server error. Please try again later.',
+        active: true,
+      });
+    else rerender();
   };
 
   return (
@@ -148,7 +161,6 @@ const RegisterForm: React.FC<RegisterFormProps> = ({
               </FormControl>
             </Box>
             <Box py={'2'}>
-              {/* <!-- Age - TODO: change to birth date--> */}
               <FormControl isInvalid={!!errors.birthdate}>
                 <FormLabel htmlFor="birthdate">Birthdate</FormLabel>
                 <Input

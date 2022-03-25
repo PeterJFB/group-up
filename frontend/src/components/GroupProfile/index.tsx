@@ -1,5 +1,5 @@
 import React, {useState, useEffect} from 'react';
-import {useNavigate, useParams} from 'react-router-dom';
+import {useLocation, useNavigate, useParams} from 'react-router-dom';
 import {useSetRecoilState} from 'recoil';
 import {nState, rbState} from '../../state';
 import GroupProfileDetail from './GroupProfileDetail';
@@ -8,7 +8,16 @@ import {GroupObject} from '../../types/api';
 import CenteredMessage from '../CenteredMessage';
 
 const GroupProfile: React.FC = () => {
+  function useQuery() {
+    const {search} = useLocation();
+
+    return React.useMemo(() => new URLSearchParams(search), [search]);
+  }
+
   const {id} = useParams();
+  const query = useQuery();
+  const redirect = query.get('redirect');
+  const redirectNState = query.get('redirectNState');
   const [groupDetails, setGroupDetails] = useState<GroupObject>();
   const [ageDetails, setAgeDetails] = useState<string[]>();
   const navigate = useNavigate();
@@ -30,8 +39,10 @@ const GroupProfile: React.FC = () => {
     setRbState([
       true,
       () => {
-        navigate('/groups');
-        setNState(true);
+        navigate(redirect ? redirect : '/groups');
+        setNState(
+          redirectNState == undefined ? true : redirectNState === 'true'
+        );
         setRbState([
           false,
           () => {

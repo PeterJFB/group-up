@@ -1,5 +1,5 @@
 import {fetchWithToken} from '../../api/api';
-import {GroupObject, GroupUpObject} from '../../types/api';
+import {GroupUpObject} from '../../types/api';
 
 export const changePlannedDate = async (groupUpId: number, newDate: string) => {
   const response = await fetchWithToken<GroupUpObject>(
@@ -15,28 +15,21 @@ export const changePlannedDate = async (groupUpId: number, newDate: string) => {
   return {success: false};
 };
 
-export const getGroupUpAndGroupInfo = async (groupUpId: number) => {
+export const getGroupUp = async (groupUpId: number) => {
   const response = await fetchWithToken<GroupUpObject>(
     `/api/groupups/${groupUpId}/`,
     'GET'
   );
-  let groupUp: GroupUpObject;
-  if (!response.missingToken && response.body) groupUp = response.body;
-  else return;
-  const group1 = await fetchWithToken<GroupObject>(
-    `/api/groups/${groupUp?.group1}/`,
+  if (!response.missingToken && response.body) return response.body;
+};
+
+export const getGroupUps = async () => {
+  const response = await fetchWithToken<GroupUpObject[]>(
+    '/api/groupups/getGroupUps/',
     'GET'
   );
-  const group2 = await fetchWithToken<GroupObject>(
-    `/api/groups/${groupUp?.group2}/`,
-    'GET'
-  );
-  if (
-    !group2.missingToken &&
-    !group1.missingToken &&
-    group1.body &&
-    group2.body
-  ) {
-    return {groupUp: groupUp, group1: group1.body, group2: group2.body};
-  }
+
+  if (!response.missingToken && response.body) return response.body;
+
+  console.error('Fetching of GroupUps failed');
 };
