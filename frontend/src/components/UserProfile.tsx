@@ -59,7 +59,7 @@ const UserProfile = () => {
             <Spacer />
 
             <Button
-              bg={gs.active ? 'groupGold' : 'groupWhite.200'}
+              bg={gs.active ? 'groupGold' : 'groupWhite.100'}
               _hover={{opacity: '80%'}}
               shadow="xl"
               w="200px"
@@ -67,7 +67,7 @@ const UserProfile = () => {
               color="groupGreen"
               mt="5"
             >
-              {gs.active ? 'Deactivate' : 'Acivate'} GroupUp Gold
+              {gs.active ? 'Deactivate' : 'Activate'} GroupUp Gold
             </Button>
 
             <Button

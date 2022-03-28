@@ -76,7 +76,14 @@ const GroupUpDetail: React.FC<{groupUp: GroupUpObject}> = ({groupUp}) => {
   };
 
   return (
-    <Flex direction="column" height="100%" maxWidth="100%" py={20}>
+    <Flex
+      direction="column"
+      height="fit-content"
+      bg="groupWhite.200"
+      minH="100%"
+      maxWidth="100%"
+      py={20}
+    >
       <Flex justify="space-evenly" align="center">
         <Flex maxW="45%">
           <Image

@@ -210,6 +210,7 @@ const CreateGroupForm: React.FC<CreateGroupFormProps> = ({
               colorScheme="teal"
               isLoading={isSubmitting}
               type="submit"
+              bg="groupGreen"
             >
               Submit
             </Button>

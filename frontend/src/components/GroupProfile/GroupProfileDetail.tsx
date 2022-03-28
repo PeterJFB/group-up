@@ -147,7 +147,8 @@ const GroupProfileDetail: React.FC<{
     <Flex
       flexDir="column"
       flex={1}
-      height="100%"
+      height="fit-content"
+      minH="100%"
       width="100%"
       bg="groupWhite.200"
       py={10}
@@ -175,16 +176,20 @@ const GroupProfileDetail: React.FC<{
 
         {/* MEMBER COUNT, AGE RANGE AND LOCATION */}
         <Flex w="full" mb="15px">
-          <Spacer />
-          <MembersNumber members={group.members} />
-          <Spacer />
-          <Box>
-            <Text fontSize={'20px'} textAlign={'center'}>
+          <Flex flex={1} justify="center">
+            <MembersNumber members={group.members} />
+            <Text
+              fontSize={'20px'}
+              ml="5px"
+              pt="2px"
+              textAlign={'center'}
+              alignItems={'flex-end'}
+              display="flex"
+            >
               {ageGapText}
             </Text>
-          </Box>
-          <Spacer />
-          <Box flex={1} color="black">
+          </Flex>
+          <Flex flex={1} justify="center" color="black">
             <HStack>
               <Image
                 w="24px"
@@ -192,10 +197,9 @@ const GroupProfileDetail: React.FC<{
               />
               <Text fontSize="20px">{group.location}</Text>
             </HStack>
-          </Box>
-          <Spacer />
+          </Flex>
         </Flex>
-        <Flex pt="5" wrap={'wrap'} gap="4px">
+        <Flex pt="5" wrap={'wrap'} gap="4px" justify="center">
           {group.interests.map(interest => {
             return <InterestItem key={interest.name} interest={interest} />;
           })}

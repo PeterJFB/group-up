@@ -1,5 +1,3 @@
-const {REACT_APP_URL} = process.env;
-
 /**
  * This file consists of a set helper functions, which the frontend will use to communicate
  * with our backend, i.e. participating as a controller to the model.
@@ -58,7 +56,7 @@ export async function fetchWithToken<ResponseBody>(
   }*/
 
   // Perform request to backend with token
-  const response = await fetch(REACT_APP_URL + endpoint, {
+  const response = await fetch(endpoint, {
     method: method,
     headers: {
       Accept: 'application/json',
@@ -70,8 +68,20 @@ export async function fetchWithToken<ResponseBody>(
 
   // Attempt to parse response body if it exists
   let responseBody: ResponseBody | undefined = undefined;
+  const contentEncoding = response.headers.get('Content-Encoding');
   const contentLength = response.headers.get('Content-Length');
-  if (contentLength && parseInt(contentLength)) {
+  if (contentEncoding?.includes('gzip')) {
+    await response
+      .text()
+      .then(text => {
+        responseBody = JSON.parse(text);
+      })
+      .catch(e => {
+        console.error('Parsing of body failed');
+        console.error(e);
+        console.error(response);
+      });
+  } else if (contentLength && parseInt(contentLength)) {
     await response
       .json()
       .then(body => {
@@ -108,7 +118,7 @@ const saveUserToLocalStorage = (responseBody: UserObject) => {
 export async function registerAndSaveToken(user: RegisterUserObject) {
   delete user.confirmPassword;
   // Perform request to "/login" with credentials
-  const response = await fetch(REACT_APP_URL + '/auth/register/', {
+  const response = await fetch('/auth/register/', {
     method: 'POST',
     headers: {
       Accept: 'application/json',
@@ -149,7 +159,7 @@ export async function registerAndSaveToken(user: RegisterUserObject) {
  */
 export async function signInAndSaveToken(email: string, password: string) {
   // Perform request to "/login" with credentials
-  const response = await fetch(REACT_APP_URL + '/auth/login/', {
+  const response = await fetch('/auth/login/', {
     method: 'POST',
     headers: {
       Accept: 'application/json',
