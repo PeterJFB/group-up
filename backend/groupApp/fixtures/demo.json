@@ -1,0 +1,1040 @@
+[
+  {
+    "model": "auth.permission",
+    "pk": 1,
+    "fields": {
+      "name": "Can add log entry",
+      "content_type": 1,
+      "codename": "add_logentry"
+    }
+  },
+  {
+    "model": "auth.permission",
+    "pk": 2,
+    "fields": {
+      "name": "Can change log entry",
+      "content_type": 1,
+      "codename": "change_logentry"
+    }
+  },
+  {
+    "model": "auth.permission",
+    "pk": 3,
+    "fields": {
+      "name": "Can delete log entry",
+      "content_type": 1,
+      "codename": "delete_logentry"
+    }
+  },
+  {
+    "model": "auth.permission",
+    "pk": 4,
+    "fields": {
+      "name": "Can view log entry",
+      "content_type": 1,
+      "codename": "view_logentry"
+    }
+  },
+  {
+    "model": "auth.permission",
+    "pk": 5,
+    "fields": {
+      "name": "Can add permission",
+      "content_type": 2,
+      "codename": "add_permission"
+    }
+  },
+  {
+    "model": "auth.permission",
+    "pk": 6,
+    "fields": {
+      "name": "Can change permission",
+      "content_type": 2,
+      "codename": "change_permission"
+    }
+  },
+  {
+    "model": "auth.permission",
+    "pk": 7,
+    "fields": {
+      "name": "Can delete permission",
+      "content_type": 2,
+      "codename": "delete_permission"
+    }
+  },
+  {
+    "model": "auth.permission",
+    "pk": 8,
+    "fields": {
+      "name": "Can view permission",
+      "content_type": 2,
+      "codename": "view_permission"
+    }
+  },
+  {
+    "model": "auth.permission",
+    "pk": 9,
+    "fields": {
+      "name": "Can add group",
+      "content_type": 3,
+      "codename": "add_group"
+    }
+  },
+  {
+    "model": "auth.permission",
+    "pk": 10,
+    "fields": {
+      "name": "Can change group",
+      "content_type": 3,
+      "codename": "change_group"
+    }
+  },
+  {
+    "model": "auth.permission",
+    "pk": 11,
+    "fields": {
+      "name": "Can delete group",
+      "content_type": 3,
+      "codename": "delete_group"
+    }
+  },
+  {
+    "model": "auth.permission",
+    "pk": 12,
+    "fields": {
+      "name": "Can view group",
+      "content_type": 3,
+      "codename": "view_group"
+    }
+  },
+  {
+    "model": "auth.permission",
+    "pk": 13,
+    "fields": {
+      "name": "Can add content type",
+      "content_type": 4,
+      "codename": "add_contenttype"
+    }
+  },
+  {
+    "model": "auth.permission",
+    "pk": 14,
+    "fields": {
+      "name": "Can change content type",
+      "content_type": 4,
+      "codename": "change_contenttype"
+    }
+  },
+  {
+    "model": "auth.permission",
+    "pk": 15,
+    "fields": {
+      "name": "Can delete content type",
+      "content_type": 4,
+      "codename": "delete_contenttype"
+    }
+  },
+  {
+    "model": "auth.permission",
+    "pk": 16,
+    "fields": {
+      "name": "Can view content type",
+      "content_type": 4,
+      "codename": "view_contenttype"
+    }
+  },
+  {
+    "model": "auth.permission",
+    "pk": 17,
+    "fields": {
+      "name": "Can add session",
+      "content_type": 5,
+      "codename": "add_session"
+    }
+  },
+  {
+    "model": "auth.permission",
+    "pk": 18,
+    "fields": {
+      "name": "Can change session",
+      "content_type": 5,
+      "codename": "change_session"
+    }
+  },
+  {
+    "model": "auth.permission",
+    "pk": 19,
+    "fields": {
+      "name": "Can delete session",
+      "content_type": 5,
+      "codename": "delete_session"
+    }
+  },
+  {
+    "model": "auth.permission",
+    "pk": 20,
+    "fields": {
+      "name": "Can view session",
+      "content_type": 5,
+      "codename": "view_session"
+    }
+  },
+  {
+    "model": "auth.permission",
+    "pk": 21,
+    "fields": {
+      "name": "Can add Token",
+      "content_type": 6,
+      "codename": "add_token"
+    }
+  },
+  {
+    "model": "auth.permission",
+    "pk": 22,
+    "fields": {
+      "name": "Can change Token",
+      "content_type": 6,
+      "codename": "change_token"
+    }
+  },
+  {
+    "model": "auth.permission",
+    "pk": 23,
+    "fields": {
+      "name": "Can delete Token",
+      "content_type": 6,
+      "codename": "delete_token"
+    }
+  },
+  {
+    "model": "auth.permission",
+    "pk": 24,
+    "fields": {
+      "name": "Can view Token",
+      "content_type": 6,
+      "codename": "view_token"
+    }
+  },
+  {
+    "model": "auth.permission",
+    "pk": 25,
+    "fields": {
+      "name": "Can add token",
+      "content_type": 7,
+      "codename": "add_tokenproxy"
+    }
+  },
+  {
+    "model": "auth.permission",
+    "pk": 26,
+    "fields": {
+      "name": "Can change token",
+      "content_type": 7,
+      "codename": "change_tokenproxy"
+    }
+  },
+  {
+    "model": "auth.permission",
+    "pk": 27,
+    "fields": {
+      "name": "Can delete token",
+      "content_type": 7,
+      "codename": "delete_tokenproxy"
+    }
+  },
+  {
+    "model": "auth.permission",
+    "pk": 28,
+    "fields": {
+      "name": "Can view token",
+      "content_type": 7,
+      "codename": "view_tokenproxy"
+    }
+  },
+  {
+    "model": "auth.permission",
+    "pk": 29,
+    "fields": {
+      "name": "Can add user",
+      "content_type": 8,
+      "codename": "add_user"
+    }
+  },
+  {
+    "model": "auth.permission",
+    "pk": 30,
+    "fields": {
+      "name": "Can change user",
+      "content_type": 8,
+      "codename": "change_user"
+    }
+  },
+  {
+    "model": "auth.permission",
+    "pk": 31,
+    "fields": {
+      "name": "Can delete user",
+      "content_type": 8,
+      "codename": "delete_user"
+    }
+  },
+  {
+    "model": "auth.permission",
+    "pk": 32,
+    "fields": {
+      "name": "Can view user",
+      "content_type": 8,
+      "codename": "view_user"
+    }
+  },
+  {
+    "model": "auth.permission",
+    "pk": 33,
+    "fields": {
+      "name": "Can add group up",
+      "content_type": 9,
+      "codename": "add_groupup"
+    }
+  },
+  {
+    "model": "auth.permission",
+    "pk": 34,
+    "fields": {
+      "name": "Can change group up",
+      "content_type": 9,
+      "codename": "change_groupup"
+    }
+  },
+  {
+    "model": "auth.permission",
+    "pk": 35,
+    "fields": {
+      "name": "Can delete group up",
+      "content_type": 9,
+      "codename": "delete_groupup"
+    }
+  },
+  {
+    "model": "auth.permission",
+    "pk": 36,
+    "fields": {
+      "name": "Can view group up",
+      "content_type": 9,
+      "codename": "view_groupup"
+    }
+  },
+  {
+    "model": "auth.permission",
+    "pk": 37,
+    "fields": {
+      "name": "Can add interest",
+      "content_type": 10,
+      "codename": "add_interest"
+    }
+  },
+  {
+    "model": "auth.permission",
+    "pk": 38,
+    "fields": {
+      "name": "Can change interest",
+      "content_type": 10,
+      "codename": "change_interest"
+    }
+  },
+  {
+    "model": "auth.permission",
+    "pk": 39,
+    "fields": {
+      "name": "Can delete interest",
+      "content_type": 10,
+      "codename": "delete_interest"
+    }
+  },
+  {
+    "model": "auth.permission",
+    "pk": 40,
+    "fields": {
+      "name": "Can view interest",
+      "content_type": 10,
+      "codename": "view_interest"
+    }
+  },
+  {
+    "model": "auth.permission",
+    "pk": 41,
+    "fields": {
+      "name": "Can add interest group",
+      "content_type": 11,
+      "codename": "add_interestgroup"
+    }
+  },
+  {
+    "model": "auth.permission",
+    "pk": 42,
+    "fields": {
+      "name": "Can change interest group",
+      "content_type": 11,
+      "codename": "change_interestgroup"
+    }
+  },
+  {
+    "model": "auth.permission",
+    "pk": 43,
+    "fields": {
+      "name": "Can delete interest group",
+      "content_type": 11,
+      "codename": "delete_interestgroup"
+    }
+  },
+  {
+    "model": "auth.permission",
+    "pk": 44,
+    "fields": {
+      "name": "Can view interest group",
+      "content_type": 11,
+      "codename": "view_interestgroup"
+    }
+  },
+  {
+    "model": "contenttypes.contenttype",
+    "pk": 1,
+    "fields": {"app_label": "admin", "model": "logentry"}
+  },
+  {
+    "model": "contenttypes.contenttype",
+    "pk": 2,
+    "fields": {"app_label": "auth", "model": "permission"}
+  },
+  {
+    "model": "contenttypes.contenttype",
+    "pk": 3,
+    "fields": {"app_label": "auth", "model": "group"}
+  },
+  {
+    "model": "contenttypes.contenttype",
+    "pk": 4,
+    "fields": {"app_label": "contenttypes", "model": "contenttype"}
+  },
+  {
+    "model": "contenttypes.contenttype",
+    "pk": 5,
+    "fields": {"app_label": "sessions", "model": "session"}
+  },
+  {
+    "model": "contenttypes.contenttype",
+    "pk": 6,
+    "fields": {"app_label": "authtoken", "model": "token"}
+  },
+  {
+    "model": "contenttypes.contenttype",
+    "pk": 7,
+    "fields": {"app_label": "authtoken", "model": "tokenproxy"}
+  },
+  {
+    "model": "contenttypes.contenttype",
+    "pk": 8,
+    "fields": {"app_label": "core", "model": "user"}
+  },
+  {
+    "model": "contenttypes.contenttype",
+    "pk": 9,
+    "fields": {"app_label": "groupApp", "model": "groupup"}
+  },
+  {
+    "model": "contenttypes.contenttype",
+    "pk": 10,
+    "fields": {"app_label": "groupApp", "model": "interest"}
+  },
+  {
+    "model": "contenttypes.contenttype",
+    "pk": 11,
+    "fields": {"app_label": "groupApp", "model": "interestgroup"}
+  },
+  {
+    "model": "authtoken.token",
+    "pk": "00875b1c631335bc779310f5a42dfe412c0dd4db",
+    "fields": {"user": 2, "created": "2022-03-28T09:07:09.271Z"}
+  },
+  {
+    "model": "authtoken.token",
+    "pk": "0d1949d7bcd5254961ad2f32f1f159c17bff2346",
+    "fields": {"user": 4, "created": "2022-03-28T16:57:45.743Z"}
+  },
+  {
+    "model": "authtoken.token",
+    "pk": "2637a2ddf3783b02e4054e3a7f2cd3a52c676a2b",
+    "fields": {"user": 3, "created": "2022-03-28T11:32:49.507Z"}
+  },
+  {
+    "model": "authtoken.token",
+    "pk": "30c963106a8af38218fe264ad834a3da7f1e36c7",
+    "fields": {"user": 5, "created": "2022-03-28T17:02:20.649Z"}
+  },
+  {
+    "model": "authtoken.token",
+    "pk": "6cda587ddcd60dd0d394788c2386ea868bb14d98",
+    "fields": {"user": 1, "created": "2022-03-28T08:57:07.662Z"}
+  },
+  {
+    "model": "authtoken.token",
+    "pk": "985f0b52b7a55922cc058897eb61185b9fd8623c",
+    "fields": {"user": 6, "created": "2022-03-28T17:05:18.705Z"}
+  },
+  {
+    "model": "authtoken.token",
+    "pk": "ec28508869d18d494373b03fc2678016823adb34",
+    "fields": {"user": 7, "created": "2022-03-28T17:06:28.111Z"}
+  },
+  {
+    "model": "core.user",
+    "pk": 1,
+    "fields": {
+      "password": "pbkdf2_sha256$320000$jkeCpUgO4fAbVGGwZ1xpRn$S3y6AAzhpPXaDJMGPnf7wq0IF8t7qRB3LnKzWJxw5wA=",
+      "last_login": null,
+      "is_superuser": false,
+      "email": "heihallo@email.com",
+      "username": "heihallo",
+      "first_name": "Hei",
+      "last_name": "Hallo",
+      "is_staff": false,
+      "birthdate": "1998-02-04",
+      "groups": [],
+      "user_permissions": []
+    }
+  },
+  {
+    "model": "core.user",
+    "pk": 2,
+    "fields": {
+      "password": "pbkdf2_sha256$320000$LOsczgvNmrYQPWKtWpS8D7$ZyVmhczEZ8cqmg+EWtuUNjKpumytrQUIyyrkX/sks98=",
+      "last_login": null,
+      "is_superuser": false,
+      "email": "navn@email.com",
+      "username": "navnnavnløs",
+      "first_name": "Navn",
+      "last_name": "Navnløs",
+      "is_staff": false,
+      "birthdate": "2001-03-02",
+      "groups": [],
+      "user_permissions": []
+    }
+  },
+  {
+    "model": "core.user",
+    "pk": 3,
+    "fields": {
+      "password": "pbkdf2_sha256$320000$3VW7uYwyk2njBt6qwoRLQK$b2pcmlAIG5ZJdZd2kom8DXTWuDjB9VpvUUcNAYtZxO0=",
+      "last_login": null,
+      "is_superuser": false,
+      "email": "smilglad@email.com",
+      "username": "smilglad",
+      "first_name": "Smil",
+      "last_name": "Glad",
+      "is_staff": false,
+      "birthdate": "2002-01-30",
+      "groups": [],
+      "user_permissions": []
+    }
+  },
+  {
+    "model": "core.user",
+    "pk": 4,
+    "fields": {
+      "password": "pbkdf2_sha256$320000$V6B3YYfhZF28rHK0qwuSWy$PZVNHH9skeG4obMl5US4IE4Myf/xgkTTJeyp9w7ciLk=",
+      "last_login": null,
+      "is_superuser": false,
+      "email": "kari@ntnu.no",
+      "username": "Kari",
+      "first_name": "Kari",
+      "last_name": "Andersen",
+      "is_staff": false,
+      "birthdate": "1998-07-09",
+      "groups": [],
+      "user_permissions": []
+    }
+  },
+  {
+    "model": "core.user",
+    "pk": 5,
+    "fields": {
+      "password": "pbkdf2_sha256$320000$mnT6NuF6Joy3erO7Bot0NX$/pckl7sFLempZiEZWua5mH6VI8Q7GSm/3WDKtnDkqR4=",
+      "last_login": null,
+      "is_superuser": false,
+      "email": "gunnar@ntnu.no",
+      "username": "Gunnar",
+      "first_name": "Gunnar",
+      "last_name": "Hansen",
+      "is_staff": false,
+      "birthdate": "1997-10-16",
+      "groups": [],
+      "user_permissions": []
+    }
+  },
+  {
+    "model": "core.user",
+    "pk": 6,
+    "fields": {
+      "password": "pbkdf2_sha256$320000$7G978c4DMQJfKrbFe4R5CD$d0RaJjwOlhWBaGmsvNatn0jLLVKAE45h6xbmSusoCkA=",
+      "last_login": null,
+      "is_superuser": false,
+      "email": "anne@ntnu.no",
+      "username": "Anne",
+      "first_name": "Anne",
+      "last_name": "Marit",
+      "is_staff": false,
+      "birthdate": "2002-10-15",
+      "groups": [],
+      "user_permissions": []
+    }
+  },
+  {
+    "model": "core.user",
+    "pk": 7,
+    "fields": {
+      "password": "pbkdf2_sha256$320000$YfOhpOvbh7Zb7Lq431c8fP$WRPq+erjkl0CJLoIEvIFz64+r3y7M2Oz8ge2N1sEhvI=",
+      "last_login": null,
+      "is_superuser": false,
+      "email": "hanne@ntnu.no",
+      "username": "Hanne",
+      "first_name": "Hanne",
+      "last_name": "Olsen",
+      "is_staff": false,
+      "birthdate": "2001-06-06",
+      "groups": [],
+      "user_permissions": []
+    }
+  },
+  {
+    "model": "groupApp.interestgroup",
+    "pk": 7,
+    "fields": {
+      "name": "Klatregruppa",
+      "description": "Klatre sammen? Vi er en gjeng som møtes for å klatre året rundt og har veldig lyst til å klatre med andre gjenger.",
+      "location": "Oslo",
+      "quote": "Vi liker å klatre inne og ute",
+      "groupAdmin": 3,
+      "meetingDate": "2022-04-02",
+      "contactInfo": "smilglad@email.com",
+      "members": [3, 7],
+      "interests": [12, 13, 14, 15, 16],
+      "groupups": [],
+      "sentLikes": []
+    }
+  },
+  {
+    "model": "groupApp.interestgroup",
+    "pk": 8,
+    "fields": {
+      "name": "Bakerne",
+      "description": "Vi er studenter som liker å bake kake. Vil dere være med å prøve å bake gulrotkake?",
+      "location": "Trondheim",
+      "quote": "Kake er best",
+      "groupAdmin": 3,
+      "meetingDate": "2022-03-30",
+      "contactInfo": "smilglad@email.com",
+      "members": [3, 6, 7],
+      "interests": [17, 18],
+      "groupups": [],
+      "sentLikes": []
+    }
+  },
+  {
+    "model": "groupApp.interestgroup",
+    "pk": 9,
+    "fields": {
+      "name": "Vinyl lytterne",
+      "description": "Vi liker å lytte til tonene fra platespilleren og å diskutere nye vinylplater.",
+      "location": "Trondheim",
+      "quote": "Vi vil chille med vinyl",
+      "groupAdmin": 3,
+      "meetingDate": "2022-04-03",
+      "contactInfo": "smilglad@email.com",
+      "members": [3, 7],
+      "interests": [19, 20],
+      "groupups": [],
+      "sentLikes": []
+    }
+  },
+  {
+    "model": "groupApp.interestgroup",
+    "pk": 10,
+    "fields": {
+      "name": "Smash gruppa",
+      "description": "Finnes ikke noe bedre enn smash på kontoret",
+      "location": "Gløshaugen",
+      "quote": "Vi spiller smash",
+      "groupAdmin": 3,
+      "meetingDate": "2022-04-07",
+      "contactInfo": "smilglad@email.com",
+      "members": [3, 7],
+      "interests": [22, 23],
+      "groupups": [],
+      "sentLikes": []
+    }
+  },
+  {
+    "model": "groupApp.interestgroup",
+    "pk": 11,
+    "fields": {
+      "name": "Planteelskere",
+      "description": "Vi liker å snakke om planter, og noen ganger planter vi også planter.",
+      "location": "Trondheim",
+      "quote": "Vi vil prate om planter",
+      "groupAdmin": 3,
+      "meetingDate": "2022-04-04",
+      "contactInfo": "smilglad@email.com",
+      "members": [3, 6],
+      "interests": [24, 25],
+      "groupups": [],
+      "sentLikes": []
+    }
+  },
+  {
+    "model": "groupApp.interestgroup",
+    "pk": 12,
+    "fields": {
+      "name": "Kaffedrikkere",
+      "description": "Vi pleier å møtes for en kaffe og en prat på starten av dagen",
+      "location": "Gløshaugen",
+      "quote": "Vi drikker kaffe",
+      "groupAdmin": 3,
+      "meetingDate": "2022-03-30",
+      "contactInfo": "smilglad@email.com",
+      "members": [3, 7],
+      "interests": [26, 27],
+      "groupups": [],
+      "sentLikes": []
+    }
+  },
+  {
+    "model": "groupApp.interestgroup",
+    "pk": 13,
+    "fields": {
+      "name": "Backpackerne",
+      "description": "Vi liker å reise rundt og neste land er nå våre gode naboer. Vi bor på hostel og vil på Liseberg.",
+      "location": "Sverige",
+      "quote": "Vi vil reise i Sverige",
+      "groupAdmin": 3,
+      "meetingDate": "2022-04-26",
+      "contactInfo": "smilglad@email.com",
+      "members": [3, 6, 7],
+      "interests": [16, 28, 29],
+      "groupups": [],
+      "sentLikes": []
+    }
+  },
+  {
+    "model": "groupApp.interestgroup",
+    "pk": 14,
+    "fields": {
+      "name": "Konsertgruppen",
+      "description": "Vi skal på kosert med Veronica Maggio og vil ha flere å dra med",
+      "location": "Trondheim",
+      "quote": "Skal på Maggio konsert",
+      "groupAdmin": 3,
+      "meetingDate": "2022-04-08",
+      "contactInfo": "smilglad@email.com",
+      "members": [3, 7],
+      "interests": [30, 31],
+      "groupups": [],
+      "sentLikes": []
+    }
+  },
+  {
+    "model": "groupApp.interestgroup",
+    "pk": 15,
+    "fields": {
+      "name": "Fotballgruppa",
+      "description": "Vi bruker fritiden vår til å spille og å se fotball.",
+      "location": "Oslo",
+      "quote": "Spille og se fotball",
+      "groupAdmin": 3,
+      "meetingDate": "2022-04-06",
+      "contactInfo": "smilglad@email.com",
+      "members": [3, 7],
+      "interests": [32, 33],
+      "groupups": [],
+      "sentLikes": []
+    }
+  },
+  {
+    "model": "groupApp.interestgroup",
+    "pk": 16,
+    "fields": {
+      "name": "Møbelgruppa",
+      "description": "Vi synes det er veldig gøy å prøve å sette sammen IKEA møbler. Må være IKEA.",
+      "location": "Trondheim",
+      "quote": "Sette sammen IKEA møbler",
+      "groupAdmin": 3,
+      "meetingDate": "2022-04-04",
+      "contactInfo": "smilglad@email.com",
+      "members": [3, 7],
+      "interests": [34, 35],
+      "groupups": [],
+      "sentLikes": []
+    }
+  },
+  {
+    "model": "groupApp.interestgroup",
+    "pk": 18,
+    "fields": {
+      "name": "Kanelbollegruppa",
+      "description": "Vi liker å spise kanelboller ute i solen, gjerne som en pause midt på dagen.",
+      "location": "Gløshaugen",
+      "quote": "Kanelboller er livet",
+      "groupAdmin": 4,
+      "meetingDate": "2022-04-06",
+      "contactInfo": "kari@ntnu.no",
+      "members": [4, 6],
+      "interests": [21, 37],
+      "groupups": [],
+      "sentLikes": []
+    }
+  },
+  {
+    "model": "groupApp.interestgroup",
+    "pk": 19,
+    "fields": {
+      "name": "Turgruppa",
+      "description": "Vi er en gjeng som liker å gå tur med andre.",
+      "location": "Trondheim",
+      "quote": "Vi vil gå tur",
+      "groupAdmin": 4,
+      "meetingDate": "2022-04-09",
+      "contactInfo": "kari@ntnu.no",
+      "members": [4, 6, 7],
+      "interests": [16, 36],
+      "groupups": [],
+      "sentLikes": []
+    }
+  },
+  {
+    "model": "groupApp.interestgroup",
+    "pk": 20,
+    "fields": {
+      "name": "Lunsjerne",
+      "description": "Vi liker å spise lunsj sammen på skolen",
+      "location": "Gløshaugen",
+      "quote": "Vi digger lunsj",
+      "groupAdmin": 5,
+      "meetingDate": "2022-04-06",
+      "contactInfo": "gunnar@ntnu.no",
+      "members": [5, 7],
+      "interests": [27, 38],
+      "groupups": [],
+      "sentLikes": []
+    }
+  },
+  {
+    "model": "groupApp.interest",
+    "pk": 1,
+    "fields": {"name": "Vær", "description": "beskrivelse"}
+  },
+  {
+    "model": "groupApp.interest",
+    "pk": 2,
+    "fields": {"name": "trafikk", "description": "beskrivelse"}
+  },
+  {
+    "model": "groupApp.interest",
+    "pk": 3,
+    "fields": {"name": "Kanel", "description": "beskrivelse"}
+  },
+  {
+    "model": "groupApp.interest",
+    "pk": 4,
+    "fields": {"name": "boller", "description": "beskrivelse"}
+  },
+  {
+    "model": "groupApp.interest",
+    "pk": 5,
+    "fields": {"name": "sfsf", "description": "beskrivelse"}
+  },
+  {
+    "model": "groupApp.interest",
+    "pk": 6,
+    "fields": {"name": "sefsef", "description": "beskrivelse"}
+  },
+  {
+    "model": "groupApp.interest",
+    "pk": 7,
+    "fields": {"name": "Isfiske", "description": "beskrivelse"}
+  },
+  {
+    "model": "groupApp.interest",
+    "pk": 8,
+    "fields": {"name": "iskrem", "description": "beskrivelse"}
+  },
+  {
+    "model": "groupApp.interest",
+    "pk": 9,
+    "fields": {"name": "Smile", "description": "beskrivelse"}
+  },
+  {
+    "model": "groupApp.interest",
+    "pk": 10,
+    "fields": {"name": "glad", "description": "beskrivelse"}
+  },
+  {
+    "model": "groupApp.interest",
+    "pk": 11,
+    "fields": {"name": "Kanelboller", "description": "beskrivelse"}
+  },
+  {
+    "model": "groupApp.interest",
+    "pk": 12,
+    "fields": {"name": "klatring", "description": "beskrivelse"}
+  },
+  {
+    "model": "groupApp.interest",
+    "pk": 13,
+    "fields": {"name": "buldring", "description": "beskrivelse"}
+  },
+  {
+    "model": "groupApp.interest",
+    "pk": 14,
+    "fields": {"name": "fjellklatring", "description": "beskrivelse"}
+  },
+  {
+    "model": "groupApp.interest",
+    "pk": 15,
+    "fields": {"name": "isklatring", "description": "beskrivelse"}
+  },
+  {
+    "model": "groupApp.interest",
+    "pk": 16,
+    "fields": {"name": "tur", "description": "beskrivelse"}
+  },
+  {
+    "model": "groupApp.interest",
+    "pk": 17,
+    "fields": {"name": "baking", "description": "beskrivelse"}
+  },
+  {
+    "model": "groupApp.interest",
+    "pk": 18,
+    "fields": {"name": "kake", "description": "beskrivelse"}
+  },
+  {
+    "model": "groupApp.interest",
+    "pk": 19,
+    "fields": {"name": "vinyl", "description": "beskrivelse"}
+  },
+  {
+    "model": "groupApp.interest",
+    "pk": 20,
+    "fields": {"name": "musikk", "description": "beskrivelse"}
+  },
+  {
+    "model": "groupApp.interest",
+    "pk": 21,
+    "fields": {"name": "kanelboller", "description": "beskrivelse"}
+  },
+  {
+    "model": "groupApp.interest",
+    "pk": 22,
+    "fields": {"name": "smash", "description": "beskrivelse"}
+  },
+  {
+    "model": "groupApp.interest",
+    "pk": 23,
+    "fields": {"name": "spill", "description": "beskrivelse"}
+  },
+  {
+    "model": "groupApp.interest",
+    "pk": 24,
+    "fields": {"name": "plante", "description": "beskrivelse"}
+  },
+  {
+    "model": "groupApp.interest",
+    "pk": 25,
+    "fields": {"name": "prate", "description": "beskrivelse"}
+  },
+  {
+    "model": "groupApp.interest",
+    "pk": 26,
+    "fields": {"name": "kaffe", "description": "beskrivelse"}
+  },
+  {
+    "model": "groupApp.interest",
+    "pk": 27,
+    "fields": {"name": "prat", "description": "beskrivelse"}
+  },
+  {
+    "model": "groupApp.interest",
+    "pk": 28,
+    "fields": {"name": "reise", "description": "beskrivelse"}
+  },
+  {
+    "model": "groupApp.interest",
+    "pk": 29,
+    "fields": {"name": "fornøyelsespark", "description": "beskrivelse"}
+  },
+  {
+    "model": "groupApp.interest",
+    "pk": 30,
+    "fields": {"name": "konsert", "description": "beskrivelse"}
+  },
+  {
+    "model": "groupApp.interest",
+    "pk": 31,
+    "fields": {"name": "veronica maggio", "description": "beskrivelse"}
+  },
+  {
+    "model": "groupApp.interest",
+    "pk": 32,
+    "fields": {"name": "fotball", "description": "beskrivelse"}
+  },
+  {
+    "model": "groupApp.interest",
+    "pk": 33,
+    "fields": {"name": "tv", "description": "beskrivelse"}
+  },
+  {
+    "model": "groupApp.interest",
+    "pk": 34,
+    "fields": {"name": "IKEA", "description": "beskrivelse"}
+  },
+  {
+    "model": "groupApp.interest",
+    "pk": 35,
+    "fields": {"name": "møbler", "description": "beskrivelse"}
+  },
+  {
+    "model": "groupApp.interest",
+    "pk": 36,
+    "fields": {"name": "ski", "description": "beskrivelse"}
+  },
+  {
+    "model": "groupApp.interest",
+    "pk": 37,
+    "fields": {"name": "sol", "description": "beskrivelse"}
+  },
+  {
+    "model": "groupApp.interest",
+    "pk": 38,
+    "fields": {"name": "lunsj", "description": "beskrivelse"}
+  },
+  {
+    "model": "groupApp.groupup",
+    "pk": 1,
+    "fields": {
+      "group1": 13,
+      "group2": 19,
+      "groupUpAccept": false,
+      "isSuperGroupup": false,
+      "plannedDate": null
+    }
+  },
+  {
+    "model": "groupApp.groupup",
+    "pk": 2,
+    "fields": {
+      "group1": 8,
+      "group2": 18,
+      "groupUpAccept": true,
+      "isSuperGroupup": false,
+      "plannedDate": "2022-04-09"
+    }
+  }
+]

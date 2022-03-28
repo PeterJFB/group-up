@@ -68,7 +68,7 @@ export const FindGroupUp: React.FC = () => {
 
   if (chosenGroup)
     return (
-      <Flex direction={'column'} height="100%" width="100%">
+      <Flex direction={'column'} height="fit-content" minH="100%" width="100%">
         {/* Header */}
         <ChosenGroup group={chosenGroup} />
         <Filter
@@ -121,7 +121,7 @@ export const FindGroupUp: React.FC = () => {
     <Flex direction={'column'} height="100%" width="100%">
       {/* Header */}
       <Flex justify="center" align="center" h="50px" bgColor={'groupWhite.200'}>
-        Choose which group to GroupUp with:
+        Choose which group to GroupUp as:
       </Flex>
 
       {/* Selection */}

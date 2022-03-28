@@ -56,12 +56,10 @@ export function findAndSortAges(birthdays: string[]) {
 
 export function generateAgeGapText(birthdays: string[]) {
   const agesSorted = findAndSortAges(birthdays);
-  if (birthdays[0] == birthdays[birthdays.length - 1]) {
+  if (agesSorted[0] == agesSorted[agesSorted.length - 1]) {
     return agesSorted[0] + ' y.o.';
   } else {
-    return (
-      agesSorted[0] + ' y.o. - ' + agesSorted[agesSorted.length - 1] + ' y.o.'
-    );
+    return agesSorted[0] + ' - ' + agesSorted[agesSorted.length - 1] + ' y.o.';
   }
 }
 

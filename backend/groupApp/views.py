@@ -173,17 +173,6 @@ class GroupUpViewSet(viewsets.ModelViewSet):
     serializer_class = GroupUpSerializer
     permission_classes = [permissions.IsAuthenticated, UserAccessToMatchPermission]
 
-    def retrieve(self, request, pk=None):
-        groupUp = self.serializer_class(self.get_object()).data
-        groupUp["group1"] = InterestGroupSerializer(
-            InterestGroup.objects.get(id=groupUp["group1"])
-        ).data
-        groupUp["group2"] = InterestGroupSerializer(
-            InterestGroup.objects.get(id=groupUp["group2"])
-        ).data
-
-        return Response(groupUp, status=200)
-
     @action(
         methods=["get"],
         detail=False,
@@ -194,10 +183,10 @@ class GroupUpViewSet(viewsets.ModelViewSet):
         user_groups = request.user.groups_member_in.all()
         queryset = GroupUp.objects.filter(
             Q(group1__in=user_groups) | Q(group2__in=user_groups)
-        )
+        ).exclude(groupUpAccept=False)
 
-        serializer = self.serializer_class(queryset, many=True)
-        for groupUp in serializer.data:
+        groupUps = self.serializer_class(queryset, many=True).data
+        for groupUp in groupUps:
             groupUp["group1"] = InterestGroupSerializer(
                 InterestGroup.objects.get(id=groupUp["group1"])
             ).data
@@ -205,4 +194,15 @@ class GroupUpViewSet(viewsets.ModelViewSet):
                 InterestGroup.objects.get(id=groupUp["group2"])
             ).data
 
-        return Response(serializer.data, status=200)
+        return Response(groupUps, status=200)
+
+    def retrieve(self, request, pk=None):
+        groupUp = self.serializer_class(self.get_object()).data
+        groupUp["group1"] = InterestGroupSerializer(
+            InterestGroup.objects.get(id=groupUp["group1"])
+        ).data
+        groupUp["group2"] = InterestGroupSerializer(
+            InterestGroup.objects.get(id=groupUp["group2"])
+        ).data
+
+        return Response(groupUp, status=200)

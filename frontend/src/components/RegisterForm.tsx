@@ -49,7 +49,7 @@ const RegisterForm: React.FC<RegisterFormProps> = ({
     const status = await registerAndSaveToken(values).catch(() => {
       return -1;
     });
-    if (status != 200)
+    if (status != 200 && status != 201)
       setAlertState({
         type: AlertType.ERROR,
         message:
@@ -244,6 +244,7 @@ const RegisterForm: React.FC<RegisterFormProps> = ({
                 colorScheme="teal"
                 isLoading={isSubmitting}
                 type="submit"
+                bg="groupGreen"
               >
                 Submit
               </Button>

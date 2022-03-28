@@ -62,7 +62,7 @@ const LoginForm: React.FC<LoginFormProps> = ({
     ).catch(() => {
       return -1;
     });
-    if (status != 200) {
+    if (status != 200 && status != 201) {
       if (status === 400) {
         setAlertState({
           type: AlertType.ERROR,
@@ -136,6 +136,7 @@ const LoginForm: React.FC<LoginFormProps> = ({
                 <Button
                   mt={4}
                   colorScheme="teal"
+                  bg="groupGreen"
                   isLoading={isSubmitting}
                   type="submit"
                 >
@@ -156,7 +157,7 @@ const LoginForm: React.FC<LoginFormProps> = ({
                     ]);
                   }}
                 >
-                  <Button mt={4} colorScheme="teal">
+                  <Button mt={4} colorScheme="teal" bg="groupGreen">
                     Sign Up
                   </Button>
                 </Link>
